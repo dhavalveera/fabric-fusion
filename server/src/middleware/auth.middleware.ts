@@ -17,7 +17,7 @@ export const AuthMiddleware = (
 
     console.log('No Authorization Headers Available!.');
 
-    next();
+    res.status(401).send('Access Token Missing');
   } catch (error) {
     next(error);
   }
