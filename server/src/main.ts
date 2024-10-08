@@ -13,8 +13,8 @@ async function bootstrap() {
   // Defining Global Middleware, for Route Specific Middleware define it in app.module.ts with forRoutes()
   // app.use(AuthMiddleware);
 
-  const PORT = process.env.port || 7080;
+  await app.listen(7080);
 
-  await app.listen(PORT);
+  console.log(`Application is running on: ${await app.getUrl()}`);
 }
 bootstrap();
