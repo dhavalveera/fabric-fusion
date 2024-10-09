@@ -1,23 +1,19 @@
 // Expressjs
-import { Request, Response, NextFunction } from 'express';
+import { Request, Response, NextFunction } from "express";
 
-export const AuthMiddleware = (
-  req: Request,
-  res: Response,
-  next: NextFunction,
-): void => {
+export const AuthMiddleware = (req: Request, res: Response, next: NextFunction): void => {
   try {
     if (req.headers.authorization) {
-      const token = req.headers.authorization.replace('Bearer ', '');
+      const token = req.headers.authorization.replace("Bearer ", "");
 
-      console.log('token => ', token);
+      console.log("token => ", token);
 
       next();
     }
 
-    console.log('No Authorization Headers Available!.');
+    console.log("No Authorization Headers Available!.");
 
-    res.status(401).send('Access Token Missing');
+    res.status(401).send("Access Token Missing");
   } catch (error) {
     next(error);
   }
