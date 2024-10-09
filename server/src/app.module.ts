@@ -10,8 +10,10 @@ import { AppService } from "./app.service";
 // Middleware
 import { AuthMiddleware } from "./middleware/auth.middleware";
 
-// Admin Auth
-import { AdminAuthModule } from "./admin-auth/admin-auth.module";
+// Admin Modules
+import { AdminAuthModule } from "./admin/auth/auth.module";
+import { ProductsModule as AdminProductsModule } from "./admin/products/products.module";
+import { ProductsController as AdminProductsController } from "./admin/products/products.controller";
 
 @Module({
   imports: [
@@ -30,13 +32,16 @@ import { AdminAuthModule } from "./admin-auth/admin-auth.module";
       logger: "simple-console",
       logging: "all",
     }),
+
+    // Admin Modules
     AdminAuthModule,
+    AdminProductsModule,
   ],
   controllers: [AppController],
   providers: [AppService],
 })
 export class AppModule implements NestModule {
   configure(consumer: MiddlewareConsumer) {
-    consumer.apply(AuthMiddleware).forRoutes(AppController, AppController);
+    consumer.apply(AuthMiddleware).forRoutes(AppController, AdminProductsController);
   }
 }

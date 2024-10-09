@@ -6,15 +6,15 @@ import { JwtModule } from "@nestjs/jwt";
 import { AdminRegistrations } from "./models/adminRegistration.model";
 
 // Controller + Service
-import { AdminAuthService } from "./admin-auth.service";
-import { AdminAuthController } from "./admin-auth.controller";
+import { AdminAuthService } from "./auth.service";
+import { AdminAuthController } from "./auth.controller";
 
 @Module({
   imports: [
     TypeOrmModule.forFeature([AdminRegistrations]),
     JwtModule.register({
       global: true,
-      secret: "FabricFusionJWTSecret",
+      secret: process.env.JWT_SECRET,
       signOptions: { expiresIn: "7d" },
     }),
   ],

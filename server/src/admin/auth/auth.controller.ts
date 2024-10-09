@@ -1,10 +1,10 @@
 import { Controller, Post, Body, HttpCode, HttpStatus } from "@nestjs/common";
 
 // Admin Auth Service
-import { AdminAuthService } from "./admin-auth.service";
+import { AdminAuthService } from "./auth.service";
 
 // DTO (Data Transfer Object) Type
-import { CreateAdminAuthDto, SignInAdminAuthDto } from "./dto/create-admin-auth.dto";
+import { CreateAdminAuthDto, SignInAdminAuthDto } from "./dto/create-auth.dto";
 
 @Controller("auth/admin")
 export class AdminAuthController {

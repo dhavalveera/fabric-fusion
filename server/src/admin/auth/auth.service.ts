@@ -9,7 +9,7 @@ import { Repository } from "typeorm";
 import { compareSync, hashSync } from "bcryptjs";
 
 // DTO --- Type
-import { AccessToken, CreateAdminAuthDto, SignInAdminAuthDto } from "./dto/create-admin-auth.dto";
+import { AccessToken, CreateAdminAuthDto, SignInAdminAuthDto } from "./dto/create-auth.dto";
 
 // Admin Registration Model
 import { AdminRegistrations } from "./models/adminRegistration.model";

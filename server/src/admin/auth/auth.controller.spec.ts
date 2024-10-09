@@ -1,8 +1,8 @@
-import { Test, TestingModule } from '@nestjs/testing';
-import { AdminAuthController } from './admin-auth.controller';
-import { AdminAuthService } from './admin-auth.service';
+import { Test, TestingModule } from "@nestjs/testing";
+import { AdminAuthController } from "./auth.controller";
+import { AdminAuthService } from "./auth.service";
 
-describe('AdminAuthController', () => {
+describe("AdminAuthController", () => {
   let controller: AdminAuthController;
 
   beforeEach(async () => {
@@ -14,7 +14,7 @@ describe('AdminAuthController', () => {
     controller = module.get<AdminAuthController>(AdminAuthController);
   });
 
-  it('should be defined', () => {
+  it("should be defined", () => {
     expect(controller).toBeDefined();
   });
 });
