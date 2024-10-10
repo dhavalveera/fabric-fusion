@@ -9,11 +9,11 @@ export const AuthMiddleware = (req: Request, res: Response, next: NextFunction):
       console.log("token => ", token);
 
       next();
+    } else {
+      console.log("No Authorization Headers Available!.");
+
+      res.status(401).send("Access Token Missing");
     }
-
-    console.log("No Authorization Headers Available!.");
-
-    res.status(401).send("Access Token Missing");
   } catch (error) {
     next(error);
   }

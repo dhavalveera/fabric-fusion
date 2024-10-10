@@ -14,7 +14,7 @@ import { AdminAuthController } from "./auth.controller";
     TypeOrmModule.forFeature([AdminRegistrations]),
     JwtModule.register({
       global: true,
-      secret: process.env.JWT_SECRET,
+      secret: "FabricFusionJWTSecret",
       signOptions: { expiresIn: "7d" },
     }),
   ],
