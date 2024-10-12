@@ -1,5 +1,8 @@
 import { Column, Entity, JoinColumn, ManyToOne, OneToMany, PrimaryGeneratedColumn } from "typeorm";
 
+// Class Transfomer
+import { Transform } from "class-transformer";
+
 // Category Model
 import { ProductCategory } from "src/admin/category/models/category.model";
 
@@ -14,6 +17,10 @@ export class ProductSubCategory {
   @Column({ type: "varchar", length: 255, unique: true, nullable: false })
   productSubCategoryName: string;
 
+  @Column({ type: "text", nullable: false })
+  productSubCategoryImage: string;
+
+  @Transform(({ value }) => value.productCategoryId)
   @ManyToOne(() => ProductCategory, productCategory => productCategory.productCategoryId, { onDelete: "CASCADE" })
   @JoinColumn({ name: "productCategoryFk" })
   productCategoryFk: ProductCategory;

@@ -32,21 +32,24 @@ import { SubCategoryController as AdminProductSubCategoryController } from "./ad
   imports: [
     // for .env
     ConfigModule.forRoot({
+      isGlobal: true,
       envFilePath: [".env.development", ".env.test", ".env.production"],
     }),
 
     // for DB Connection
-    TypeOrmModule.forRoot({
-      type: process.env.DB_TYPE as "postgres",
-      host: process.env.DB_HOST,
-      port: Number(process.env.DB_PORT),
-      username: process.env.DB_USERNAME,
-      password: process.env.DB_PASSWORD,
-      database: process.env.DB_DATABASE_NAME,
-      autoLoadEntities: true,
-      synchronize: true,
-      logger: "advanced-console",
-      logging: "all",
+    TypeOrmModule.forRootAsync({
+      useFactory: async () => ({
+        type: process.env.DB_TYPE as "postgres",
+        host: process.env.DB_HOST,
+        port: Number(process.env.DB_PORT),
+        username: process.env.DB_USERNAME,
+        password: process.env.DB_PASSWORD,
+        database: process.env.DB_DATABASE_NAME,
+        autoLoadEntities: true,
+        synchronize: true,
+        logger: "advanced-console",
+        logging: "all",
+      }),
     }),
 
     // RateLimiter

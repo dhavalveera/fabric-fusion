@@ -1,4 +1,4 @@
-import { HttpStatus, Injectable, NotFoundException } from "@nestjs/common";
+import { HttpStatus, Injectable, Logger, NotFoundException } from "@nestjs/common";
 import { InjectRepository } from "@nestjs/typeorm";
 
 // typeorm
@@ -17,6 +17,7 @@ import { FindAllReturnType } from "./interface";
 @Injectable()
 export class CategoryService {
   constructor(@InjectRepository(ProductCategory) private readonly productCategRepository: Repository<ProductCategory>) {}
+  private readonly logger = new Logger();
 
   create(createCategoryDto: CreateCategoryDto): Promise<ProductCategory> {
     const insertedCategory = new ProductCategory();
@@ -28,6 +29,8 @@ export class CategoryService {
 
   async findAll(): Promise<FindAllReturnType> {
     const [categories, categroriesCount] = await this.productCategRepository.findAndCount({ order: { createdAt: "DESC" }, where: { isDeleted: false } });
+
+    this.logger.log(`Fetched total ${categroriesCount} Product Categories`);
 
     return { categories, categroriesCount };
   }
