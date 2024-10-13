@@ -1,7 +1,7 @@
 import { Column, Entity, JoinColumn, ManyToOne, PrimaryGeneratedColumn, Relation } from "typeorm";
 
 // Product Model
-import { ProductDetailsModel } from "./product.model";
+import { ProductDetailsModel } from "src/admin/products/models/product.model";
 
 // Size Constant/Enum
 import { Size } from "../constants/size";

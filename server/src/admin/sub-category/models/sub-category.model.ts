@@ -1,4 +1,4 @@
-import { Column, Entity, JoinColumn, ManyToOne, OneToMany, PrimaryGeneratedColumn } from "typeorm";
+import { Column, Entity, JoinColumn, ManyToOne, OneToMany, PrimaryGeneratedColumn, Relation } from "typeorm";
 
 // Class Transfomer
 import { Transform } from "class-transformer";
@@ -23,7 +23,7 @@ export class ProductSubCategory {
   @Transform(({ value }) => value.productCategoryId)
   @ManyToOne(() => ProductCategory, productCategory => productCategory.productCategoryId, { onDelete: "CASCADE" })
   @JoinColumn({ name: "productCategoryFk" })
-  productCategoryFk: ProductCategory;
+  productCategoryFk: Relation<ProductCategory>;
 
   @OneToMany(() => ProductDetailsModel, productTable => productTable.productSubCategoryFk)
   productDetailsFk: ProductDetailsModel[];

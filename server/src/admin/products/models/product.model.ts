@@ -2,7 +2,7 @@ import { Column, Entity, JoinColumn, ManyToOne, OneToMany, OneToOne, PrimaryGene
 
 // Product Relationship Models
 import { ProductSubCategory } from "src/admin/sub-category/models/sub-category.model";
-import { ProductSize } from "./product-size.model";
+import { ProductSize } from "src/admin/product-sizes/models/product-size.model";
 import { ReturnPolicy } from "./return-policy.model";
 import { CareInstruction } from "./care-instructions.model";
 
@@ -66,5 +66,5 @@ export class ProductDetailsModel {
 
   @ManyToOne(() => ProductSubCategory, subCategory => subCategory.productDetailsFk, { eager: true })
   @JoinColumn({ name: "productSubCategoryFk" })
-  productSubCategoryFk: ProductSubCategory;
+  productSubCategoryFk: Relation<ProductSubCategory>;
 }

@@ -19,9 +19,10 @@ import { AuthMiddleware } from "./middleware/auth.middleware";
 
 // Admin Modules
 import { AdminAuthModule } from "./admin/auth/auth.module";
-import { ProductsModule as AdminProductsModule } from "./admin/products/products.module";
 import { CategoryModule as AdminProductCategoryModule } from "./admin/category/category.module";
 import { SubCategoryModule as AdminProductSubCategoryModule } from "./admin/sub-category/sub-category.module";
+import { ProductsModule as AdminProductsModule } from "./admin/products/products.module";
+import { ProductSizesModule as AdminProductSizeModule } from "./admin/product-sizes/product-sizes.module";
 
 // Admin Controllers
 import { ProductsController as AdminProductsController } from "./admin/products/products.controller";
@@ -77,6 +78,7 @@ import { SubCategoryController as AdminProductSubCategoryController } from "./ad
     AdminProductsModule,
     AdminProductCategoryModule,
     AdminProductSubCategoryModule,
+    AdminProductSizeModule,
   ],
   controllers: [AppController],
   providers: [
