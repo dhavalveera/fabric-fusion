@@ -1,4 +1,4 @@
-import { CanActivate, ExecutionContext, Injectable, UnauthorizedException } from "@nestjs/common";
+import { CanActivate, ExecutionContext, HttpStatus, Injectable, Logger, UnauthorizedException } from "@nestjs/common";
 import { Reflector } from "@nestjs/core";
 
 // JWT
@@ -16,6 +16,7 @@ export class AuthGuard implements CanActivate {
     private jwtService: JwtService,
     private reflector: Reflector,
   ) {}
+  private readonly logger = new Logger(AuthGuard.name);
 
   async canActivate(context: ExecutionContext): Promise<boolean> {
     const isPublic = this.reflector.getAllAndOverride<boolean>(IS_PUBLIC_KEY, [context.getHandler(), context.getClass()]);
@@ -29,17 +30,28 @@ export class AuthGuard implements CanActivate {
     const token = this.extractTokenFromHeader(request);
 
     if (!token) {
-      throw new UnauthorizedException();
+      this.logger.log("Access Token Missing.");
+      throw new UnauthorizedException({
+        statusCode: HttpStatus.UNAUTHORIZED,
+        message: "Sorry, Looks like you dont have the required authorization. Access Token Missing.",
+      });
     }
 
     try {
       const payload = await this.jwtService.verifyAsync(token, { secret: "FabricFusionJWTSecret" });
 
+      this.logger.log(`Authenticated User Payload => ${payload}`);
+
       // 💡 We're assigning the payload to the request object here
       // so that we can access it in our route handlers
       request["user"] = payload;
     } catch (error) {
-      throw new UnauthorizedException();
+      this.logger.log("Access Token Missing.");
+
+      throw new UnauthorizedException({
+        statusCode: HttpStatus.UNAUTHORIZED,
+        message: "Access Token Missing.",
+      });
     }
 
     return true;

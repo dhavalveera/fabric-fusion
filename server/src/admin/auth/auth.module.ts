@@ -1,5 +1,5 @@
 import { Module } from "@nestjs/common";
-import { TypeOrmModule } from "@nestjs/typeorm";
+import { SequelizeModule } from "@nestjs/sequelize";
 import { JwtModule } from "@nestjs/jwt";
 import { ConfigModule, ConfigService } from "@nestjs/config";
 
@@ -12,7 +12,7 @@ import { AdminAuthController } from "./auth.controller";
 
 @Module({
   imports: [
-    TypeOrmModule.forFeature([AdminRegistrations]),
+    SequelizeModule.forFeature([AdminRegistrations]),
     JwtModule.registerAsync({
       imports: [ConfigModule],
       inject: [ConfigService],

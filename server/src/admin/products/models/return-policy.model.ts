@@ -1,31 +1,29 @@
-import { Column, Entity, OneToOne, PrimaryGeneratedColumn, Relation } from "typeorm";
+// import { AutoIncrement, BelongsTo, Column, DataType, Model, Table } from "sequelize-typescript";
 
-// Product Model
-import { ProductDetailsModel } from "./product.model";
+// // Product Model
+// import { ProductDetailsModel } from "./product.model";
 
-@Entity({ name: "returnPolicy" })
-export class ReturnPolicy {
-  @PrimaryGeneratedColumn("uuid")
-  returnPolicyId: string;
+// @Table({ tableName: "returnPolicy" })
+// export class ReturnPolicy extends Model {
+//   @AutoIncrement
+//   @Column({ type: DataType.UUIDV4, primaryKey: true, allowNull: false })
+//   returnPolicyId: string;
 
-  @Column({ type: "int", nullable: false })
-  returnDuration: number; // Number of days allowed for return (e.g., 7)
+//   @Column({ type: DataType.INTEGER, allowNull: false })
+//   returnDuration: number; // Number of days allowed for return (e.g., 7)
 
-  @Column({ type: "varchar", length: 255, nullable: false })
-  returnWindow: string; // e.g., "7 days", "30 days"
+//   @Column({ type: DataType.STRING, allowNull: false })
+//   returnWindow: string; // e.g., "7 days", "30 days"
 
-  @Column({ type: "text", array: true, nullable: false })
-  conditions: Array<string>; // Conditions for return (e.g., unworn, tags attached)
+//   @Column({ type: DataType.ARRAY(DataType.STRING), allowNull: false })
+//   conditions: Array<string>; // Conditions for return (e.g., unworn, tags attached)
 
-  @Column({ type: "text", nullable: false })
-  policyInformation: string; // Detailed description of the return policy
+//   @Column({ type: DataType.TEXT, allowNull: false })
+//   policyInformation: string; // Detailed description of the return policy
 
-  @OneToOne(() => ProductDetailsModel, productTable => productTable.returnPolicyFk, { onDelete: "CASCADE" })
-  productDetailFk: Relation<ProductDetailsModel>; // Link to the product this policy belongs to
+//   @BelongsTo(() => ProductDetailsModel, "returnPolicyFk")
+//   public productDetailFk: ReturnType<() => ProductDetailsModel>; // Link to the product this policy belongs to
 
-  @Column({ default: false })
-  isDeleted: boolean;
-
-  @Column({ default: new Date() })
-  createdAt: string;
-}
+//   @Column({ defaultValue: false, type: DataType.BOOLEAN })
+//   isDeleted: boolean;
+// }

@@ -1,14 +1,16 @@
 import { Module } from "@nestjs/common";
-import { TypeOrmModule } from "@nestjs/typeorm";
+import { SequelizeModule } from "@nestjs/sequelize";
 
 // Model
 import { ProductSubCategory as ProductSubCategoryModel } from "./models/sub-category.model";
 
 import { SubCategoryService } from "./sub-category.service";
 import { SubCategoryController } from "./sub-category.controller";
+import { ProductCategory } from "../category/models/category.model";
+import { CategoryModule } from "../category/category.module";
 
 @Module({
-  imports: [TypeOrmModule.forFeature([ProductSubCategoryModel])],
+  imports: [CategoryModule, SequelizeModule.forFeature([ProductCategory, ProductSubCategoryModel])],
   controllers: [SubCategoryController],
   providers: [SubCategoryService],
 })

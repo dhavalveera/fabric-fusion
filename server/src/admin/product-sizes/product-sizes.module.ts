@@ -1,10 +1,11 @@
 import { Module } from "@nestjs/common";
-import { TypeOrmModule } from "@nestjs/typeorm";
+import { SequelizeModule } from "@nestjs/sequelize";
 
 // Model
 import { ProductSize } from "./models/product-size.model";
 
 @Module({
-  imports: [TypeOrmModule.forFeature([ProductSize])],
+  imports: [SequelizeModule.forFeature([ProductSize])],
+  exports: [SequelizeModule],
 })
 export class ProductSizesModule {}

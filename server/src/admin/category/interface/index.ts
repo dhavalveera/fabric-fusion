@@ -2,8 +2,8 @@
 import { ProductCategory } from "../models/category.model";
 
 export interface FindAllReturnType {
-  categories: ProductCategory[];
-  categroriesCount: number;
+  rows: ProductCategory[];
+  count: number;
 }
 
 // export interface AdminUserInRequest {

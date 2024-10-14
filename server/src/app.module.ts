@@ -2,8 +2,8 @@ import { APP_GUARD } from "@nestjs/core";
 import { MiddlewareConsumer, Module, NestModule } from "@nestjs/common";
 import { ConfigModule } from "@nestjs/config";
 
-// Nestjs TypeORM
-import { TypeOrmModule } from "@nestjs/typeorm";
+// Nestjs Sequelize
+import { SequelizeModule } from "@nestjs/sequelize";
 
 // RateLimiter
 import { ThrottlerModule } from "@nestjs/throttler";
@@ -21,13 +21,16 @@ import { AuthMiddleware } from "./middleware/auth.middleware";
 import { AdminAuthModule } from "./admin/auth/auth.module";
 import { CategoryModule as AdminProductCategoryModule } from "./admin/category/category.module";
 import { SubCategoryModule as AdminProductSubCategoryModule } from "./admin/sub-category/sub-category.module";
-import { ProductsModule as AdminProductsModule } from "./admin/products/products.module";
-import { ProductSizesModule as AdminProductSizeModule } from "./admin/product-sizes/product-sizes.module";
+// import { ProductsModule as AdminProductsModule } from "./admin/products/products.module";
+// import { ProductSizesModule as AdminProductSizeModule } from "./admin/product-sizes/product-sizes.module";
 
 // Admin Controllers
-import { ProductsController as AdminProductsController } from "./admin/products/products.controller";
+// import { ProductsController as AdminProductsController } from "./admin/products/products.controller";
 import { CategoryController as AdminProductCategoryController } from "./admin/category/category.controller";
 import { SubCategoryController as AdminProductSubCategoryController } from "./admin/sub-category/sub-category.controller";
+
+// DB Config
+import { DBConfig } from "./config/db.config";
 
 @Module({
   imports: [
@@ -38,20 +41,7 @@ import { SubCategoryController as AdminProductSubCategoryController } from "./ad
     }),
 
     // for DB Connection
-    TypeOrmModule.forRootAsync({
-      useFactory: async () => ({
-        type: process.env.DB_TYPE as "postgres",
-        host: process.env.DB_HOST,
-        port: Number(process.env.DB_PORT),
-        username: process.env.DB_USERNAME,
-        password: process.env.DB_PASSWORD,
-        database: process.env.DB_DATABASE_NAME,
-        autoLoadEntities: true,
-        synchronize: true,
-        logger: "advanced-console",
-        logging: "all",
-      }),
-    }),
+    SequelizeModule.forRoot(DBConfig),
 
     // RateLimiter
     // no more than 3 calls in a second, 20 calls in 10 seconds, and 100 calls in a minute.
@@ -75,10 +65,10 @@ import { SubCategoryController as AdminProductSubCategoryController } from "./ad
 
     // Admin Modules
     AdminAuthModule,
-    AdminProductsModule,
+    // AdminProductsModule,
     AdminProductCategoryModule,
     AdminProductSubCategoryModule,
-    AdminProductSizeModule,
+    // AdminProductSizeModule,
   ],
   controllers: [AppController],
   providers: [
@@ -91,6 +81,11 @@ import { SubCategoryController as AdminProductSubCategoryController } from "./ad
 })
 export class AppModule implements NestModule {
   configure(consumer: MiddlewareConsumer) {
-    consumer.apply(AuthMiddleware).forRoutes(AppController, AdminProductsController, AdminProductCategoryController, AdminProductSubCategoryController);
+    consumer.apply(AuthMiddleware).forRoutes(
+      AppController,
+      // AdminProductsController,
+      AdminProductCategoryController,
+      AdminProductSubCategoryController,
+    );
   }
 }

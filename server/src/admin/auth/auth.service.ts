@@ -1,9 +1,6 @@
 import { Injectable, UnauthorizedException } from "@nestjs/common";
-import { InjectRepository } from "@nestjs/typeorm";
 import { JwtService } from "@nestjs/jwt";
-
-// typeorm
-import { Repository } from "typeorm";
+import { InjectModel } from "@nestjs/sequelize";
 
 // bcryptjs
 import { compareSync, hashSync } from "bcryptjs";
@@ -17,7 +14,7 @@ import { AdminRegistrations } from "./models/adminRegistration.model";
 @Injectable()
 export class AdminAuthService {
   constructor(
-    @InjectRepository(AdminRegistrations) private readonly adminReg: Repository<AdminRegistrations>,
+    @InjectModel(AdminRegistrations) private adminReg: typeof AdminRegistrations,
     private readonly jwtService: JwtService,
   ) {}
 
@@ -40,7 +37,7 @@ export class AdminAuthService {
       adminData.email = createAdminAuthDto.email;
       adminData.password = hashSync(createAdminAuthDto.password, 10);
 
-      return this.adminReg.save(adminData);
+      return this.adminReg.create({ ...adminData });
     }
   }
 

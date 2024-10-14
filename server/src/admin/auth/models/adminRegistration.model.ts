@@ -1,25 +1,23 @@
-import { Column, Entity, PrimaryGeneratedColumn } from "typeorm";
+import { AutoIncrement, Column, DataType, Model, Table } from "sequelize-typescript";
 
-@Entity({ name: "adminRegistrations" })
-export class AdminRegistrations {
-  @PrimaryGeneratedColumn("uuid")
+@Table({ tableName: "adminRegistrations" })
+export class AdminRegistrations extends Model<AdminRegistrations> {
+  @AutoIncrement
+  @Column({ type: DataType.UUIDV4, primaryKey: true, allowNull: false })
   adminRegistrationId: string;
 
-  @Column()
+  @Column({ allowNull: false, type: DataType.STRING })
   name: string;
 
-  @Column({ unique: true, nullable: false })
+  @Column({ type: DataType.STRING, allowNull: false, unique: true })
   email: string;
 
-  @Column({ type: "varchar", length: 255, nullable: false })
+  @Column({ allowNull: false, type: DataType.STRING })
   password: string;
 
-  @Column({ default: true })
+  @Column({ type: DataType.BOOLEAN, defaultValue: true })
   isActive: boolean;
 
-  @Column({ default: false })
+  @Column({ type: DataType.BOOLEAN, defaultValue: false })
   isDeleted: boolean;
-
-  @Column({ default: new Date() })
-  createdAt: string;
 }

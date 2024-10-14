@@ -1,8 +1,5 @@
 import { HttpException, HttpStatus, Injectable, NotFoundException } from "@nestjs/common";
-import { InjectRepository } from "@nestjs/typeorm";
-
-// Typeorm
-import { DataSource, Repository } from "typeorm";
+import { InjectModel } from "@nestjs/sequelize";
 
 // DTO (Data Transfer Object)
 import { CreateSubCategoryDto } from "./dto/create-sub-category.dto";
@@ -17,17 +14,13 @@ import { FindAllSubCategReturnType } from "./interface";
 
 @Injectable()
 export class SubCategoryService {
-  private categoryRespository: Repository<ProductCategory>;
-
   constructor(
-    @InjectRepository(ProductSubCategory) private readonly subCategRepository: Repository<ProductSubCategory>,
-    private dataSource: DataSource,
-  ) {
-    this.categoryRespository = this.dataSource.getRepository(ProductCategory);
-  }
+    @InjectModel(ProductSubCategory) private readonly subCategRepository: typeof ProductSubCategory,
+    @InjectModel(ProductCategory) private readonly categoryRespository: typeof ProductCategory,
+  ) {}
 
   async create(id: string, createSubCategoryDto: CreateSubCategoryDto): Promise<ProductSubCategory> {
-    const isProductCategoryAvailable = await this.categoryRespository.findOneBy({ productCategoryId: id, isDeleted: false });
+    const isProductCategoryAvailable = await this.categoryRespository.findOne({ where: { productCategoryId: id, isDeleted: false } });
 
     if (isProductCategoryAvailable) {
       const productSubCateg = new ProductSubCategory();
@@ -36,7 +29,7 @@ export class SubCategoryService {
       productSubCateg.productSubCategoryImage = createSubCategoryDto.productSubCategoryImage;
       productSubCateg.productCategoryFk = isProductCategoryAvailable;
 
-      return this.subCategRepository.save(productSubCateg);
+      return this.subCategRepository.create({ ...productSubCateg });
     }
 
     throw new HttpException(
@@ -46,15 +39,13 @@ export class SubCategoryService {
   }
 
   async findAll(productCategoryId: string): Promise<FindAllSubCategReturnType> {
-    const isProductCategoryAvailable = await this.categoryRespository.findOneBy({ productCategoryId: productCategoryId, isDeleted: false });
+    const isProductCategoryAvailable = await this.categoryRespository.findOne({ where: { productCategoryId: productCategoryId, isDeleted: false } });
 
     if (isProductCategoryAvailable) {
-      const [subCategories, subCategoriesCount] = await this.subCategRepository.findAndCount({
-        order: { createdAt: "DESC" },
+      return await this.subCategRepository.findAndCountAll({
+        order: [["createdAt", "DESC"]],
         where: { productCategoryFk: isProductCategoryAvailable, isDeleted: false },
       });
-
-      return { subCategories, subCategoriesCount };
     }
 
     throw new HttpException(
@@ -64,7 +55,7 @@ export class SubCategoryService {
   }
 
   async findOne(id: string): Promise<ProductSubCategory> {
-    const isSubCategoryAvailable = await this.subCategRepository.findOneBy({ productSubCategoryId: id, isDeleted: false });
+    const isSubCategoryAvailable = await this.subCategRepository.findOne({ where: { productSubCategoryId: id, isDeleted: false } });
 
     if (isSubCategoryAvailable) {
       return isSubCategoryAvailable;
@@ -74,25 +65,23 @@ export class SubCategoryService {
   }
 
   async update(id: string, updateSubCategoryDto: UpdateSubCategoryDto): Promise<ProductSubCategory> {
-    const isSubCategoryAvailable = await this.subCategRepository.findOneBy({ productSubCategoryId: id, isDeleted: false });
+    const isSubCategoryAvailable = await this.subCategRepository.findOne({ where: { productSubCategoryId: id, isDeleted: false } });
 
     if (isSubCategoryAvailable) {
       isSubCategoryAvailable.productSubCategoryName = updateSubCategoryDto.productSubCategoryName;
       isSubCategoryAvailable.productSubCategoryImage = updateSubCategoryDto.productSubCategoryImage;
 
-      return this.subCategRepository.save(isSubCategoryAvailable);
+      return this.subCategRepository.create({ ...isSubCategoryAvailable });
     } else {
       throw new NotFoundException();
     }
   }
 
   async remove(id: string) {
-    const isSubCategoryAvailable = await this.subCategRepository.findOneBy({ productSubCategoryId: id, isDeleted: false });
+    const isSubCategoryAvailable = await this.subCategRepository.findOne({ where: { productSubCategoryId: id, isDeleted: false } });
 
     if (isSubCategoryAvailable) {
-      isSubCategoryAvailable.isDeleted = true;
-
-      return this.subCategRepository.save(isSubCategoryAvailable);
+      return this.subCategRepository.update({ isDeleted: true }, { where: { productSubCategoryId: id }, returning: true });
 
       // below line of code will delete the specific entry from the table itself.
       // return this.subCategRepository.remove([isSubCategoryAvailable]);

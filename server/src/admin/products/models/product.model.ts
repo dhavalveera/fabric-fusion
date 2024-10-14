@@ -1,70 +1,67 @@
-import { Column, Entity, JoinColumn, ManyToOne, OneToMany, OneToOne, PrimaryGeneratedColumn, Relation } from "typeorm";
+// import { AutoIncrement, BelongsTo, Column, DataType, ForeignKey, HasOne, Model, Table } from "sequelize-typescript";
 
-// Product Relationship Models
-import { ProductSubCategory } from "src/admin/sub-category/models/sub-category.model";
-import { ProductSize } from "src/admin/product-sizes/models/product-size.model";
-import { ReturnPolicy } from "./return-policy.model";
-import { CareInstruction } from "./care-instructions.model";
+// // Product Relationship Models
+// import { ProductSubCategory } from "src/admin/sub-category/models/sub-category.model";
+// import { ProductSize } from "src/admin/product-sizes/models/product-size.model";
+// import { ReturnPolicy } from "./return-policy.model";
+// import { CareInstruction } from "./care-instructions.model";
 
-// Constant
-import { Gender } from "../constants/gender";
+// // Constant
+// import { Gender } from "../constants/gender";
 
-@Entity({ name: "productDetails" })
-export class ProductDetailsModel {
-  @PrimaryGeneratedColumn("uuid")
-  productDetailsId: string;
+// @Table({ tableName: "productDetails" })
+// export class ProductDetailsModel extends Model {
+//   @AutoIncrement
+//   @Column({ type: DataType.UUIDV4, primaryKey: true, allowNull: false })
+//   productDetailsId: string;
 
-  @Column({ nullable: false, type: "varchar", length: 255 })
-  productName: string;
+//   @Column({ allowNull: false, type: DataType.STRING })
+//   productName: string;
 
-  @Column({ type: "text", nullable: false })
-  productDescription: string;
+//   @Column({ type: DataType.TEXT, allowNull: false })
+//   productDescription: string;
 
-  @Column({ type: "varchar", length: 255, nullable: false })
-  brandName: string;
+//   @Column({ type: DataType.STRING, allowNull: false, defaultValue: "Fabric Fusion" })
+//   brandName: string;
 
-  @Column({ type: "decimal", nullable: false })
-  productPrice: number;
+//   @Column({ type: DataType.FLOAT, allowNull: false })
+//   productPrice: number;
 
-  @Column({ type: "varchar", length: 255, nullable: true })
-  hsnCode: string;
+//   @Column({ type: DataType.STRING, allowNull: true })
+//   hsnCode: string;
 
-  @Column({ type: "float", nullable: true })
-  gstPercentage: number;
+//   @Column({ type: DataType.FLOAT, allowNull: true })
+//   gstPercentage: number;
 
-  @Column({ type: "varchar", length: 255, array: true, nullable: false })
-  colorOptions: Array<string>;
+//   @Column({ type: DataType.ARRAY(DataType.STRING), allowNull: false })
+//   colorOptions: Array<string>;
 
-  @Column({ type: "varchar", length: 255, nullable: false })
-  fabricType: string;
+//   @Column({ type: DataType.STRING, allowNull: false })
+//   fabricType: string;
 
-  @Column({ type: "varchar", length: 255, nullable: false })
-  styleOfFit: string;
+//   @Column({ type: DataType.STRING, allowNull: false })
+//   styleOfFit: string;
 
-  @Column({ type: "varchar", length: 255, array: true, nullable: false })
-  tags: Array<string>;
+//   @Column({ type: DataType.ARRAY(DataType.STRING), allowNull: false })
+//   tags: Array<string>;
 
-  @Column({ type: "enum", enum: Gender, nullable: false })
-  gender: Gender;
+//   @Column({ type: DataType.ENUM(...Object.values(Gender)), allowNull: false })
+//   gender: Gender;
 
-  @Column({ default: false })
-  isDeleted: boolean;
+//   @Column({ defaultValue: false, type: DataType.BOOLEAN })
+//   isDeleted: boolean;
 
-  @Column({ default: new Date() })
-  createdAt: string;
+//   @BelongsTo(() => ProductSize, "productDetailFk")
+//   sizes: ProductSize[];
 
-  @OneToMany(() => ProductSize, productSize => productSize.productDetailFk, { cascade: true, eager: true })
-  sizes: ProductSize[];
+//   @HasOne(() => ReturnPolicy, "returnPolicyFk")
+//   returnPolicyFk: ReturnPolicy;
 
-  @OneToOne(() => ReturnPolicy, returnPolicy => returnPolicy.productDetailFk, { cascade: true, eager: true })
-  @JoinColumn({ name: "returnPolicyFk" })
-  returnPolicyFk: ReturnPolicy;
+//   @HasOne(() => CareInstruction, "careInstructionFk")
+//   careInstructionFk: CareInstruction;
 
-  @OneToOne(() => CareInstruction, { cascade: true, eager: true, nullable: true })
-  @JoinColumn({ name: "careInstructionFk" })
-  careInstructionFk: Relation<CareInstruction>;
-
-  @ManyToOne(() => ProductSubCategory, subCategory => subCategory.productDetailsFk, { eager: true })
-  @JoinColumn({ name: "productSubCategoryFk" })
-  productSubCategoryFk: Relation<ProductSubCategory>;
-}
+//   @ForeignKey(() => ProductSubCategory)
+//   @BelongsTo(() => ProductSubCategory)
+//   @Column({ allowNull: false, type: DataType.UUIDV4, field: "productSubCategoryFk" })
+//   public productSubCategoryFk: ReturnType<() => ProductSubCategory>;
+// }

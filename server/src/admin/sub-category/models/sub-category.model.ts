@@ -1,36 +1,35 @@
-import { Column, Entity, JoinColumn, ManyToOne, OneToMany, PrimaryGeneratedColumn, Relation } from "typeorm";
-
-// Class Transfomer
-import { Transform } from "class-transformer";
+import { AutoIncrement, BelongsTo, Column, DataType, ForeignKey, Model, PrimaryKey, Table } from "sequelize-typescript";
 
 // Category Model
 import { ProductCategory } from "src/admin/category/models/category.model";
 
 // Product Details Model
-import { ProductDetailsModel } from "src/admin/products/models/product.model";
+// import { ProductDetailsModel } from "src/admin/products/models/product.model";
 
-@Entity({ name: "productSubCategory" })
-export class ProductSubCategory {
-  @PrimaryGeneratedColumn("uuid")
-  productSubCategoryId: string;
+@Table({ tableName: "productSubCategory", timestamps: true, createdAt: true, updatedAt: true })
+export class ProductSubCategory extends Model {
+  @AutoIncrement
+  @PrimaryKey
+  @Column({ autoIncrement: true, type: DataType.UUIDV4, primaryKey: true, allowNull: false })
+  declare productSubCategoryId: string;
 
-  @Column({ type: "varchar", length: 255, unique: true, nullable: false })
-  productSubCategoryName: string;
+  @Column({ type: DataType.STRING, allowNull: false, unique: true })
+  declare productSubCategoryName: string;
 
-  @Column({ type: "text", nullable: false })
-  productSubCategoryImage: string;
+  @Column({ type: DataType.STRING, allowNull: false })
+  declare productSubCategoryImage: string;
 
-  @Transform(({ value }) => value.productCategoryId)
-  @ManyToOne(() => ProductCategory, productCategory => productCategory.productCategoryId, { onDelete: "CASCADE" })
-  @JoinColumn({ name: "productCategoryFk" })
-  productCategoryFk: Relation<ProductCategory>;
+  @ForeignKey(() => ProductCategory)
+  @Column
+  declare productCategoryFk: string;
 
-  @OneToMany(() => ProductDetailsModel, productTable => productTable.productSubCategoryFk)
-  productDetailsFk: ProductDetailsModel[];
+  @BelongsTo(() => ProductCategory)
+  declare productCategory: ProductCategory;
 
-  @Column({ default: false })
-  isDeleted: boolean;
+  // @HasMany(() => ProductDetailsModel)
+  // @Column({ allowNull: false, type: DataType.UUIDV4 })
+  // productDetailsFk: ProductDetailsModel;
 
-  @Column({ default: new Date() })
-  createdAt: string;
+  @Column({ defaultValue: false, type: DataType.BOOLEAN })
+  declare isDeleted: boolean;
 }

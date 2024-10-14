@@ -1,8 +1,5 @@
 import { HttpStatus, Injectable, Logger, NotFoundException } from "@nestjs/common";
-import { InjectRepository } from "@nestjs/typeorm";
-
-// typeorm
-import { Repository } from "typeorm";
+import { InjectModel } from "@nestjs/sequelize";
 
 // DTO - Data Transfer Object
 import { CreateCategoryDto } from "./dto/create-category.dto";
@@ -16,7 +13,7 @@ import { FindAllReturnType } from "./interface";
 
 @Injectable()
 export class CategoryService {
-  constructor(@InjectRepository(ProductCategory) private readonly productCategRepository: Repository<ProductCategory>) {}
+  constructor(@InjectModel(ProductCategory) private readonly productCategRepository: typeof ProductCategory) {}
   private readonly logger = new Logger();
 
   create(createCategoryDto: CreateCategoryDto): Promise<ProductCategory> {
@@ -24,28 +21,33 @@ export class CategoryService {
 
     insertedCategory.productCategoryName = createCategoryDto.productCategoryName;
 
-    return this.productCategRepository.save(insertedCategory);
+    return this.productCategRepository.create({ ...insertedCategory });
   }
 
   async findAll(): Promise<FindAllReturnType> {
-    const [categories, categroriesCount] = await this.productCategRepository.findAndCount({ order: { createdAt: "DESC" }, where: { isDeleted: false } });
+    const result = await this.productCategRepository.findAndCountAll({
+      where: { isDeleted: false },
+      order: [["createdAt", "DESC"]],
+    });
 
-    this.logger.log(`Fetched total ${categroriesCount} Product Categories`);
+    this.logger.log(`Fetched total ${result.count} Product Categories`);
 
-    return { categories, categroriesCount };
+    return result;
   }
 
   findOne(id: string) {
-    return this.productCategRepository.findOneBy({ productCategoryId: id, isDeleted: false });
+    return this.productCategRepository.findOne({ where: { productCategoryId: id, isDeleted: false } });
   }
 
-  async update(id: string, updateCategoryDto: UpdateCategoryDto): Promise<ProductCategory> {
-    const isProductCategoryAvailable = await this.productCategRepository.findOneBy({ productCategoryId: id, isDeleted: false });
+  async update(id: string, updateCategoryDto: UpdateCategoryDto): Promise<[affectedCount: number, affectedRows: ProductCategory[]]> {
+    const isProductCategoryAvailable = await this.productCategRepository.findOne({ where: { productCategoryId: id, isDeleted: false } });
 
     if (isProductCategoryAvailable) {
       isProductCategoryAvailable.productCategoryName = updateCategoryDto.productCategoryName;
 
-      return this.productCategRepository.save(isProductCategoryAvailable);
+      const updatedData = await this.productCategRepository.update({ ...isProductCategoryAvailable }, { where: { productCategoryId: id, isDeleted: false }, returning: true });
+
+      return updatedData;
     } else {
       throw new NotFoundException({
         statusCode: HttpStatus.NOT_FOUND,
@@ -54,13 +56,13 @@ export class CategoryService {
     }
   }
 
-  async remove(id: string): Promise<ProductCategory> {
-    const isProductCategoryAvailable = await this.productCategRepository.findOneBy({ productCategoryId: id, isDeleted: false });
+  async remove(id: string): Promise<[affectedCount: number, affectedRows: ProductCategory[]]> {
+    const isProductCategoryAvailable = await this.productCategRepository.findOne({ where: { productCategoryId: id, isDeleted: false } });
 
     if (isProductCategoryAvailable) {
       isProductCategoryAvailable.isDeleted = true;
 
-      return this.productCategRepository.save(isProductCategoryAvailable);
+      return this.productCategRepository.update({ ...isProductCategoryAvailable }, { where: { productCategoryId: id, isDeleted: false }, returning: true });
       // below line of code will delete the specific entry from the table itself.
       // return this.productCategRepository.remove([isProductCategoryAvailable]);
     } else {
