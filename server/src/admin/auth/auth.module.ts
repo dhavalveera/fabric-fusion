@@ -1,18 +1,22 @@
-import { Module } from "@nestjs/common";
-import { SequelizeModule } from "@nestjs/sequelize";
-import { JwtModule } from "@nestjs/jwt";
 import { ConfigModule, ConfigService } from "@nestjs/config";
+import { Module } from "@nestjs/common";
 
-// Model
-import { AdminRegistrations } from "./models/adminRegistration.model";
+// TypeORM
+import { TypeOrmModule } from "@nestjs/typeorm";
+
+// Nestjs JWT
+import { JwtModule } from "@nestjs/jwt";
 
 // Controller + Service
 import { AdminAuthService } from "./auth.service";
-import { AdminAuthController } from "./auth.controller";
+import { AuthController } from "./auth.controller";
+
+// Model
+import { AuthModel } from "./entity/auth.entity";
 
 @Module({
   imports: [
-    SequelizeModule.forFeature([AdminRegistrations]),
+    TypeOrmModule.forFeature([AuthModel]),
     JwtModule.registerAsync({
       imports: [ConfigModule],
       inject: [ConfigService],
@@ -23,7 +27,8 @@ import { AdminAuthController } from "./auth.controller";
       }),
     }),
   ],
-  controllers: [AdminAuthController],
+  controllers: [AuthController],
   providers: [AdminAuthService],
+  exports: [TypeOrmModule],
 })
-export class AdminAuthModule {}
+export class AuthModule {}

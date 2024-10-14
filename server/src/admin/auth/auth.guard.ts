@@ -1,11 +1,11 @@
 import { CanActivate, ExecutionContext, HttpStatus, Injectable, Logger, UnauthorizedException } from "@nestjs/common";
 import { Reflector } from "@nestjs/core";
 
+// Express
+import { Request } from "express";
+
 // JWT
 import { JwtService } from "@nestjs/jwt";
-
-// Express -> Request
-import { Request } from "express";
 
 // Decorator
 import { IS_PUBLIC_KEY } from "./decorators/public.decorator";
@@ -30,7 +30,7 @@ export class AuthGuard implements CanActivate {
     const token = this.extractTokenFromHeader(request);
 
     if (!token) {
-      this.logger.log("Access Token Missing.");
+      this.logger.error("Access Token Missing.");
       throw new UnauthorizedException({
         statusCode: HttpStatus.UNAUTHORIZED,
         message: "Sorry, Looks like you dont have the required authorization. Access Token Missing.",
@@ -40,13 +40,13 @@ export class AuthGuard implements CanActivate {
     try {
       const payload = await this.jwtService.verifyAsync(token, { secret: "FabricFusionJWTSecret" });
 
-      this.logger.log(`Authenticated User Payload => ${payload}`);
+      this.logger.verbose(`Authenticated User Payload => ${payload}`);
 
       // 💡 We're assigning the payload to the request object here
       // so that we can access it in our route handlers
       request["user"] = payload;
     } catch (error) {
-      this.logger.log("Access Token Missing.");
+      this.logger.error("Access Token Missing.");
 
       throw new UnauthorizedException({
         statusCode: HttpStatus.UNAUTHORIZED,

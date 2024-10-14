@@ -1,16 +1,16 @@
-import { Controller, Post, Body, HttpCode, HttpStatus } from "@nestjs/common";
+import { Controller, Post, Body, HttpStatus, HttpCode } from "@nestjs/common";
+
+// Auth Service
+import { AdminAuthService } from "./auth.service";
+
+// DTO (Data Transfer Object)
+import { CreateAdminAuthDto, SignInAdminAuthDto } from "./dto/create-auth.dto";
 
 // Decorator
 import { SkipAuth } from "./decorators/public.decorator";
 
-// Admin Auth Service
-import { AdminAuthService } from "./auth.service";
-
-// DTO (Data Transfer Object) Type
-import { CreateAdminAuthDto, SignInAdminAuthDto } from "./dto/create-auth.dto";
-
 @Controller("auth/admin")
-export class AdminAuthController {
+export class AuthController {
   constructor(private readonly adminAuthService: AdminAuthService) {}
 
   @SkipAuth()

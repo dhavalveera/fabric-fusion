@@ -1,3 +1,4 @@
+export class CreateAuthDto {}
 import { IsEmail, IsNotEmpty, IsString, IsStrongPassword } from "class-validator";
 
 export class CreateAdminAuthDto {

@@ -1,24 +1,27 @@
 import { Injectable, UnauthorizedException } from "@nestjs/common";
 import { JwtService } from "@nestjs/jwt";
-import { InjectModel } from "@nestjs/sequelize";
+import { InjectRepository } from "@nestjs/typeorm";
 
-// bcryptjs
+// bcrypt
 import { compareSync, hashSync } from "bcryptjs";
 
-// DTO --- Type
+// TypeORM
+import { Repository } from "typeorm";
+
+// DTO (Data Transfer Object)
 import { AccessToken, CreateAdminAuthDto, SignInAdminAuthDto } from "./dto/create-auth.dto";
 
-// Admin Registration Model
-import { AdminRegistrations } from "./models/adminRegistration.model";
+// Model
+import { AuthModel } from "./entity/auth.entity";
 
 @Injectable()
 export class AdminAuthService {
   constructor(
-    @InjectModel(AdminRegistrations) private adminReg: typeof AdminRegistrations,
+    @InjectRepository(AuthModel) private readonly adminReg: Repository<AuthModel>,
     private readonly jwtService: JwtService,
   ) {}
 
-  async signUp(createAdminAuthDto: CreateAdminAuthDto): Promise<AdminRegistrations> {
+  async signUp(createAdminAuthDto: CreateAdminAuthDto): Promise<AuthModel> {
     const isRegistrationAvailable = await this.adminReg.findOne({
       where: {
         email: createAdminAuthDto.email,
@@ -31,13 +34,13 @@ export class AdminAuthService {
         message: "Sorry, you are not allowed to sign up, Admin already exists",
       });
     } else {
-      const adminData = new AdminRegistrations();
+      const adminData = new AuthModel();
 
       adminData.name = createAdminAuthDto.name;
       adminData.email = createAdminAuthDto.email;
       adminData.password = hashSync(createAdminAuthDto.password, 10);
 
-      return this.adminReg.create({ ...adminData });
+      return this.adminReg.save(adminData);
     }
   }
 
