@@ -25,6 +25,7 @@ import { TypeOrmConfigService } from "./config/typeorm.config";
 import { AuthModule } from "./admin/auth/auth.module";
 import { ProductCategoryModule } from "./admin/product-category/product-category.module";
 import { ProductSubCategoryModule } from "./admin/product-sub-category/product-sub-category.module";
+import { ProductSizeModule } from "./admin/product-size/product-size.module";
 
 // Admin Controllers
 import { AuthController as AdminAuthController } from "./admin/auth/auth.controller";
@@ -68,6 +69,7 @@ import { ProductSubCategoryController as AdminProductSubCategoryController } fro
     AuthModule,
     ProductCategoryModule,
     ProductSubCategoryModule,
+    ProductSizeModule,
   ],
   controllers: [AppController],
   providers: [
