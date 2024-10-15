@@ -27,6 +27,7 @@ import { ProductCategoryModule } from "./admin/product-category/product-category
 import { ProductSubCategoryModule } from "./admin/product-sub-category/product-sub-category.module";
 import { ProductSizeModule } from "./admin/product-size/product-size.module";
 import { ReturnPolicyModule } from "./admin/return-policy/return-policy.module";
+import { CareInstructionModule } from "./admin/care-instruction/care-instruction.module";
 
 // Admin Controllers
 import { AuthController as AdminAuthController } from "./admin/auth/auth.controller";
@@ -72,6 +73,7 @@ import { ProductSubCategoryController as AdminProductSubCategoryController } fro
     ProductSubCategoryModule,
     ProductSizeModule,
     ReturnPolicyModule,
+    CareInstructionModule,
   ],
   controllers: [AppController],
   providers: [
