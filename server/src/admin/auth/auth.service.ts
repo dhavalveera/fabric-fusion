@@ -12,7 +12,7 @@ import { Repository } from "typeorm";
 import { AccessToken, CreateAdminAuthDto, SignInAdminAuthDto } from "./dto/create-auth.dto";
 
 // Model
-import { AuthModel } from "./entity/auth.entity";
+import { AuthModel } from "./entities/auth.entity";
 
 @Injectable()
 export class AdminAuthService {

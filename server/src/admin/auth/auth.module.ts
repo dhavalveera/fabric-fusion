@@ -12,7 +12,7 @@ import { AdminAuthService } from "./auth.service";
 import { AuthController } from "./auth.controller";
 
 // Model
-import { AuthModel } from "./entity/auth.entity";
+import { AuthModel } from "./entities/auth.entity";
 
 @Module({
   imports: [

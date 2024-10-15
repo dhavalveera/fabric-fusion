@@ -40,7 +40,7 @@ export class AuthGuard implements CanActivate {
     try {
       const payload = await this.jwtService.verifyAsync(token, { secret: "FabricFusionJWTSecret" });
 
-      this.logger.verbose(`Authenticated User Payload => ${payload}`);
+      this.logger.log(`Authenticated User Payload => ${JSON.stringify(payload)}`);
 
       // 💡 We're assigning the payload to the request object here
       // so that we can access it in our route handlers

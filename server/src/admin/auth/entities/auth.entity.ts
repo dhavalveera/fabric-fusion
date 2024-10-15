@@ -24,7 +24,4 @@ export class AuthModel extends BaseCommonModel {
 
   @Column({ nullable: false, type: "boolean", default: true })
   isActive: boolean;
-
-  @Column({ nullable: false, type: "boolean", default: false })
-  isDeleted: boolean;
 }
