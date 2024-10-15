@@ -28,10 +28,13 @@ export class ProductsModel extends BaseCommonModel {
   @Column({ nullable: false, type: "float" })
   productPrice: number;
 
+  @Column({ nullable: false, type: "varchar", length: 255 })
+  productDisplayImage: string;
+
   @Column({ nullable: true, type: "varchar", length: 255 })
   hsnCode: string;
 
-  @Column({ nullable: false, type: "float" })
+  @Column({ nullable: true, type: "float" })
   gstPercentage: number;
 
   @Column({ nullable: false, type: "varchar", array: true })

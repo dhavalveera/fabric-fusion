@@ -1,4 +1,4 @@
-import { IsArray, IsEnum, IsNotEmpty, IsNumber, IsOptional, IsString } from "class-validator";
+import { IsArray, IsEnum, IsNotEmpty, IsNumber, IsOptional, IsString, IsUrl } from "class-validator";
 
 // Constants
 import { Gender } from "../constants/gender";
@@ -19,6 +19,11 @@ export class ProductDetailsDto {
   @IsNotEmpty()
   @IsNumber({ allowNaN: false })
   productPrice: number;
+
+  @IsNotEmpty()
+  @IsString()
+  @IsUrl()
+  productDisplayImage: string;
 
   @IsOptional()
   @IsString()
