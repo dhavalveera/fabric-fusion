@@ -1,10 +1,11 @@
-import { Column, Entity, OneToMany } from "typeorm";
+import { Column, Entity, OneToMany, OneToOne, Relation } from "typeorm";
 
 // Common Base Model for --- createdAt, updatedAt, isDeleted
 import { BaseCommonModel } from "src/common/common-column.entity";
 
 // Models
 import { ProductSizeModel } from "src/admin/product-size/entities/product-size.entity";
+import { CareInstructionModel } from "src/admin/care-instruction/entities/care-instruction.entity";
 
 // CONSTANTS
 import { Gender } from "../constants/gender";
@@ -49,4 +50,7 @@ export class ProductsModel extends BaseCommonModel {
 
   @OneToMany(() => ProductSizeModel, prodSize => prodSize.productDetailFk, { cascade: true, eager: true, nullable: false })
   sizes: ProductSizeModel[];
+
+  @OneToOne(() => CareInstructionModel, careInstruction => careInstruction.productDetailsFk, { cascade: true, eager: true, nullable: false })
+  careInstructionsFk: Relation<CareInstructionModel>;
 }
