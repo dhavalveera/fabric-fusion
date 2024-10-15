@@ -28,11 +28,13 @@ import { ProductSubCategoryModule } from "./admin/product-sub-category/product-s
 import { ProductSizeModule } from "./admin/product-size/product-size.module";
 import { ReturnPolicyModule } from "./admin/return-policy/return-policy.module";
 import { CareInstructionModule } from "./admin/care-instruction/care-instruction.module";
+import { ProductsModule } from "./admin/products/products.module";
 
 // Admin Controllers
 import { AuthController as AdminAuthController } from "./admin/auth/auth.controller";
 import { ProductCategoryController as AdminProductCategoryController } from "./admin/product-category/product-category.controller";
 import { ProductSubCategoryController as AdminProductSubCategoryController } from "./admin/product-sub-category/product-sub-category.controller";
+import { ProductsController as AdminProductsController } from "./admin/products/products.controller";
 
 @Module({
   imports: [
@@ -74,6 +76,7 @@ import { ProductSubCategoryController as AdminProductSubCategoryController } fro
     ProductSizeModule,
     ReturnPolicyModule,
     CareInstructionModule,
+    ProductsModule,
   ],
   controllers: [AppController],
   providers: [
@@ -87,6 +90,6 @@ import { ProductSubCategoryController as AdminProductSubCategoryController } fro
 })
 export class AppModule implements NestModule {
   configure(consumer: MiddlewareConsumer) {
-    consumer.apply(RequestLoggerMiddleware).forRoutes(AppController, AdminAuthController, AdminProductCategoryController, AdminProductSubCategoryController);
+    consumer.apply(RequestLoggerMiddleware).forRoutes(AppController, AdminAuthController, AdminProductCategoryController, AdminProductSubCategoryController, AdminProductsController);
   }
 }
