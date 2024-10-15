@@ -24,10 +24,12 @@ import { TypeOrmConfigService } from "./config/typeorm.config";
 // Admin Modules
 import { AuthModule } from "./admin/auth/auth.module";
 import { ProductCategoryModule } from "./admin/product-category/product-category.module";
+import { ProductSubCategoryModule } from "./admin/product-sub-category/product-sub-category.module";
 
 // Admin Controllers
-// import { AuthController } from "./admin/auth/auth.controller";
-// import { ProductCategoryController } from "./admin/product-category/product-category.controller";
+import { AuthController as AdminAuthController } from "./admin/auth/auth.controller";
+import { ProductCategoryController as AdminProductCategoryController } from "./admin/product-category/product-category.controller";
+import { ProductSubCategoryController as AdminProductSubCategoryController } from "./admin/product-sub-category/product-sub-category.controller";
 
 @Module({
   imports: [
@@ -64,8 +66,8 @@ import { ProductCategoryModule } from "./admin/product-category/product-category
 
     // Admin Modules
     AuthModule,
-
     ProductCategoryModule,
+    ProductSubCategoryModule,
   ],
   controllers: [AppController],
   providers: [
@@ -79,6 +81,6 @@ import { ProductCategoryModule } from "./admin/product-category/product-category
 })
 export class AppModule implements NestModule {
   configure(consumer: MiddlewareConsumer) {
-    consumer.apply(RequestLoggerMiddleware).forRoutes("*");
+    consumer.apply(RequestLoggerMiddleware).forRoutes(AppController, AdminAuthController, AdminProductCategoryController, AdminProductSubCategoryController);
   }
 }

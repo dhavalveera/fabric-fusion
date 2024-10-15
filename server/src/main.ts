@@ -13,7 +13,7 @@ async function bootstrap(): Promise<void> {
   app.setGlobalPrefix("api");
 
   // Binding `ValidationPipe` ensuring all endpoints are protected from receiving incorrect data
-  app.useGlobalPipes(new ValidationPipe());
+  app.useGlobalPipes(new ValidationPipe({ transform: true }));
 
   // ClassSerializerInterceptor -> is used to provide rules for transforming and sanitizing the data to be returned to the client such as sending only a subset of properties of an entity.
   app.useGlobalInterceptors(new ClassSerializerInterceptor(app.get(Reflector)));
