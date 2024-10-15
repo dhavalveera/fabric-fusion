@@ -1,7 +1,10 @@
-import { Column, Entity } from "typeorm";
+import { Column, Entity, JoinColumn, OneToOne, Relation } from "typeorm";
 
 // Base Common Model for createdAt, updatedAt, isDeleted
 import { BaseCommonModel } from "src/common/common-column.entity";
+
+// Product Details Model
+import { ProductsModel } from "src/admin/products/entities/product.entity";
 
 @Entity({ name: "returnPolicy" })
 export class ReturnPolicyModel extends BaseCommonModel {
@@ -19,4 +22,8 @@ export class ReturnPolicyModel extends BaseCommonModel {
 
   @Column({ nullable: false, type: "text" })
   policyInformation: string;
+
+  @OneToOne(() => ProductsModel, productTable => productTable.returnPolicyFk, { onDelete: "CASCADE" })
+  @JoinColumn({ name: "productDetailFk" })
+  productDetailFk: Relation<ProductsModel>;
 }
