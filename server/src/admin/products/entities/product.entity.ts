@@ -1,4 +1,4 @@
-import { Column, Entity, OneToMany, OneToOne, Relation } from "typeorm";
+import { Column, Entity, JoinColumn, ManyToOne, OneToMany, OneToOne, Relation } from "typeorm";
 
 // Common Base Model for --- createdAt, updatedAt, isDeleted
 import { BaseCommonModel } from "src/common/common-column.entity";
@@ -7,9 +7,11 @@ import { BaseCommonModel } from "src/common/common-column.entity";
 import { ProductSizeModel } from "src/admin/product-size/entities/product-size.entity";
 import { CareInstructionModel } from "src/admin/care-instruction/entities/care-instruction.entity";
 import { ReturnPolicyModel } from "src/admin/return-policy/entities/return-policy.entity";
+import { ProductSubCategoryModel } from "src/admin/product-sub-category/entities/product-sub-category.entity";
 
 // CONSTANTS
 import { Gender } from "../constants/gender";
+import { Transform } from "class-transformer";
 
 @Entity({ name: "productDetails" })
 export class ProductsModel extends BaseCommonModel {
@@ -54,6 +56,11 @@ export class ProductsModel extends BaseCommonModel {
 
   @OneToMany(() => ProductSizeModel, prodSize => prodSize.productDetailFk, { cascade: true, eager: true, nullable: false })
   sizes: ProductSizeModel[];
+
+  @Transform(({ value }) => value.productSubCategoryId)
+  @ManyToOne(() => ProductSubCategoryModel, subCategoryModel => subCategoryModel.productDetailsFk, { nullable: false })
+  @JoinColumn({ name: "productSubCategoryFk" })
+  productSubCategoryFk: Relation<ProductSubCategoryModel>;
 
   @OneToOne(() => CareInstructionModel, careInstruction => careInstruction.productDetailsFk, { cascade: true, eager: true, nullable: false })
   careInstructionsFk: Relation<CareInstructionModel>;

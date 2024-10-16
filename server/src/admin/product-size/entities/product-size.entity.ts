@@ -1,4 +1,4 @@
-import { Column, Entity, JoinColumn, ManyToOne } from "typeorm";
+import { Column, Entity, JoinColumn, ManyToOne, Relation } from "typeorm";
 
 // Base Common Model for createdAt, updatedAt, isDeleted
 import { BaseCommonModel } from "src/common/common-column.entity";
@@ -25,5 +25,5 @@ export class ProductSizeModel extends BaseCommonModel {
 
   @ManyToOne(() => ProductsModel, productTable => productTable.sizes, { onDelete: "CASCADE" })
   @JoinColumn({ name: "productDetailFk" })
-  productDetailFk: ProductsModel;
+  productDetailFk: Relation<ProductsModel>;
 }

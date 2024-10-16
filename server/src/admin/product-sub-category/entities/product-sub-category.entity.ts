@@ -1,9 +1,10 @@
-import { Column, CreateDateColumn, Entity, JoinColumn, ManyToOne, Relation, UpdateDateColumn } from "typeorm";
+import { Column, CreateDateColumn, Entity, JoinColumn, ManyToOne, OneToMany, Relation, UpdateDateColumn } from "typeorm";
 
 import { Transform } from "class-transformer";
 
-// Category Model
+// Models
 import { ProductCategoryModel } from "src/admin/product-category/entities/product-category.entity";
+import { ProductsModel } from "src/admin/products/entities/product.entity";
 
 @Entity({ name: "productSubCategory" })
 export class ProductSubCategoryModel {
@@ -20,6 +21,9 @@ export class ProductSubCategoryModel {
   @ManyToOne(() => ProductCategoryModel, categoryTable => categoryTable.productSubCategories, { onDelete: "CASCADE", nullable: false })
   @JoinColumn({ name: "productCategoryFk" })
   productCategoryFk: Relation<ProductCategoryModel>;
+
+  @OneToMany(() => ProductsModel, productTable => productTable.productSubCategoryFk, { cascade: true, nullable: false, eager: true })
+  productDetailsFk: Relation<ProductsModel[]>;
 
   @Column({ nullable: false, type: "boolean", default: false })
   isDeleted: boolean;
