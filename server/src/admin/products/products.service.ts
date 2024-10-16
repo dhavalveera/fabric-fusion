@@ -143,12 +143,16 @@ export class ProductsService {
         if (singleProductData.careInstructionsFk) {
           const updatedCareInstructionData = this.careInstructionRepository.merge(singleProductData.careInstructionsFk, updateProductDto.careInstruction);
           await this.careInstructionRepository.save(updatedCareInstructionData);
+
+          this.logger.log("Updated Existing Care Instruction Data");
         } else {
           const newCareInstruction = this.careInstructionRepository.create({
             ...updateProductDto.careInstruction,
             productDetailsFk: updatedProductData,
           });
           await this.careInstructionRepository.save(newCareInstruction);
+
+          this.logger.log("Created New Care Instruction Data");
         }
       }
 
@@ -157,12 +161,16 @@ export class ProductsService {
         if (singleProductData.returnPolicyFk) {
           const updatedReturnPolicyData = this.returnPolicyRepository.merge(singleProductData.returnPolicyFk, updateProductDto.returnPolicy);
           await this.returnPolicyRepository.save(updatedReturnPolicyData);
+
+          this.logger.log("Updated Existing Return Poicy Data");
         } else {
           const newReturnPolicy = this.returnPolicyRepository.create({
             ...updateProductDto.returnPolicy,
             productDetailFk: updatedProductData,
           });
           await this.returnPolicyRepository.save(newReturnPolicy);
+
+          this.logger.log("Created New Return Poicy Data");
         }
       }
 
@@ -174,11 +182,21 @@ export class ProductsService {
           const existingSize = existingSizes.find(s => s.size === sizeDto.size);
 
           if (existingSize) {
-            return this.productSizeRepository.merge(existingSize, sizeDto);
+            // Calculate the difference in totalStock
+            const stockDifference = sizeDto.totalStock - existingSize.totalStock;
+
+            // If the `totalStock`increases, update stockRemaining accordingly
+            const updatedSize = this.productSizeRepository.merge(existingSize, {
+              ...sizeDto,
+              stockRemaining: stockDifference > 0 ? existingSize.stockRemaining + stockDifference : existingSize.stockRemaining, // Don't decrease stockRemaining if totalStock decreases
+            });
+
+            return updatedSize;
           } else {
             // Create New Size it doesn't exists
             const newSize = this.productSizeRepository.create({
               ...sizeDto,
+              stockRemaining: sizeDto.totalStock,
               productDetailFk: updatedProductData,
             });
             return newSize;
@@ -188,10 +206,14 @@ export class ProductsService {
         // Save the updated Sizes (and create new ones if necessary)
         await this.productSizeRepository.save(updatedSizeData);
 
+        this.logger.log("Save the updated Sizes (and create new ones if necessary)");
+
         // Remove any sizes that no longer exist in the updated data
         const sizeToDelete = existingSizes.filter(existingSize => !updateProductDto.productSize.some(sizeDto => sizeDto.size === existingSize.size));
         if (sizeToDelete.length) {
           await this.productSizeRepository.remove(sizeToDelete);
+
+          this.logger.log("Remove any sizes that no longer exist in the updated data");
         }
       }
 
