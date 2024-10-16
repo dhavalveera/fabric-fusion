@@ -53,6 +53,15 @@ export class ProductsModel extends BaseCommonModel {
   @Column({ nullable: false, type: "enum", enum: Gender })
   gender: Gender;
 
+  @Column({ nullable: false, type: "varchar", length: 170 })
+  metaTitle: string;
+
+  @Column({ nullable: false, type: "varchar", length: 255 })
+  metaDescription: string;
+
+  @Column({ nullable: false, type: "text", array: true })
+  metaKeywords: Array<string>;
+
   @OneToMany(() => ProductSizeModel, prodSize => prodSize.productDetailFk, { cascade: true, eager: true, nullable: false })
   sizes: ProductSizeModel[];
 
