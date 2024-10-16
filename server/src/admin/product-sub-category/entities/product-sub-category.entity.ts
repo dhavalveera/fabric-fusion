@@ -1,7 +1,5 @@
 import { Column, CreateDateColumn, Entity, JoinColumn, ManyToOne, OneToMany, Relation, UpdateDateColumn } from "typeorm";
 
-import { Transform } from "class-transformer";
-
 // Models
 import { ProductCategoryModel } from "src/admin/product-category/entities/product-category.entity";
 import { ProductsModel } from "src/admin/products/entities/product.entity";
@@ -17,12 +15,11 @@ export class ProductSubCategoryModel {
   @Column({ nullable: false, type: "varchar", length: 255 })
   productSubCategoryImage: string;
 
-  @Transform(({ value }) => value.productCategoryId)
   @ManyToOne(() => ProductCategoryModel, categoryTable => categoryTable.productSubCategories, { onDelete: "CASCADE", nullable: false })
   @JoinColumn({ name: "productCategoryFk" })
   productCategoryFk: Relation<ProductCategoryModel>;
 
-  @OneToMany(() => ProductsModel, productTable => productTable.productSubCategoryFk, { cascade: true, nullable: false, eager: true })
+  @OneToMany(() => ProductsModel, productTable => productTable.productSubCategoryFk, { cascade: true, nullable: false })
   productDetailsFk: Relation<ProductsModel[]>;
 
   @Column({ nullable: false, type: "boolean", default: false })

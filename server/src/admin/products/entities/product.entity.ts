@@ -11,7 +11,6 @@ import { ProductSubCategoryModel } from "src/admin/product-sub-category/entities
 
 // CONSTANTS
 import { Gender } from "../constants/gender";
-import { Transform } from "class-transformer";
 
 @Entity({ name: "productDetails" })
 export class ProductsModel extends BaseCommonModel {
@@ -57,8 +56,7 @@ export class ProductsModel extends BaseCommonModel {
   @OneToMany(() => ProductSizeModel, prodSize => prodSize.productDetailFk, { cascade: true, eager: true, nullable: false })
   sizes: ProductSizeModel[];
 
-  @Transform(({ value }) => value.productSubCategoryId)
-  @ManyToOne(() => ProductSubCategoryModel, subCategoryModel => subCategoryModel.productDetailsFk, { nullable: false })
+  @ManyToOne(() => ProductSubCategoryModel, subCategoryModel => subCategoryModel.productDetailsFk, { nullable: false, eager: true })
   @JoinColumn({ name: "productSubCategoryFk" })
   productSubCategoryFk: Relation<ProductSubCategoryModel>;
 

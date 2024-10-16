@@ -52,8 +52,4 @@ export class ProductDetailsDto {
   @IsNotEmpty()
   @IsEnum(Gender)
   gender: Gender;
-
-  @IsNotEmpty()
-  @IsString()
-  productSubCategoryFk: string;
 }
