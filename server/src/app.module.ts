@@ -22,19 +22,21 @@ import { RequestLoggerMiddleware } from "./middleware/request-logger/request-log
 import { TypeOrmConfigService } from "./config/typeorm.config";
 
 // Admin Modules
-import { AuthModule } from "./admin/auth/auth.module";
-import { ProductCategoryModule } from "./admin/product-category/product-category.module";
-import { ProductSubCategoryModule } from "./admin/product-sub-category/product-sub-category.module";
-import { ProductSizeModule } from "./admin/product-size/product-size.module";
-import { ReturnPolicyModule } from "./admin/return-policy/return-policy.module";
-import { CareInstructionModule } from "./admin/care-instruction/care-instruction.module";
-import { ProductsModule } from "./admin/products/products.module";
+import { AuthModule as AdminAuthModule } from "./admin/auth/auth.module";
+import { ProductCategoryModule as AdminProductCategoryModule } from "./admin/product-category/product-category.module";
+import { ProductSubCategoryModule as AdminProductSubCategoryModule } from "./admin/product-sub-category/product-sub-category.module";
+import { ProductSizeModule as AdminProductSizeModule } from "./admin/product-size/product-size.module";
+import { ReturnPolicyModule as AdminReturnPolicyModule } from "./admin/return-policy/return-policy.module";
+import { CareInstructionModule as AdminCareInstructionModule } from "./admin/care-instruction/care-instruction.module";
+import { ProductsModule as AdminProductsModule } from "./admin/products/products.module";
+import { ProductImagesModule as AdminProductImagesModule } from "./admin/product-images/product-images.module";
 
 // Admin Controllers
 import { AuthController as AdminAuthController } from "./admin/auth/auth.controller";
 import { ProductCategoryController as AdminProductCategoryController } from "./admin/product-category/product-category.controller";
 import { ProductSubCategoryController as AdminProductSubCategoryController } from "./admin/product-sub-category/product-sub-category.controller";
 import { ProductsController as AdminProductsController } from "./admin/products/products.controller";
+import { ProductImagesController as AdminProductImagesController } from "./admin/product-images/product-images.controller";
 
 @Module({
   imports: [
@@ -70,13 +72,14 @@ import { ProductsController as AdminProductsController } from "./admin/products/
     ]),
 
     // Admin Modules
-    AuthModule,
-    ProductCategoryModule,
-    ProductSubCategoryModule,
-    ProductSizeModule,
-    ReturnPolicyModule,
-    CareInstructionModule,
-    ProductsModule,
+    AdminAuthModule,
+    AdminProductCategoryModule,
+    AdminProductSubCategoryModule,
+    AdminProductSizeModule,
+    AdminReturnPolicyModule,
+    AdminCareInstructionModule,
+    AdminProductsModule,
+    AdminProductImagesModule,
   ],
   controllers: [AppController],
   providers: [
@@ -90,6 +93,8 @@ import { ProductsController as AdminProductsController } from "./admin/products/
 })
 export class AppModule implements NestModule {
   configure(consumer: MiddlewareConsumer) {
-    consumer.apply(RequestLoggerMiddleware).forRoutes(AppController, AdminAuthController, AdminProductCategoryController, AdminProductSubCategoryController, AdminProductsController);
+    consumer
+      .apply(RequestLoggerMiddleware)
+      .forRoutes(AppController, AdminAuthController, AdminProductCategoryController, AdminProductSubCategoryController, AdminProductsController, AdminProductImagesController);
   }
 }

@@ -8,6 +8,7 @@ import { ProductSizeModel } from "src/admin/product-size/entities/product-size.e
 import { CareInstructionModel } from "src/admin/care-instruction/entities/care-instruction.entity";
 import { ReturnPolicyModel } from "src/admin/return-policy/entities/return-policy.entity";
 import { ProductSubCategoryModel } from "src/admin/product-sub-category/entities/product-sub-category.entity";
+import { ProductImagesModel } from "src/admin/product-images/entities/product-images.entity";
 
 // CONSTANTS
 import { Gender } from "../constants/gender";
@@ -74,4 +75,7 @@ export class ProductsModel extends BaseCommonModel {
 
   @OneToOne(() => ReturnPolicyModel, returnPolicyTable => returnPolicyTable.productDetailFk, { cascade: true, eager: true, nullable: false })
   returnPolicyFk: ReturnPolicyModel;
+
+  @OneToMany(() => ProductImagesModel, productImageTable => productImageTable.productDetailsFk, { cascade: true, nullable: true, eager: true })
+  productImagesFk: Relation<ProductImagesModel[]>;
 }

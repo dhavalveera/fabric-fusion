@@ -93,35 +93,59 @@ export class ProductsService {
   }
 
   async findAll(): Promise<{ rows: ProductsModel[]; count: number }> {
-    const [rows, count] = await this.productDetailsRepository.findAndCount({
-      where: { isDeleted: false },
-      order: { createdAt: "DESC" },
-      relations: ["productSubCategoryFk.productCategoryFk"],
-    });
+    // const [rows, count] = await this.productDetailsRepository.findAndCount({
+    //   where: { isDeleted: false },
+    //   order: { createdAt: "DESC" },
+    //   relations: ["productSubCategoryFk.productCategoryFk"],
+    // });
+
+    const [rows, count] = await this.productDetailsRepository
+      .createQueryBuilder("products")
+      .leftJoinAndSelect("products.productSubCategoryFk", "productSubCategory")
+      .leftJoinAndSelect("productSubCategory.productCategoryFk", "productCategory")
+      .leftJoinAndSelect("products.sizes", "sizes")
+      .leftJoinAndSelect("products.careInstructionsFk", "careInstruction")
+      .leftJoinAndSelect("products.returnPolicyFk", "returnPolicy")
+      .leftJoinAndSelect("products.productImagesFk", "productImages", "productImages.isDeleted = :isDeleted OR productImages.isDeleted IS NULL", { isDeleted: false })
+      .where("products.isDeleted = :isDeleted", { isDeleted: false })
+      .orderBy("products.createdAt", "DESC")
+      .getManyAndCount();
+
+    // console.log("allProducts => ", allProducts);
 
     if (count > 0) {
       this.logger.log(`Found Total ${count} Products`);
 
       return { count, rows };
     } else {
-      this.logger.error("Not Products Found!.");
+      this.logger.error("findAll - Not Products Found!.");
 
       throw new NotFoundException();
     }
   }
 
   async findOne(id: string): Promise<ProductsModel> {
-    const singleProductData = await this.productDetailsRepository.findOne({
-      where: { productDetailsId: id, isDeleted: false },
-      relations: ["productSubCategoryFk.productCategoryFk"],
-    });
+    // const singleProductData = await this.productDetailsRepository.findOne({
+    //   where: { productDetailsId: id, isDeleted: false },
+    //   relations: ["productSubCategoryFk.productCategoryFk"],
+    // });
+    const singleProductData = await this.productDetailsRepository
+      .createQueryBuilder("products")
+      .leftJoinAndSelect("products.productSubCategoryFk", "productSubCategory")
+      .leftJoinAndSelect("productSubCategory.productCategoryFk", "productCategory")
+      .leftJoinAndSelect("products.sizes", "sizes")
+      .leftJoinAndSelect("products.careInstructionsFk", "careInstruction")
+      .leftJoinAndSelect("products.returnPolicyFk", "returnPolicy")
+      .leftJoinAndSelect("products.productImagesFk", "productImages", "productImages.isDeleted = :isDeleted OR productImages.isDeleted IS NULL", { isDeleted: false })
+      .where("products.productDetailsId = :productDetailsId", { productDetailsId: id })
+      .getOne();
 
     if (singleProductData) {
       this.logger.log(`Found 1 product matching ${id} -> ${singleProductData.productName}`);
 
       return singleProductData;
     } else {
-      this.logger.error("Not Products Found!.");
+      this.logger.error("Single Product Details Not Products Found!.");
 
       throw new NotFoundException();
     }
