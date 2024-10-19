@@ -14,6 +14,9 @@ export class AdsModel extends BaseCommonModel {
   @Column({ type: "varchar", length: 255, nullable: false })
   imgTitle: string;
 
+  @Column({ type: "varchar", length: 255, nullable: false })
+  adsSlug: string;
+
   @Column({ type: "boolean", nullable: false, default: true })
   isActive: boolean;
 }
