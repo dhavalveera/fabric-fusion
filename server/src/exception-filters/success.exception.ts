@@ -1,7 +1,7 @@
 import { HttpException, HttpStatus } from "@nestjs/common";
 
 export class SuccessException extends HttpException {
-  constructor() {
-    super("Success", HttpStatus.OK);
+  constructor(message: string = "Success") {
+    super(message, HttpStatus.OK);
   }
 }
