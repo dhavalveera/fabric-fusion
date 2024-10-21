@@ -36,18 +36,18 @@ export class ProductsService {
     this.returnPolicyRepository = this.dataSource.getRepository(ReturnPolicyModel);
     this.subCategRepository = this.dataSource.getRepository(ProductSubCategoryModel);
   }
-  private readonly logger = new Logger("ProductDetails");
+  private readonly logger = new Logger("AdminProductDetails");
 
   async create(createProductDto: CreateProductDto) {
     const isProdSubCategoryAvailable = await this.subCategRepository.findOne({ where: { productSubCategoryId: createProductDto.productSubCategoryId, isDeleted: false } });
 
     if (isProdSubCategoryAvailable) {
-      const productDetailsPayload = {
+      const insertProductData = this.productDetailsRepository.create({
         ...createProductDto.productDetails,
         productSubCategoryFk: isProdSubCategoryAvailable,
-      };
+      });
 
-      const productData = await this.productDetailsRepository.save(productDetailsPayload);
+      const productData = await this.productDetailsRepository.save(insertProductData);
 
       if (productData) {
         if (createProductDto.careInstruction && Object.keys(createProductDto.careInstruction).length !== 0) {

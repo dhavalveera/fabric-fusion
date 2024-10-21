@@ -1,4 +1,4 @@
-import { Injectable, UnauthorizedException } from "@nestjs/common";
+import { Injectable, Logger, UnauthorizedException } from "@nestjs/common";
 import { JwtService } from "@nestjs/jwt";
 import { InjectRepository } from "@nestjs/typeorm";
 
@@ -7,6 +7,9 @@ import { compareSync, hashSync } from "bcryptjs";
 
 // TypeORM
 import { Repository } from "typeorm";
+
+// Custom Exception
+import { UnsuccessfulException } from "src/exception-filters/unsuccessful.exception";
 
 // DTO (Data Transfer Object)
 import { AccessToken, CreateAdminAuthDto, SignInAdminAuthDto } from "./dto/create-auth.dto";
@@ -20,6 +23,7 @@ export class AdminAuthService {
     @InjectRepository(AuthModel) private readonly adminReg: Repository<AuthModel>,
     private readonly jwtService: JwtService,
   ) {}
+  private readonly logger = new Logger("AdminAuthService");
 
   async signUp(createAdminAuthDto: CreateAdminAuthDto): Promise<AuthModel> {
     const isRegistrationAvailable = await this.adminReg.findOne({
@@ -40,7 +44,17 @@ export class AdminAuthService {
       adminData.email = createAdminAuthDto.email;
       adminData.password = hashSync(createAdminAuthDto.password, 10);
 
-      return this.adminReg.save(adminData);
+      const adminInsertedData = await this.adminReg.save(adminData);
+
+      if (adminInsertedData) {
+        this.logger.log(`Admin registered Succesfully - ${adminInsertedData.name}`);
+
+        return adminInsertedData;
+      } else {
+        this.logger.log("Unable to Create Admin. Please try again later.");
+
+        throw new UnsuccessfulException();
+      }
     }
   }
 
@@ -54,6 +68,8 @@ export class AdminAuthService {
     });
 
     if (isRegistrationAvailable) {
+      this.logger.log(`Admin Name: - ${isRegistrationAvailable.name} Found`);
+
       const verifiedPassword = compareSync(signInAdminAuthDto.password, isRegistrationAvailable.password);
       if (verifiedPassword) {
         const payload = {
@@ -63,16 +79,22 @@ export class AdminAuthService {
           accountType: "admin",
         };
 
+        this.logger.log(`Passowrd verified for Admin Name: - (${isRegistrationAvailable.name}) & EMail: - (${isRegistrationAvailable.email})`);
+
         return {
           access_token: await this.jwtService.signAsync(payload),
         };
       } else {
+        this.logger.log(`Admin Name: - (${isRegistrationAvailable.name}) has used invalid Password which is (${signInAdminAuthDto.password}). Please re-check the password and try again`);
+
         throw new UnauthorizedException({
           statusCode: 401,
           message: "Wrong Credentials, Please verify your Login Credentials",
         });
       }
     } else {
+      this.logger.log(`Sorry, No Admin found with (${signInAdminAuthDto.email}). Please check the credentials again!.`);
+
       throw new UnauthorizedException({
         statusCode: 401,
         message: "Sorry, Please check your email, Admin not found",

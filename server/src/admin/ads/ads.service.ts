@@ -19,7 +19,7 @@ import { AdsModel } from "./entities/ad.entity";
 @Injectable()
 export class AdsService {
   constructor(@InjectRepository(AdsModel) private readonly adsRepository: Repository<AdsModel>) {}
-  private readonly logger = new Logger("AdsService");
+  private readonly logger = new Logger("AdminAdsService");
 
   async create(createAdDto: CreateAdDto) {
     const adsData = await this.adsRepository.save(createAdDto);

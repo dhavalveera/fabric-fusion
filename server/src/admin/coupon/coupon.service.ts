@@ -26,7 +26,7 @@ export class CouponService {
     @InjectRepository(CouponDetailsModel) private readonly couponDetailsRepository: Repository<CouponDetailsModel>,
     @InjectRepository(CouponUsageModel) private readonly couponUsageRepository: Repository<CouponUsageModel>,
   ) {}
-  private readonly logger = new Logger("AdminCoupons");
+  private readonly logger = new Logger("AdminCouponsService");
 
   async create(createCouponDto: CreateCouponDto): Promise<CouponDetailsModel> {
     const couponPayload = {

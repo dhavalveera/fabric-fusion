@@ -26,7 +26,7 @@ export class ProductImagesService {
   ) {
     this.productDetailsRepository = this.dataSource.getRepository(ProductsModel);
   }
-  private readonly logger = new Logger("ProductImages");
+  private readonly logger = new Logger("AdminProductImages");
 
   async create(id: string, createProductImagesDto: CreateProductImagesDto) {
     const isProductAvailable = await this.productDetailsRepository.findOne({ where: { productDetailsId: id, isDeleted: false } });

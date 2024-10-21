@@ -27,7 +27,7 @@ export class ProductSubCategoryService {
   ) {
     this.categoryRespository = this.dataSource.getRepository(ProductCategoryModel);
   }
-  private readonly logger = new Logger("ProductSubCategory");
+  private readonly logger = new Logger("AdminProductSubCategory");
 
   async create(id: string, createProductSubCategoryDto: CreateProductSubCategoryDto): Promise<ProductSubCategoryModel> {
     const isProductCategoryAvailable = await this.categoryRespository.findOne({ where: { productCategoryId: id, isDeleted: false } });

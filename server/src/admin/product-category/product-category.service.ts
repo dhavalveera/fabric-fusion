@@ -19,7 +19,7 @@ import { ProductCategoryModel } from "./entities/product-category.entity";
 @Injectable()
 export class ProductCategoryService {
   constructor(@InjectRepository(ProductCategoryModel) private readonly productCategRepository: Repository<ProductCategoryModel>) {}
-  private readonly logger = new Logger("ProductCategory");
+  private readonly logger = new Logger("AdminProductCategory");
 
   async create(createProductCategoryDto: CreateProductCategoryDto): Promise<ProductCategoryModel> {
     const insertedData = await this.productCategRepository.save(createProductCategoryDto);

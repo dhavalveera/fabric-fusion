@@ -1,4 +1,4 @@
-import { Column, Entity, JoinColumn, ManyToOne, OneToMany, OneToOne, Relation } from "typeorm";
+import { BeforeInsert, Column, Entity, JoinColumn, ManyToOne, OneToMany, OneToOne, Relation } from "typeorm";
 
 // Common Base Model for --- createdAt, updatedAt, isDeleted
 import { BaseCommonModel } from "src/common/common-column.entity";
@@ -63,6 +63,9 @@ export class ProductsModel extends BaseCommonModel {
   @Column({ nullable: false, type: "text", array: true })
   metaKeywords: Array<string>;
 
+  @Column({ nullable: false, type: "varchar", length: 255 })
+  productSlug: string;
+
   @OneToMany(() => ProductSizeModel, prodSize => prodSize.productDetailFk, { cascade: true, eager: true, nullable: false })
   sizes: ProductSizeModel[];
 
@@ -78,4 +81,15 @@ export class ProductsModel extends BaseCommonModel {
 
   @OneToMany(() => ProductImagesModel, productImageTable => productImageTable.productDetailsFk, { cascade: true, nullable: true, eager: true })
   productImagesFk: Relation<ProductImagesModel[]>;
+
+  @BeforeInsert()
+  createSlugFromTitle(): void {
+    this.productSlug = this.metaTitle
+      .toLowerCase() // Convert to lowercase
+      .trim() // Trim whitespace
+      .replace(/[\s]+/g, "-") // Replace spaces with hyphens
+      .replace(/[^\w\-]+/g, "") // Remove all non-word chars
+      .replace(/--+/g, "-") // Replace multiple hyphens with a single one
+      .replace(/^-+|-+$/g, ""); // Trim hyphens from start and end
+  }
 }
