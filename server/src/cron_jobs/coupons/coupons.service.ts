@@ -21,7 +21,7 @@ export class CronCouponsService {
     this.couponDetailsRepository = this.dataSource.getRepository(CouponDetailsModel);
   }
 
-  @Cron(CronExpression.EVERY_HOUR)
+  @Cron(CronExpression.EVERY_HOUR, { timeZone: "Asia/Kolkata", name: "Expire Coupon CRON" })
   async expireCoupons() {
     // Get the current date and time in UTC (or whichever timezone your app standardizes on)
     const now = moment().tz("Asia/Kolkata"); // Using UTC to match PostgreSQL's timezone
