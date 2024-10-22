@@ -1,6 +1,7 @@
 import { APP_GUARD } from "@nestjs/core";
 import { MiddlewareConsumer, Module, NestModule } from "@nestjs/common";
 import { ConfigModule } from "@nestjs/config";
+import { ScheduleModule } from "@nestjs/schedule";
 
 // Nestjs TypeOrm
 import { TypeOrmModule } from "@nestjs/typeorm";
@@ -32,6 +33,9 @@ import { ProductsModule as AdminProductsModule } from "./admin/products/products
 import { ProductImagesModule as AdminProductImagesModule } from "./admin/product-images/product-images.module";
 import { AdsModule as AdminAdsModule } from "./admin/ads/ads.module";
 import { CouponModule as AdminCouponModule } from "./admin/coupon/coupon.module";
+
+// Cron Modules
+import { CouponsModule as CouponsCronModule } from "./cron_jobs/coupons/coupons.module";
 
 // Admin Controllers
 import { AuthController as AdminAuthController } from "./admin/auth/auth.controller";
@@ -75,6 +79,9 @@ import { CouponController as AdminCouponController } from "./admin/coupon/coupon
       },
     ]),
 
+    // ScheduleModule -> for CRON Jobs
+    ScheduleModule.forRoot(),
+
     // Admin Modules
     AdminAuthModule,
     AdminProductCategoryModule,
@@ -86,6 +93,9 @@ import { CouponController as AdminCouponController } from "./admin/coupon/coupon
     AdminProductImagesModule,
     AdminAdsModule,
     AdminCouponModule,
+
+    // Cron Modules
+    CouponsCronModule,
   ],
   controllers: [AppController],
   providers: [
