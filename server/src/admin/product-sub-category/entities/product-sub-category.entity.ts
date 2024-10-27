@@ -3,6 +3,7 @@ import { Column, CreateDateColumn, Entity, JoinColumn, ManyToOne, OneToMany, Rel
 // Models
 import { ProductCategoryModel } from "src/admin/product-category/entities/product-category.entity";
 import { ProductsModel } from "src/admin/products/entities/product.entity";
+import { ProductAttributeModel } from "src/admin/product-attributes/entities/product-attribute.entity";
 
 @Entity({ name: "productSubCategory" })
 export class ProductSubCategoryModel {
@@ -21,6 +22,9 @@ export class ProductSubCategoryModel {
 
   @OneToMany(() => ProductsModel, productTable => productTable.productSubCategoryFk, { cascade: true, nullable: false })
   productDetailsFk: Relation<ProductsModel[]>;
+
+  @OneToMany(() => ProductAttributeModel, productAttributeTable => productAttributeTable.productSubCategoryFk, { cascade: true })
+  productAttributes: ProductAttributeModel[];
 
   @Column({ nullable: false, type: "boolean", default: false })
   isDeleted: boolean;
