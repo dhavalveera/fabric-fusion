@@ -4,6 +4,9 @@ import { ClassSerializerInterceptor, Logger, ValidationPipe } from "@nestjs/comm
 // App Module
 import { AppModule } from "./app.module";
 
+// Middleware
+import { requireQueryParamsMiddleware } from "./middleware/query-param-checker/query-param-checker.logger";
+
 async function bootstrap(): Promise<void> {
   const logger = new Logger("AppRunning");
 
@@ -17,6 +20,9 @@ async function bootstrap(): Promise<void> {
 
   // ClassSerializerInterceptor -> is used to provide rules for transforming and sanitizing the data to be returned to the client such as sending only a subset of properties of an entity.
   app.useGlobalInterceptors(new ClassSerializerInterceptor(app.get(Reflector)));
+
+  // Middleware to check Query Params based on Routes
+  app.use(requireQueryParamsMiddleware);
 
   const PORT = process.env.PORT || 7080;
 

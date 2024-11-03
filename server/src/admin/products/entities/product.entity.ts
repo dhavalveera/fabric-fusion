@@ -9,6 +9,7 @@ import { CareInstructionModel } from "src/admin/care-instruction/entities/care-i
 import { ReturnPolicyModel } from "src/admin/return-policy/entities/return-policy.entity";
 import { ProductSubCategoryModel } from "src/admin/product-sub-category/entities/product-sub-category.entity";
 import { ProductImagesModel } from "src/admin/product-images/entities/product-images.entity";
+import { OrderItemsModel } from "src/admin/orders/entities/order-items.entity";
 
 // CONSTANTS
 import { Gender } from "../constants/gender";
@@ -81,6 +82,9 @@ export class ProductsModel extends BaseCommonModel {
 
   @OneToMany(() => ProductImagesModel, productImageTable => productImageTable.productDetailsFk, { cascade: true, nullable: true, eager: true })
   productImagesFk: Relation<ProductImagesModel[]>;
+
+  @OneToMany(() => OrderItemsModel, orderItemTable => orderItemTable.productDetailsFk, { cascade: true })
+  orderItemsFk: OrderItemsModel[];
 
   @BeforeInsert()
   createSlugFromTitle(): void {

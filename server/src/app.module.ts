@@ -34,6 +34,7 @@ import { ProductImagesModule as AdminProductImagesModule } from "./admin/product
 import { AdsModule as AdminAdsModule } from "./admin/ads/ads.module";
 import { CouponModule as AdminCouponModule } from "./admin/coupon/coupon.module";
 import { ProductAttributesModule as AdminProductAttributesModule } from "./admin/product-attributes/product-attributes.module";
+import { OrdersModule as AdminOrdersModule } from "./admin/orders/orders.module";
 
 // Cron Modules
 import { CouponsModule as CouponsCronModule } from "./cron_jobs/coupons/coupons.module";
@@ -47,6 +48,7 @@ import { ProductImagesController as AdminProductImagesController } from "./admin
 import { AdsController as AdminAdsController } from "./admin/ads/ads.controller";
 import { CouponController as AdminCouponController } from "./admin/coupon/coupon.controller";
 import { ProductAttributesController as AdminProductAttributesController } from "./admin/product-attributes/product-attributes.controller";
+import { OrdersController as AdminOrdersController } from "./admin/orders/orders.controller";
 
 @Module({
   imports: [
@@ -95,11 +97,11 @@ import { ProductAttributesController as AdminProductAttributesController } from 
     AdminProductImagesModule,
     AdminAdsModule,
     AdminCouponModule,
+    AdminProductAttributesModule,
+    AdminOrdersModule,
 
     // Cron Modules
     CouponsCronModule,
-
-    AdminProductAttributesModule,
   ],
   controllers: [AppController],
   providers: [
@@ -125,6 +127,7 @@ export class AppModule implements NestModule {
         AdminAdsController,
         AdminCouponController,
         AdminProductAttributesController,
+        AdminOrdersController,
       );
   }
 }
