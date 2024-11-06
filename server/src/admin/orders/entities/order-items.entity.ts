@@ -21,6 +21,15 @@ export class OrderItemsModel extends BaseCommonModel {
   @Column({ type: "decimal", precision: 10, scale: 2, nullable: false })
   totalAmount: number; // Quantity * Price
 
+  @Column({ type: "decimal", precision: 10, scale: 2, nullable: true })
+  totalCgstAmount: number;
+
+  @Column({ type: "decimal", precision: 10, scale: 2, nullable: true })
+  totalSgstAmount: number;
+
+  @Column({ type: "decimal", precision: 10, scale: 2, nullable: true })
+  totalIgstAmount: number;
+
   @ManyToOne(() => OrderDetailsModel, orderDetailsTable => orderDetailsTable.orderItemsFk, { nullable: false, onDelete: "CASCADE" })
   @JoinColumn({ name: "orderDetailsFk" })
   orderDetailsFk: Relation<OrderDetailsModel>;

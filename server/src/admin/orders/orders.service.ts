@@ -33,6 +33,11 @@ export class OrdersService {
   ) {}
 
   async create(createOrderDto: CreateOrderDto): Promise<OrderDetailsModel> {
+    // Check if the Order is CGST + SGST or IGST
+    // const isIntraState = "Maharashtra" === process.env.BUSINESS_OPERATED_IN_STATE;
+
+    // this.logger.log(`Is Intra State or Inter State => ${isIntraState}`);
+
     const createOrdersPaylaod = this.orderDetailsRepository.create(createOrderDto);
 
     const orderDetailsPayload = await this.orderDetailsRepository.save(createOrdersPaylaod);
