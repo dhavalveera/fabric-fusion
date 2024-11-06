@@ -39,6 +39,9 @@ import { OrdersModule as AdminOrdersModule } from "./admin/orders/orders.module"
 // Cron Modules
 import { CouponsModule as CouponsCronModule } from "./cron_jobs/coupons/coupons.module";
 
+// Email Module
+import { EmailServiceModule } from "./email-service/email-service.module";
+
 // Admin Controllers
 import { AuthController as AdminAuthController } from "./admin/auth/auth.controller";
 import { ProductCategoryController as AdminProductCategoryController } from "./admin/product-category/product-category.controller";
@@ -102,6 +105,9 @@ import { OrdersController as AdminOrdersController } from "./admin/orders/orders
 
     // Cron Modules
     CouponsCronModule,
+
+    // Email Module
+    EmailServiceModule,
   ],
   controllers: [AppController],
   providers: [
