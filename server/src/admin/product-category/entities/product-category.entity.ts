@@ -1,10 +1,13 @@
-import { Column, CreateDateColumn, Entity, OneToMany, UpdateDateColumn } from "typeorm";
+import { Column, Entity, OneToMany } from "typeorm";
+
+// Common Base Model for createdAt, updatedAt, isDeleted
+import { BaseCommonModel } from "src/common/common-column.entity";
 
 // Sub Category Model
 import { ProductSubCategoryModel } from "src/admin/product-sub-category/entities/product-sub-category.entity";
 
 @Entity({ name: "productCategory" })
-export class ProductCategoryModel {
+export class ProductCategoryModel extends BaseCommonModel {
   @Column({ generated: "uuid", nullable: false, primary: true, type: "uuid", unique: true })
   productCategoryId: string;
 
@@ -16,13 +19,4 @@ export class ProductCategoryModel {
 
   @OneToMany(() => ProductSubCategoryModel, subCategoryTable => subCategoryTable.productCategoryFk, { cascade: true })
   productSubCategories: ProductSubCategoryModel[];
-
-  @Column({ nullable: false, type: "boolean", default: false })
-  isDeleted: boolean;
-
-  @CreateDateColumn()
-  createdAt: Date;
-
-  @UpdateDateColumn()
-  updatedAt: Date;
 }

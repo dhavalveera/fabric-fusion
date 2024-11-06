@@ -35,6 +35,7 @@ import { AdsModule as AdminAdsModule } from "./admin/ads/ads.module";
 import { CouponModule as AdminCouponModule } from "./admin/coupon/coupon.module";
 import { ProductAttributesModule as AdminProductAttributesModule } from "./admin/product-attributes/product-attributes.module";
 import { OrdersModule as AdminOrdersModule } from "./admin/orders/orders.module";
+import { ShippingModule as AdminShippingModule } from "./admin/shipping/shipping.module";
 
 // Cron Modules
 import { CouponsModule as CouponsCronModule } from "./cron_jobs/coupons/coupons.module";
@@ -102,6 +103,7 @@ import { OrdersController as AdminOrdersController } from "./admin/orders/orders
     AdminCouponModule,
     AdminProductAttributesModule,
     AdminOrdersModule,
+    AdminShippingModule,
 
     // Cron Modules
     CouponsCronModule,

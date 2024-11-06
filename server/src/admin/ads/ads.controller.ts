@@ -1,5 +1,9 @@
 import { Controller, Get, Post, Body, Patch, Param, Delete } from "@nestjs/common";
+
+// Service
 import { AdsService } from "./ads.service";
+
+// Controller + Service
 import { CreateAdDto } from "./dto/create-ad.dto";
 import { UpdateAdDto } from "./dto/update-ad.dto";
 

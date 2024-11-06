@@ -1,9 +1,10 @@
-import { BeforeInsert, Column, CreateDateColumn, Entity, OneToMany } from "typeorm";
+import { BeforeInsert, Column, CreateDateColumn, Entity, JoinColumn, OneToMany, OneToOne } from "typeorm";
 
 // Common Base Model for createdAt, updatedAt & isDeleted
 import { BaseCommonModel } from "src/common/common-column.entity";
 
 // Relationship Models
+import { DeliveryDetailsModel } from "src/admin/shipping/entities/shipping.entity";
 import { OrderItemsModel } from "./order-items.entity";
 
 @Entity({ name: "orderDetails" })
@@ -18,13 +19,17 @@ export class OrderDetailsModel extends BaseCommonModel {
   totalAmount: number;
 
   @Column({ type: "varchar", length: 20, default: "pending" })
-  orderStatus: string; // e.g. Pending, Processing, Cancelled or Completed
+  orderStatus: string; // e.g. Pending, Processing, Shipped, Cancelled or Completed
 
   @CreateDateColumn()
   orderDate: Date;
 
   @OneToMany(() => OrderItemsModel, orderItemsTable => orderItemsTable.orderDetailsFk, { cascade: true, eager: true })
   orderItemsFk: OrderItemsModel[];
+
+  @OneToOne(() => DeliveryDetailsModel, deliveryDetailTable => deliveryDetailTable.orderDetailsFk, { cascade: true, eager: true })
+  @JoinColumn({ name: "deliveryDetailsFk" })
+  deliveryDetailsFk: DeliveryDetailsModel;
 
   @BeforeInsert()
   generateOrderId(): void {

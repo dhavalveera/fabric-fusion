@@ -2,7 +2,7 @@ import { Injectable, Logger } from "@nestjs/common";
 import { InjectRepository } from "@nestjs/typeorm";
 
 // TypeORM
-import { Repository } from "typeorm";
+import { DataSource, Repository } from "typeorm";
 
 // Custom Exception
 import { NotFoundException } from "src/exception-filters/not-found.exception";
@@ -17,6 +17,7 @@ import { CreateOrderDto } from "./dto/create-order.dto";
 import { UpdateOrderDto } from "./dto/update-order.dto";
 
 // Model
+import { DeliveryDetailsModel } from "../shipping/entities/shipping.entity";
 import { OrderDetailsModel } from "./entities/order.entity";
 import { OrderItemsModel } from "./entities/order-items.entity";
 
@@ -27,10 +28,15 @@ import { FindAllResp, OrderStatusType } from "./types/interfaces";
 export class OrdersService {
   private readonly logger = new Logger("AdminOrderDetails");
 
+  private readonly deliveryDetailModel: Repository<DeliveryDetailsModel>;
+
   constructor(
     @InjectRepository(OrderDetailsModel) private readonly orderDetailsRepository: Repository<OrderDetailsModel>,
     @InjectRepository(OrderItemsModel) private readonly orderItemsRepository: Repository<OrderItemsModel>,
-  ) {}
+    private readonly dataSource: DataSource,
+  ) {
+    this.deliveryDetailModel = this.dataSource.getRepository(DeliveryDetailsModel);
+  }
 
   async create(createOrderDto: CreateOrderDto): Promise<OrderDetailsModel> {
     // Check if the Order is CGST + SGST or IGST
@@ -99,22 +105,52 @@ export class OrdersService {
     // Allow status updates only for certain status (e.g. Pending or Processing)
     const allowedStatues: Array<string> = ["pending", "processing"];
 
-    if (!allowedStatues.includes(updateOrderDto.orderStatus)) {
+    if (!allowedStatues.includes(isOrderDetailsAvailable.orderStatus)) {
       this.logger.warn(`Order status for ID (${id}) is not eligible for update.`);
       throw new UnsuccessfulException(`Order status cannot be updated from current status (${isOrderDetailsAvailable.orderStatus}).`);
     }
 
-    // Proceed with the update
-    const updatedData = await this.orderDetailsRepository.update({ orderDetailId: id, isDeleted: false }, updateOrderDto);
+    // Check if the status is being set to "shipped"
+    if (updateOrderDto.orderStatus === "shipped") {
+      // Prevent further updates if delivery data already exists
+      if (isOrderDetailsAvailable.deliveryDetailsFk) {
+        this.logger.warn(`Delivery entry already exists for order ID - (${id}). Status cannot be updated.`);
 
-    if (updatedData) {
-      this.logger.log(`Updated Order Status successfully with orderDetailsId - ${isOrderDetailsAvailable.orderDetailId}`);
+        throw new UnsuccessfulException("Order status or delivery details cannot be updated once shipped.");
+      }
 
-      throw new SuccessException();
+      // Insert delivery data for "shipped" status
+      const deliveryCreatedData = this.deliveryDetailModel.create({
+        ...updateOrderDto.deliveryData,
+        dispatchedDate: new Date(),
+        deliveryStatus: "Dispatched",
+        orderDetailsFk: isOrderDetailsAvailable,
+      });
+
+      const deliveryData = await this.deliveryDetailModel.save(deliveryCreatedData);
+
+      if (deliveryData) {
+        this.logger.log(`Created Delivery entry successfully with Tracking ID - ${isOrderDetailsAvailable.orderDetailId}`);
+
+        throw new SuccessException();
+      } else {
+        this.logger.log(`Unable to create the Delivery Data`);
+
+        throw new UnsuccessfulException(`Unable to create the Delivery Data`);
+      }
     } else {
-      this.logger.log(`Unable to Update the Order Details with ID - (${id})`);
+      // Proceed with the update
+      const updatedData = await this.orderDetailsRepository.update({ orderDetailId: id, isDeleted: false }, updateOrderDto);
 
-      throw new UnsuccessfulException(`Unable to Update the Order Details with ID - (${id})`);
+      if (updatedData) {
+        this.logger.log(`Updated Order Status successfully with orderDetailsId - ${isOrderDetailsAvailable.orderDetailId}`);
+
+        throw new SuccessException();
+      } else {
+        this.logger.log(`Unable to Update the Order Details with ID - (${id})`);
+
+        throw new UnsuccessfulException(`Unable to Update the Order Details with ID - (${id})`);
+      }
     }
   }
 }

@@ -1,4 +1,7 @@
-import { Column, CreateDateColumn, Entity, JoinColumn, ManyToOne, OneToMany, Relation, UpdateDateColumn } from "typeorm";
+import { Column, Entity, JoinColumn, ManyToOne, OneToMany, Relation } from "typeorm";
+
+// Common Model
+import { BaseCommonModel } from "src/common/common-column.entity";
 
 // Models
 import { ProductCategoryModel } from "src/admin/product-category/entities/product-category.entity";
@@ -6,7 +9,7 @@ import { ProductsModel } from "src/admin/products/entities/product.entity";
 import { ProductAttributeModel } from "src/admin/product-attributes/entities/product-attribute.entity";
 
 @Entity({ name: "productSubCategory" })
-export class ProductSubCategoryModel {
+export class ProductSubCategoryModel extends BaseCommonModel {
   @Column({ generated: "uuid", nullable: false, primary: true, type: "uuid", unique: true })
   productSubCategoryId: string;
 
@@ -25,13 +28,4 @@ export class ProductSubCategoryModel {
 
   @OneToMany(() => ProductAttributeModel, productAttributeTable => productAttributeTable.productSubCategoryFk, { cascade: true })
   productAttributes: ProductAttributeModel[];
-
-  @Column({ nullable: false, type: "boolean", default: false })
-  isDeleted: boolean;
-
-  @CreateDateColumn()
-  createdAt: Date;
-
-  @UpdateDateColumn()
-  updatedAt: Date;
 }

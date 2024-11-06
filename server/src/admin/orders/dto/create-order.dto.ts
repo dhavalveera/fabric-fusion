@@ -1,15 +1,9 @@
-import { IsNotEmpty, IsNumber, IsString } from "class-validator";
+import { ArrayMinSize, ArrayNotEmpty, IsArray, IsString } from "class-validator";
 
 export class CreateOrderDto {
-  @IsNotEmpty()
-  @IsNumber({ allowNaN: false })
-  discountAmount: number;
-
-  @IsNotEmpty()
-  @IsNumber({ allowNaN: false })
-  totalAmount: number;
-
-  @IsNotEmpty()
-  @IsString()
-  orderStatus: string;
+  @IsArray()
+  @ArrayNotEmpty() // Ensures the array is not empty
+  @IsString({ each: true }) // Ensures each element in the array is a string
+  @ArrayMinSize(1) // Optionally, enforce a minimum size for the array
+  cartIds: string[];
 }
