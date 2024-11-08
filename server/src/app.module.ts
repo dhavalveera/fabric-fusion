@@ -37,6 +37,10 @@ import { ProductAttributesModule as AdminProductAttributesModule } from "./admin
 import { OrdersModule as AdminOrdersModule } from "./admin/orders/orders.module";
 import { ShippingModule as AdminShippingModule } from "./admin/shipping/shipping.module";
 
+// Customer Modules
+import { CommonModule } from "./customer/common/common.module";
+import { WishlistModule as CustomerWishlistModule } from "./customer/wishlist/wishlist.module";
+
 // Cron Modules
 import { CouponsModule as CouponsCronModule } from "./cron_jobs/coupons/coupons.module";
 
@@ -53,6 +57,10 @@ import { AdsController as AdminAdsController } from "./admin/ads/ads.controller"
 import { CouponController as AdminCouponController } from "./admin/coupon/coupon.controller";
 import { ProductAttributesController as AdminProductAttributesController } from "./admin/product-attributes/product-attributes.controller";
 import { OrdersController as AdminOrdersController } from "./admin/orders/orders.controller";
+
+// Customer Controllers
+import { CommonController as CustomerCommonController } from "./customer/common/common.controller";
+import { WishlistController as CustomerWishlistController } from "./customer/wishlist/wishlist.controller";
 
 @Module({
   imports: [
@@ -110,6 +118,10 @@ import { OrdersController as AdminOrdersController } from "./admin/orders/orders
 
     // Email Module
     EmailServiceModule,
+
+    // Customer Modules
+    CommonModule,
+    CustomerWishlistModule,
   ],
   controllers: [AppController],
   providers: [
@@ -136,6 +148,8 @@ export class AppModule implements NestModule {
         AdminCouponController,
         AdminProductAttributesController,
         AdminOrdersController,
+        CustomerCommonController,
+        CustomerWishlistController,
       );
   }
 }
