@@ -13,4 +13,5 @@ export type UserType = AccountType & {
   phoneNumber: string;
   email: string;
   name: string;
+  customerDetailsId: string;
 };

@@ -51,4 +51,10 @@ export class CommonController {
   getLowStockProducts() {
     return this.commonService.getLowStockItemsService();
   }
+
+  @SkipAuth()
+  @Get("most-loved")
+  findMostLovedProducts() {
+    return this.commonService.findMostLovedProductsService();
+  }
 }

@@ -39,6 +39,8 @@ import { ShippingModule as AdminShippingModule } from "./admin/shipping/shipping
 
 // Customer Modules
 import { CommonModule } from "./customer/common/common.module";
+import { AuthModule as CustomerAuthModule } from "./customer/auth/auth.module";
+import { AddressModule as CustomerAddressModule } from "./customer/address/address.module";
 import { WishlistModule as CustomerWishlistModule } from "./customer/wishlist/wishlist.module";
 
 // Cron Modules
@@ -60,6 +62,8 @@ import { OrdersController as AdminOrdersController } from "./admin/orders/orders
 
 // Customer Controllers
 import { CommonController as CustomerCommonController } from "./customer/common/common.controller";
+import { AuthController as CustomerAuthController } from "./customer/auth/auth.controller";
+import { AddressController as CustomerAddressController } from "./customer/address/address.controller";
 import { WishlistController as CustomerWishlistController } from "./customer/wishlist/wishlist.controller";
 
 @Module({
@@ -121,6 +125,8 @@ import { WishlistController as CustomerWishlistController } from "./customer/wis
 
     // Customer Modules
     CommonModule,
+    CustomerAuthModule,
+    CustomerAddressModule,
     CustomerWishlistModule,
   ],
   controllers: [AppController],
@@ -149,6 +155,8 @@ export class AppModule implements NestModule {
         AdminProductAttributesController,
         AdminOrdersController,
         CustomerCommonController,
+        CustomerAuthController,
+        CustomerAddressController,
         CustomerWishlistController,
       );
   }

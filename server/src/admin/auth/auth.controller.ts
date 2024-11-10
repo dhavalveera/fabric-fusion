@@ -14,7 +14,7 @@ export class AuthController {
   constructor(private readonly adminAuthService: AdminAuthService) {}
 
   @SkipAuth()
-  @HttpCode(HttpStatus.OK)
+  @HttpCode(HttpStatus.CREATED)
   @Post("signup")
   signUp(@Body() createAdminAuthDto: CreateAdminAuthDto) {
     return this.adminAuthService.signUp(createAdminAuthDto);

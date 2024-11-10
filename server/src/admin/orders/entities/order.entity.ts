@@ -1,9 +1,10 @@
-import { BeforeInsert, Column, CreateDateColumn, Entity, JoinColumn, OneToMany, OneToOne } from "typeorm";
+import { BeforeInsert, Column, CreateDateColumn, Entity, JoinColumn, ManyToOne, OneToMany, OneToOne, Relation } from "typeorm";
 
 // Common Base Model for createdAt, updatedAt & isDeleted
 import { BaseCommonModel } from "src/common/common-column.entity";
 
 // Relationship Models
+import { CustomerDetailsModel } from "src/customer/auth/entities/customer-details.entity";
 import { DeliveryDetailsModel } from "src/admin/shipping/entities/shipping.entity";
 import { OrderItemsModel } from "./order-items.entity";
 
@@ -30,6 +31,10 @@ export class OrderDetailsModel extends BaseCommonModel {
   @OneToOne(() => DeliveryDetailsModel, deliveryDetailTable => deliveryDetailTable.orderDetailsFk, { cascade: true, eager: true })
   @JoinColumn({ name: "deliveryDetailsFk" })
   deliveryDetailsFk: DeliveryDetailsModel;
+
+  @ManyToOne(() => CustomerDetailsModel, customerDetailTable => customerDetailTable, { nullable: false, onDelete: "CASCADE" })
+  @JoinColumn({ name: "customerDetailsFk" })
+  customerDetailsFk: Relation<CustomerDetailsModel>;
 
   @BeforeInsert()
   generateOrderId(): void {

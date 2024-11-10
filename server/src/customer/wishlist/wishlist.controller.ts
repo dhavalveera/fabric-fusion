@@ -6,7 +6,7 @@ import { WishlistService } from "./wishlist.service";
 // DTO (Data Transfer Object)
 import { CreateWishlistDto } from "./dto/create-wishlist.dto";
 
-@Controller("customer/wishlist")
+@Controller("user/wishlist")
 export class WishlistController {
   constructor(private readonly wishlistService: WishlistService) {}
 

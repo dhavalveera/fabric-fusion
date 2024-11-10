@@ -22,16 +22,13 @@ import { EmailServiceController } from "./email-service.controller";
             pass: config.get("MAIL_PASSWORD"),
           },
         },
-        defaults: {
-          from: `Fabric Fusion ${config.get("MAIL_USERNAME")}`,
-        },
-        template: {
-          dir: join(__dirname, "templates"),
-          adapter: new EjsAdapter(),
-          options: {
-            strict: false,
-          },
-        },
+        // template: {
+        //   dir: join(__dirname, "templates"),
+        //   adapter: new EjsAdapter({ inlineCssEnabled: true }),
+        //   options: {
+        //     strict: false,
+        //   },
+        // },
       }),
       inject: [ConfigService],
     }),

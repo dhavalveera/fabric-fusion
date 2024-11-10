@@ -157,4 +157,31 @@ export class CommonService {
       throw new UnsuccessfulException(`Unable to find Low Stock Products with Low Stock Threshold limit to ${lowStockThreshold}`);
     }
   }
+
+  async findMostLovedProductsService(): Promise<{ rows: ProductsModel[]; count: number }> {
+    const [rows, count] = await this.productsRepository
+      .createQueryBuilder("product")
+      .leftJoin("product.wishlistFk", "wishlist")
+      .leftJoin("product.orderItemsFk", "orderItem")
+      // .addSelect("COUNT(wishlist.wishlistId) as wishlistCount")
+      // .addSelect("COUNT(orderItem.orderItemId) as orderCount")
+      .where("product.isDeleted = :isDeleted", { isDeleted: false })
+      .andWhere("wishlist.isDeleted = :isDeleted", { isDeleted: false })
+      // .andWhere("orderItem.isDeleted = :isDeleted", { isDeleted: false })
+      .groupBy("product.productDetailsId")
+      .orderBy("COUNT(wishlist.wishlistId)", "DESC")
+      .addOrderBy("COUNT(orderItem.orderItemId)", "DESC")
+      .limit(10)
+      .getManyAndCount();
+
+    if (count > 0) {
+      this.logger.log(`Found total ${count} Most Loved Products`);
+
+      return { count, rows };
+    } else {
+      this.logger.warn(`Unable to find Most Loved Products`);
+
+      throw new UnsuccessfulException(`Unable to find Most Loved Products`);
+    }
+  }
 }
