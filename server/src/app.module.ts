@@ -9,6 +9,9 @@ import { TypeOrmModule } from "@nestjs/typeorm";
 // RateLimiter
 import { ThrottlerModule } from "@nestjs/throttler";
 
+// Nestjs Cache
+import { CacheModule } from "@nestjs/cache-manager";
+
 // Root Controller + Service
 import { AppController } from "./app.controller";
 import { AppService } from "./app.service";
@@ -101,6 +104,9 @@ import { WishlistController as CustomerWishlistController } from "./customer/wis
 
     // ScheduleModule -> for CRON Jobs
     ScheduleModule.forRoot(),
+
+    // Cache
+    CacheModule.register({ isGlobal: true }),
 
     // Admin Modules
     AdminAuthModule,
