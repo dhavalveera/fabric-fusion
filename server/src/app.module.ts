@@ -68,6 +68,7 @@ import { CommonController as CustomerCommonController } from "./customer/common/
 import { AuthController as CustomerAuthController } from "./customer/auth/auth.controller";
 import { AddressController as CustomerAddressController } from "./customer/address/address.controller";
 import { WishlistController as CustomerWishlistController } from "./customer/wishlist/wishlist.controller";
+import { CartModule } from './customer/cart/cart.module';
 
 @Module({
   imports: [
@@ -134,6 +135,7 @@ import { WishlistController as CustomerWishlistController } from "./customer/wis
     CustomerAuthModule,
     CustomerAddressModule,
     CustomerWishlistModule,
+    CartModule,
   ],
   controllers: [AppController],
   providers: [

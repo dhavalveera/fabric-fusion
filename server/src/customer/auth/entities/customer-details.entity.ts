@@ -7,6 +7,7 @@ import { BaseCommonModel } from "src/common/common-column.entity";
 import { OrderDetailsModel } from "src/admin/orders/entities/order.entity";
 import { WishlistModel } from "src/customer/wishlist/entities/wishlist.entity";
 import { CustomerAddressModel } from "src/customer/address/entities/address.entity";
+import { CartsModel } from "src/customer/cart/entities/cart.entity";
 import { CustomerRegistrationsModel } from "./customer-registrations.entity";
 
 @Entity({ name: "customerDetails" })
@@ -35,4 +36,7 @@ export class CustomerDetailsModel extends BaseCommonModel {
 
   @OneToMany(() => CustomerAddressModel, customerAddressTable => customerAddressTable.customerDetailsFk)
   customerAddressFk: Relation<CustomerAddressModel[]>;
+
+  @OneToMany(() => CartsModel, cartsTable => cartsTable.customerDetailsFk, { cascade: true })
+  cartDetailsFk: CartsModel[];
 }

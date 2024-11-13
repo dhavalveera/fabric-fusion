@@ -6,6 +6,7 @@ import { BaseCommonModel } from "src/common/common-column.entity";
 // Relationship Models
 import { CustomerDetailsModel } from "src/customer/auth/entities/customer-details.entity";
 import { DeliveryDetailsModel } from "src/admin/shipping/entities/shipping.entity";
+import { CartsModel } from "src/customer/cart/entities/cart.entity";
 import { OrderItemsModel } from "./order-items.entity";
 
 @Entity({ name: "orderDetails" })
@@ -35,6 +36,9 @@ export class OrderDetailsModel extends BaseCommonModel {
   @ManyToOne(() => CustomerDetailsModel, customerDetailTable => customerDetailTable, { nullable: false, onDelete: "CASCADE" })
   @JoinColumn({ name: "customerDetailsFk" })
   customerDetailsFk: Relation<CustomerDetailsModel>;
+
+  @OneToMany(() => CartsModel, cartsTable => cartsTable.orderDetailsFk, { cascade: true })
+  cartDetailsFk: CartsModel[];
 
   @BeforeInsert()
   generateOrderId(): void {
