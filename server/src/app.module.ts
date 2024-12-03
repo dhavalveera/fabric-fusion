@@ -45,6 +45,8 @@ import { CommonModule } from "./customer/common/common.module";
 import { AuthModule as CustomerAuthModule } from "./customer/auth/auth.module";
 import { AddressModule as CustomerAddressModule } from "./customer/address/address.module";
 import { WishlistModule as CustomerWishlistModule } from "./customer/wishlist/wishlist.module";
+import { CartModule as CustomerCartModule } from "./customer/cart/cart.module";
+import { ProfileModule as CustomerProfileModule } from "./customer/profile/profile.module";
 
 // Cron Modules
 import { CouponsModule as CouponsCronModule } from "./cron_jobs/coupons/coupons.module";
@@ -68,7 +70,8 @@ import { CommonController as CustomerCommonController } from "./customer/common/
 import { AuthController as CustomerAuthController } from "./customer/auth/auth.controller";
 import { AddressController as CustomerAddressController } from "./customer/address/address.controller";
 import { WishlistController as CustomerWishlistController } from "./customer/wishlist/wishlist.controller";
-import { CartModule } from './customer/cart/cart.module';
+import { CartController as CustomerCartController } from "./customer/cart/cart.controller";
+import { ProfileController as CustomerProfileController } from "./customer/profile/profile.controller";
 
 @Module({
   imports: [
@@ -135,7 +138,8 @@ import { CartModule } from './customer/cart/cart.module';
     CustomerAuthModule,
     CustomerAddressModule,
     CustomerWishlistModule,
-    CartModule,
+    CustomerCartModule,
+    CustomerProfileModule,
   ],
   controllers: [AppController],
   providers: [
@@ -166,6 +170,8 @@ export class AppModule implements NestModule {
         CustomerAuthController,
         CustomerAddressController,
         CustomerWishlistController,
+        CustomerCartController,
+        CustomerProfileController,
       );
   }
 }
