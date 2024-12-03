@@ -64,4 +64,41 @@ export class EmailServiceService {
       throw new UnsuccessfulException("Unable to Verify SMTP Transporter Connection. Please try again later.");
     }
   }
+
+  async forgotPasswordMailer(receiverName: string, receiverEmail: string, token: string): Promise<{ statusCode: number; message: string }> {
+    const isTransporterVerified = await this.mailerService.verifyAllTransporters();
+
+    if (isTransporterVerified) {
+      const otpMailer: ISendMailOptions = {
+        from: `Fabric Fusion ${process.env.MAIL_USERNAME}`,
+        to: `"${receiverName}" <${receiverEmail}>`,
+        subject: "Fabric Fusion: Email Verification OTP",
+        text: `Token to Reset password - ${token}`,
+        headers: {
+          priority: "high",
+          date: new Date().toISOString(),
+        },
+        // template: "./sendOTPNewRegistration",
+        // context: {
+        //   name: receiverName,
+        //   otpCode,
+        // },
+      };
+
+      return await this.mailerService
+        .sendMail(otpMailer)
+        .then(() => {
+          return { statusCode: 200, message: "Email Sent" };
+        })
+        .catch(err => {
+          this.logger.error(`Sending Email Error : ${JSON.stringify(err)}`);
+
+          return { statusCode: 400, message: "Sending Email Failed" };
+        });
+    } else {
+      this.logger.warn("Unable to Verify SMTP Transporter Connection. Please try again later.");
+
+      throw new UnsuccessfulException("Unable to Verify SMTP Transporter Connection. Please try again later.");
+    }
+  }
 }

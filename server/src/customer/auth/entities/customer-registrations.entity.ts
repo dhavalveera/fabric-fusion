@@ -1,4 +1,4 @@
-import { BeforeInsert, Column, Entity, OneToOne, PrimaryGeneratedColumn, Relation } from "typeorm";
+import { BeforeInsert, Column, Entity, OneToMany, OneToOne, PrimaryGeneratedColumn, Relation } from "typeorm";
 
 // bcrypt
 import { hashSync } from "bcryptjs";
@@ -8,6 +8,7 @@ import { BaseCommonModel } from "src/common/common-column.entity";
 
 // Relationship Model
 import { CustomerDetailsModel } from "./customer-details.entity";
+import { PasswordResetTokenModel } from "./password-reset-token.entity";
 
 @Entity({ name: "customerRegistrations" })
 export class CustomerRegistrationsModel extends BaseCommonModel {
@@ -31,6 +32,9 @@ export class CustomerRegistrationsModel extends BaseCommonModel {
 
   @OneToOne(() => CustomerDetailsModel, customerDetailTable => customerDetailTable.customerRegistrationFk, { cascade: true })
   customerDetailsFk: Relation<CustomerDetailsModel>;
+
+  @OneToMany(() => PasswordResetTokenModel, passwordResetTokenTable => passwordResetTokenTable.customerRegistrationFk)
+  passwordResetTokenFk: PasswordResetTokenModel;
 
   @BeforeInsert()
   hashThePassword(): void {

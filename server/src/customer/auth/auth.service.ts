@@ -6,7 +6,10 @@ import { InjectRepository } from "@nestjs/typeorm";
 import { Repository } from "typeorm";
 
 // bcrypt
-import { compareSync } from "bcryptjs";
+import { compareSync, hashSync } from "bcryptjs";
+
+// crypto
+import { randomBytes } from "crypto";
 
 // Email Service
 import { EmailServiceService } from "src/email-service/email-service.service";
@@ -22,6 +25,7 @@ import { generateOTP } from "src/utils/generate-otp";
 // Models
 import { CustomerDetailsModel } from "./entities/customer-details.entity";
 import { CustomerRegistrationsModel } from "./entities/customer-registrations.entity";
+import { PasswordResetTokenModel } from "./entities/password-reset-token.entity";
 
 // DTO (Data Transfer Object)
 import { SignUpDto } from "./dto/signup.dto";
@@ -35,6 +39,7 @@ export class AuthService {
   constructor(
     @InjectRepository(CustomerDetailsModel) private readonly customerDetailsModel: Repository<CustomerDetailsModel>,
     @InjectRepository(CustomerRegistrationsModel) private readonly customerRegModel: Repository<CustomerRegistrationsModel>,
+    @InjectRepository(PasswordResetTokenModel) private readonly pwdResetTokenModel: Repository<PasswordResetTokenModel>,
     private readonly jwtService: JwtService,
     private readonly emailService: EmailServiceService,
   ) {}
@@ -166,6 +171,90 @@ export class AuthService {
       this.logger.error(`No Customer Account found with given Email Address - (${verifyOtpPayload.emailAddress})`);
 
       throw new NotFoundException(`No Customer Account found with given Email Address - (${verifyOtpPayload.emailAddress})`);
+    }
+  }
+
+  async forgotPassword(forgotPasswordPayload: { emailAddress: string }) {
+    const isUserAvailable = await this.customerRegModel.findOne({
+      where: { emailAddress: forgotPasswordPayload.emailAddress, isEmailVerified: true, isDeleted: false },
+      relations: ["customerDetailsFk"],
+    });
+
+    if (isUserAvailable) {
+      const token = randomBytes(16).toString("hex"); // Generate secure random token
+      const tokenExpiry = new Date(Date.now() + 15 * 60 * 1000); // 15 minutes from now
+
+      const resetToken = this.pwdResetTokenModel.create({
+        token,
+        tokenExpiry,
+        customerRegistrationFk: { customerRegistrationId: isUserAvailable.customerRegistrationId },
+      });
+
+      const resetTokenData = await this.pwdResetTokenModel.save(resetToken);
+
+      if (resetTokenData) {
+        const { statusCode, message: emailSMTPMsg } = await this.emailService.forgotPasswordMailer(
+          `${isUserAvailable.customerDetailsFk.firstName} ${isUserAvailable.customerDetailsFk.lastName}`,
+          isUserAvailable.emailAddress,
+          token,
+        );
+
+        if (statusCode === 400) {
+          this.logger.warn(`SMTP Email Info: ${JSON.stringify(emailSMTPMsg)}`);
+
+          throw new UnsuccessfulException(`SMTP Email Info: ${JSON.stringify(emailSMTPMsg)}`);
+        } else {
+          this.logger.log(`Forgot Password Email Sent successfully for Customer/User -- (${isUserAvailable.customerDetailsFk.firstName} ${isUserAvailable.customerDetailsFk.lastName})`);
+
+          throw new SuccessException();
+        }
+      } else {
+        this.logger.warn(`Unable to Generate/Store the Reset Password Token for requested User - (${isUserAvailable.customerDetailsFk.firstName} ${isUserAvailable.customerDetailsFk.lastName})`);
+
+        throw new UnsuccessfulException();
+      }
+    } else {
+      this.logger.error(`No Customer/User Found with Email - (${forgotPasswordPayload.emailAddress}). Please check the Email`);
+
+      throw new NotFoundException(`No Customer/User Found with Email - (${forgotPasswordPayload.emailAddress}). Please check the Email`);
+    }
+  }
+
+  async resetPassword(token: string, newPasswordPayload: { newPassword: string }) {
+    const isTokenAvailable = await this.pwdResetTokenModel.findOne({ where: { token }, relations: ["customerRegistrationFk", "customerRegistrationFk.customerDetailsFk"] });
+
+    if (isTokenAvailable) {
+      if (isTokenAvailable.tokenExpiry < new Date()) {
+        this.logger.error(`Token has expired!.`);
+
+        throw new UnsuccessfulException(`Token has expired!.`);
+      } else if (isTokenAvailable.isPasswordResetted) {
+        this.logger.error(`Token has already been used!.`);
+
+        throw new UnsuccessfulException(`Token has already been used!.`);
+      } else {
+        const hashedPassword = hashSync(newPasswordPayload.newPassword, 10);
+
+        const newPasswordData = await this.customerRegModel.update({ customerRegistrationId: isTokenAvailable.customerRegistrationFk.customerRegistrationId }, { password: hashedPassword });
+
+        if (newPasswordData) {
+          await this.pwdResetTokenModel.update({ passwordResetTokenId: isTokenAvailable.passwordResetTokenId }, { isPasswordResetted: true });
+
+          this.logger.log(
+            `Password Updated Successfully for Customer/User - (${isTokenAvailable.customerRegistrationFk.customerDetailsFk.firstName} ${isTokenAvailable.customerRegistrationFk.customerDetailsFk.lastName})!.`,
+          );
+
+          throw new SuccessException();
+        } else {
+          this.logger.warn(`Unable to Save New Password!. Please try again later.`);
+
+          throw new UnsuccessfulException(`Unable to Save New Password!. Please try again later.`);
+        }
+      }
+    } else {
+      this.logger.error(`(${token}) - Token not found!. Please check the token again.`);
+
+      throw new NotFoundException(`(${token}) - Token not found!. Please check the token again.`);
     }
   }
 }

@@ -1,4 +1,4 @@
-import { Controller, Post, Body } from "@nestjs/common";
+import { Controller, Post, Body, Param } from "@nestjs/common";
 
 // Auth Decorator to Skip Auth Check
 import { SkipAuth } from "src/admin/auth/decorators/public.decorator";
@@ -31,5 +31,17 @@ export class AuthController {
   @Post("verify-otp")
   userVerifyOtp(@Body() verifyOtpPayload: VerifyOTPDto) {
     return this.authService.verifyEmailOTPService(verifyOtpPayload);
+  }
+
+  @SkipAuth()
+  @Post("forgot-password")
+  forgotPassword(@Body() forgotPasswordPayload: { emailAddress: string }) {
+    return this.authService.forgotPassword(forgotPasswordPayload);
+  }
+
+  @SkipAuth()
+  @Post("reset-password")
+  resetPassword(@Param("token") token: string, @Body() newPasswordPayload: { newPassword: string }) {
+    return this.authService.resetPassword(token, newPasswordPayload);
   }
 }
