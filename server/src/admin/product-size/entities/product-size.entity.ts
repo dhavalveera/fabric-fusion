@@ -1,10 +1,11 @@
-import { Column, Entity, JoinColumn, ManyToOne, Relation } from "typeorm";
+import { Column, Entity, JoinColumn, ManyToOne, OneToMany, Relation } from "typeorm";
 
 // Base Common Model for createdAt, updatedAt, isDeleted
 import { BaseCommonModel } from "src/common/common-column.entity";
 
 // Products Model
 import { ProductsModel } from "src/admin/products/entities/product.entity";
+import { CartsModel } from "src/customer/cart/entities/cart.entity";
 
 // CONSTANTS
 import { Size } from "../constants/size";
@@ -26,4 +27,7 @@ export class ProductSizeModel extends BaseCommonModel {
   @ManyToOne(() => ProductsModel, productTable => productTable.sizes, { onDelete: "CASCADE" })
   @JoinColumn({ name: "productDetailFk" })
   productDetailFk: Relation<ProductsModel>;
+
+  @OneToMany(() => CartsModel, cartsTable => cartsTable, { nullable: false })
+  cartDetailsFk: CartsModel[];
 }

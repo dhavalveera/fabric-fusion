@@ -1,4 +1,4 @@
-import { Controller, Get, Post, Body, Param, Delete } from "@nestjs/common";
+import { Controller, Get, Post, Body, Param, Delete, Patch } from "@nestjs/common";
 
 // Decorator for User from req
 import { UserInRequest } from "src/admin/auth/decorators/user.decorator";
@@ -12,6 +12,7 @@ import { CartService } from "./cart.service";
 // DTO (Data Transfer Object)
 import { CreateCartDto } from "./dto/create-cart.dto";
 import { DeleteCartDto } from "./dto/delete-cart.dto";
+import { UpdateCartQuantityDto } from "./dto/update-cart.dto";
 
 @Controller("user/cart")
 export class CartController {
@@ -25,6 +26,11 @@ export class CartController {
   @Get("all")
   findAll(@UserInRequest() userInfo: UserType) {
     return this.cartService.findAll(userInfo);
+  }
+
+  @Patch(":id/quantity/update")
+  updateCart(@Param("id") id: string, @Body() updateCardBody: UpdateCartQuantityDto, @UserInRequest() userInfo: UserType) {
+    return this.cartService.updateCart(id, updateCardBody, userInfo);
   }
 
   @Delete(":id/delete")

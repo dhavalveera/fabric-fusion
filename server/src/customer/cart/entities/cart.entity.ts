@@ -5,6 +5,7 @@ import { BaseCommonModel } from "src/common/common-column.entity";
 
 // Relationship Model
 import { ProductsModel } from "src/admin/products/entities/product.entity";
+import { ProductSizeModel } from "src/admin/product-size/entities/product-size.entity";
 import { OrderDetailsModel } from "src/admin/orders/entities/order.entity";
 import { CustomerDetailsModel } from "src/customer/auth/entities/customer-details.entity";
 
@@ -42,4 +43,8 @@ export class CartsModel extends BaseCommonModel {
   @ManyToOne(() => CustomerDetailsModel, customerDetailsTable => customerDetailsTable.cartDetailsFk, { nullable: false })
   @JoinColumn({ name: "customerDetailsFk" })
   customerDetailsFk: Relation<CustomerDetailsModel>;
+
+  @ManyToOne(() => ProductSizeModel, productSizeTable => productSizeTable.cartDetailsFk, { nullable: false })
+  @JoinColumn({ name: "productSizeFk" })
+  productSizeFk: Relation<ProductSizeModel>;
 }

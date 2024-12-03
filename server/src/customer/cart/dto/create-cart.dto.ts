@@ -12,4 +12,8 @@ export class CreateCartDto {
   @IsNotEmpty({ message: "Product ID is required" })
   @IsUUID()
   productDetailsFk: string;
+
+  @IsNotEmpty({ message: "Product Size ID is required" })
+  @IsUUID()
+  productSizeFk: string;
 }
