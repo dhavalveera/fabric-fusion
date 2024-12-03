@@ -9,6 +9,12 @@ import { NotFoundException } from "src/exception-filters/not-found.exception";
 import { SuccessException } from "src/exception-filters/success.exception";
 import { UnsuccessfulException } from "src/exception-filters/unsuccessful.exception";
 
+// Decorator
+import { UserInRequest } from "src/admin/auth/decorators/user.decorator";
+
+// Types
+import { UserType } from "src/all-types";
+
 // DTO (Data Transfer Object)
 import { CreateWishlistDto } from "./dto/create-wishlist.dto";
 
@@ -21,9 +27,10 @@ export class WishlistService {
 
   constructor(@InjectRepository(WishlistModel) private readonly wishlistRepository: Repository<WishlistModel>) {}
 
-  async create(createWishlistDto: CreateWishlistDto) {
+  async create(createWishlistDto: CreateWishlistDto, @UserInRequest() userInfo: UserType) {
     const createdWishlistData = this.wishlistRepository.create({
       productDetailsFk: { productDetailsId: createWishlistDto.productDetailsFk },
+      customerDetailsFk: { customerDetailsId: userInfo.customerDetailsId },
     });
 
     const insertedData = await this.wishlistRepository.save(createdWishlistData);
@@ -39,13 +46,14 @@ export class WishlistService {
     }
   }
 
-  async findAll(): Promise<{ rows: WishlistModel[]; count: number }> {
+  async findAll(@UserInRequest() userInfo: UserType): Promise<{ rows: WishlistModel[]; count: number }> {
     // const [rows, count] = await this.wishlistRepository.findAndCount({where: {isDeleted: false}})
     const [rows, count] = await this.wishlistRepository
       .createQueryBuilder("wishlist")
       .leftJoinAndSelect("wishlist.productDetailsFk", "products")
       .leftJoinAndSelect("products.productImagesFk", "productImages", "productImages.isDeleted = :isDeleted OR productImages.isDeleted IS NULL", { isDeleted: false })
-      .where("wishlist.isDeleted = :isDeleted", { isDeleted: false })
+      .where("wishlist.customerDetailsFk = :customerDetailsFk", { customerDetailsFk: userInfo.customerDetailsId })
+      .andWhere("wishlist.isDeleted = :isDeleted", { isDeleted: false })
       .andWhere("products.isDeleted = :isDeleted", { isDeleted: false })
       .orderBy("products.createdAt", "DESC")
       .getManyAndCount();
@@ -61,8 +69,8 @@ export class WishlistService {
     }
   }
 
-  async remove(id: string) {
-    const isWishlistAvailable = await this.wishlistRepository.findOne({ where: { wishlistId: id, isDeleted: false } });
+  async remove(id: string, @UserInRequest() userInfo: UserType) {
+    const isWishlistAvailable = await this.wishlistRepository.findOne({ where: { wishlistId: id, isDeleted: false, customerDetailsFk: { customerDetailsId: userInfo.customerDetailsId } } });
 
     if (isWishlistAvailable) {
       const updatedData = await this.wishlistRepository.update({ wishlistId: id, isDeleted: false }, { isDeleted: true, removedOn: new Date() });
