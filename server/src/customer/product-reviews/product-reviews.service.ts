@@ -67,6 +67,27 @@ export class ProductReviewsService {
     }
   }
 
+  async getAllReviewsOfCustomer(@UserInRequest() userInfo: UserType): Promise<{ rows: ProductReviewModel[]; count: number }> {
+    console.log("userInfo.customerDetailsId", userInfo.customerDetailsId);
+
+    const [rows, count] = await this.productReviewRepoistory
+      .createQueryBuilder("pR")
+      .leftJoinAndSelect("pR.productDetailsFk", "pD")
+      .select(["pR.productReviewsId", "pR.ratingStar", "pR.ratingComment", "pR.isDeleted", "pR.createdAt", "pR.updatedAt", "pD.productDetailsId", "pD.productName", "pD.productDisplayImage"])
+      .orderBy("pR.createdAt", "DESC")
+      .getManyAndCount();
+
+    if (count > 0) {
+      this.logger.log(`Found total ${count} Product Reviews for Customer/User - (${userInfo.name})`);
+
+      return { count, rows };
+    } else {
+      this.logger.error(`No Product Reviews Found for Customer/User - (${userInfo.name})`);
+
+      throw new UnsuccessfulException(`No Product Reviews Found`);
+    }
+  }
+
   async update(id: string, updateProductReviewDto: UpdateProductReviewDto, @UserInRequest() userInfo: UserType) {
     const isProductReviewAvailable = await this.productReviewRepoistory.findOne({
       where: { productReviewsId: id, customerDetailsFk: { customerDetailsId: userInfo.customerDetailsId }, isDeleted: false },

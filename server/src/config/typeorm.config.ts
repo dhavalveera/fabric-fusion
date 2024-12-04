@@ -19,7 +19,6 @@ export class TypeOrmConfigService implements TypeOrmOptionsFactory {
       synchronize: true,
       applicationName: "Fabric_Fusion_API",
       logger: "advanced-console",
-      logging: "all",
       ssl: process.env.NODE_ENV === "production",
     };
   }

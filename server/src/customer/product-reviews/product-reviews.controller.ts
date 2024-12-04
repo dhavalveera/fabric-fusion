@@ -27,6 +27,11 @@ export class ProductReviewsController {
     return this.productReviewsService.findAll(productId);
   }
 
+  @Get("customer")
+  getAllReviewsOfCustomer(@UserInRequest() userInfo: UserType) {
+    return this.productReviewsService.getAllReviewsOfCustomer(userInfo);
+  }
+
   @Patch(":id/update")
   update(@Param("id") id: string, @Body() updateProductReviewDto: UpdateProductReviewDto, @UserInRequest() userInfo: UserType) {
     return this.productReviewsService.update(id, updateProductReviewDto, userInfo);
