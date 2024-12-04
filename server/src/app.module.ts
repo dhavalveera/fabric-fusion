@@ -47,6 +47,7 @@ import { AddressModule as CustomerAddressModule } from "./customer/address/addre
 import { WishlistModule as CustomerWishlistModule } from "./customer/wishlist/wishlist.module";
 import { CartModule as CustomerCartModule } from "./customer/cart/cart.module";
 import { ProfileModule as CustomerProfileModule } from "./customer/profile/profile.module";
+import { SearchModule as CustomerSearchModule } from "./customer/search/search.module";
 
 // Cron Modules
 import { CouponsModule as CouponsCronModule } from "./cron_jobs/coupons/coupons.module";
@@ -72,6 +73,7 @@ import { AddressController as CustomerAddressController } from "./customer/addre
 import { WishlistController as CustomerWishlistController } from "./customer/wishlist/wishlist.controller";
 import { CartController as CustomerCartController } from "./customer/cart/cart.controller";
 import { ProfileController as CustomerProfileController } from "./customer/profile/profile.controller";
+import { SearchController as CustomerSearchController } from "./customer/search/search.controller";
 
 @Module({
   imports: [
@@ -140,6 +142,7 @@ import { ProfileController as CustomerProfileController } from "./customer/profi
     CustomerWishlistModule,
     CustomerCartModule,
     CustomerProfileModule,
+    CustomerSearchModule,
   ],
   controllers: [AppController],
   providers: [
@@ -172,6 +175,7 @@ export class AppModule implements NestModule {
         CustomerWishlistController,
         CustomerCartController,
         CustomerProfileController,
+        CustomerSearchController,
       );
   }
 }
