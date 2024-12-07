@@ -7,6 +7,10 @@ export class UpdateProductReviewDto {
   @Max(5, { message: "Rating must be at most 5." }) // Maximum rating of 5
   ratingStar: number;
 
+  @IsNotEmpty({ message: "Title should not be empty." })
+  @IsString({ message: "Title must be a string." })
+  ratingTitle: string;
+
   @IsNotEmpty({ message: "Comment should not be empty." })
   @IsString({ message: "Comment must be a string." })
   ratingComment: string;

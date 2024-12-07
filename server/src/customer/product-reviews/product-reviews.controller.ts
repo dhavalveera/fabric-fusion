@@ -12,6 +12,7 @@ import { ProductReviewsService } from "./product-reviews.service";
 // DTO
 import { CreateProductReviewDto } from "./dto/create-product-review.dto";
 import { UpdateProductReviewDto } from "./dto/update-product-review.dto";
+import { ReportReviewDto } from "./dto/report-review.dto";
 
 @Controller("user/product-reviews")
 export class ProductReviewsController {
@@ -40,5 +41,10 @@ export class ProductReviewsController {
   @Delete(":id/delete")
   remove(@Param("id") id: string, @UserInRequest() userInfo: UserType) {
     return this.productReviewsService.remove(id, userInfo);
+  }
+
+  @Post("/report")
+  reportReview(@Body() reportReviewBody: ReportReviewDto, @UserInRequest() userInfo: UserType) {
+    return this.productReviewsService.reportReview(reportReviewBody, userInfo);
   }
 }
