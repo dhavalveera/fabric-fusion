@@ -13,6 +13,7 @@ import { OrderItemsModel } from "src/admin/orders/entities/order-items.entity";
 import { WishlistModel } from "src/customer/wishlist/entities/wishlist.entity";
 import { CartsModel } from "src/customer/cart/entities/cart.entity";
 import { ProductReviewModel } from "src/customer/product-reviews/entities/product-review.entity";
+import { RecentlyViewedProductsModel } from "src/customer/recently-viewed/entities/recently-viewed.entity";
 
 // CONSTANTS
 import { Gender } from "../constants/gender";
@@ -97,6 +98,9 @@ export class ProductsModel extends BaseCommonModel {
 
   @OneToMany(() => ProductReviewModel, productReviewTable => productReviewTable.productDetailsFk)
   productReviewFk: ProductReviewModel[];
+
+  @OneToMany(() => RecentlyViewedProductsModel, recentlyViewProdTable => recentlyViewProdTable.productDetailsFk)
+  recentlyViewProdFk: RecentlyViewedProductsModel[];
 
   @BeforeInsert()
   createSlugFromTitle(): void {

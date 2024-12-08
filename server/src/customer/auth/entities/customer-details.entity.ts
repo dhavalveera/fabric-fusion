@@ -10,6 +10,7 @@ import { CustomerAddressModel } from "src/customer/address/entities/address.enti
 import { CartsModel } from "src/customer/cart/entities/cart.entity";
 import { ProductReviewModel } from "src/customer/product-reviews/entities/product-review.entity";
 import { ReviewsReportedModel } from "src/customer/product-reviews/entities/reviews-reported.entity";
+import { RecentlyViewedProductsModel } from "src/customer/recently-viewed/entities/recently-viewed.entity";
 import { CustomerRegistrationsModel } from "./customer-registrations.entity";
 
 @Entity({ name: "customerDetails" })
@@ -47,4 +48,7 @@ export class CustomerDetailsModel extends BaseCommonModel {
 
   @OneToMany(() => ReviewsReportedModel, reviewsReportedTable => reviewsReportedTable.reportedByUserId)
   reportedReviewsFk: ReviewsReportedModel[];
+
+  @OneToMany(() => RecentlyViewedProductsModel, recentViewProdTable => recentViewProdTable.customerDetailsFk)
+  recentlyViewedProdFk: RecentlyViewedProductsModel[];
 }
