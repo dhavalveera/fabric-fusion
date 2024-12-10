@@ -7,6 +7,7 @@ import { BaseCommonModel } from "src/common/common-column.entity";
 import { CustomerDetailsModel } from "src/customer/auth/entities/customer-details.entity";
 import { DeliveryDetailsModel } from "src/admin/shipping/entities/shipping.entity";
 import { CartsModel } from "src/customer/cart/entities/cart.entity";
+import { CustomerAddressModel } from "src/customer/address/entities/address.entity";
 import { OrderItemsModel } from "./order-items.entity";
 
 @Entity({ name: "orderDetails" })
@@ -14,14 +15,14 @@ export class OrderDetailsModel extends BaseCommonModel {
   @Column({ nullable: false, primary: true, type: "varchar", unique: true })
   orderDetailId: string;
 
-  @Column({ type: "decimal", precision: 10, scale: 2 })
+  @Column({ type: "decimal", precision: 10, scale: 2, nullable: true })
   discountAmount: number;
 
   @Column({ type: "decimal", precision: 10, scale: 2 })
   totalAmount: number;
 
   @Column({ type: "varchar", length: 20, default: "pending" })
-  orderStatus: string; // e.g. Pending, Processing, Shipped, Cancelled or Completed
+  orderStatus: string; // e.g. Pending, Processing or Completed
 
   @CreateDateColumn()
   orderDate: Date;
@@ -39,6 +40,10 @@ export class OrderDetailsModel extends BaseCommonModel {
 
   @OneToMany(() => CartsModel, cartsTable => cartsTable.orderDetailsFk, { cascade: true })
   cartDetailsFk: CartsModel[];
+
+  @ManyToOne(() => CustomerAddressModel, addressTable => addressTable.orderDetailsFk, { cascade: true, nullable: true })
+  @JoinColumn({ name: "customerAddressFk" })
+  customerAddressFk: Relation<CustomerAddressModel>;
 
   @BeforeInsert()
   generateOrderId(): void {

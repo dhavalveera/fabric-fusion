@@ -51,6 +51,7 @@ import { ProfileModule as CustomerProfileModule } from "./customer/profile/profi
 import { SearchModule as CustomerSearchModule } from "./customer/search/search.module";
 import { ProductReviewsModule as CustomerProductReviewsModule } from "./customer/product-reviews/product-reviews.module";
 import { RecentlyViewedModule as CustomerRecentlyViewedModule } from "./customer/recently-viewed/recently-viewed.module";
+import { OrderModule as CustomerOrderModule } from "./customer/order/order.module";
 
 // Cron Modules
 import { CouponsModule as CouponsCronModule } from "./cron_jobs/coupons/coupons.module";
@@ -81,6 +82,7 @@ import { ProfileController as CustomerProfileController } from "./customer/profi
 import { SearchController as CustomerSearchController } from "./customer/search/search.controller";
 import { ProductReviewsController as CustomerProductReviewsController } from "./customer/product-reviews/product-reviews.controller";
 import { RecentlyViewedController as CustomerRecentlyViewedController } from "./customer/recently-viewed/recently-viewed.controller";
+import { OrderController as CustomerOrderController } from "./customer/order/order.controller";
 
 @Module({
   imports: [
@@ -153,6 +155,7 @@ import { RecentlyViewedController as CustomerRecentlyViewedController } from "./
     CustomerSearchModule,
     CustomerProductReviewsModule,
     CustomerRecentlyViewedModule,
+    CustomerOrderModule,
   ],
   controllers: [AppController],
   providers: [
@@ -190,6 +193,7 @@ export class AppModule implements NestModule {
         CustomerSearchController,
         CustomerProductReviewsController,
         CustomerRecentlyViewedController,
+        CustomerOrderController,
       );
   }
 }

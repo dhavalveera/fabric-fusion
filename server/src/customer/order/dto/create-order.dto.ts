@@ -5,5 +5,5 @@ export class CreateOrderDto {
   @ArrayNotEmpty() // Ensures the array is not empty
   @IsString({ each: true }) // Ensures each element in the array is a string
   @ArrayMinSize(1) // Optionally, enforce a minimum size for the array
-  cartIds: string[];
+  cartIds: Array<string>;
 }

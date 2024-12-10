@@ -1,4 +1,4 @@
-import { Column, Entity, JoinColumn, ManyToOne, PrimaryGeneratedColumn, Relation } from "typeorm";
+import { Column, Entity, JoinColumn, ManyToOne, OneToMany, PrimaryGeneratedColumn, Relation } from "typeorm";
 
 // Base Common Model for createdAt, updatedAt, isDeleted
 import { BaseCommonModel } from "src/common/common-column.entity";
@@ -8,6 +8,7 @@ import { AddressTypeEnum } from "../constant";
 
 // Relationship Table
 import { CustomerDetailsModel } from "src/customer/auth/entities/customer-details.entity";
+import { OrderDetailsModel } from "src/admin/orders/entities/order.entity";
 
 @Entity({ name: "customerAddress" })
 export class CustomerAddressModel extends BaseCommonModel {
@@ -44,4 +45,7 @@ export class CustomerAddressModel extends BaseCommonModel {
   @ManyToOne(() => CustomerDetailsModel, customerDetailTable => customerDetailTable.customerAddressFk, { onDelete: "CASCADE" })
   @JoinColumn({ name: "customerDetailsFk" })
   customerDetailsFk: Relation<CustomerDetailsModel>;
+
+  @OneToMany(() => OrderDetailsModel, orderDetailsTable => orderDetailsTable.customerAddressFk)
+  orderDetailsFk: OrderDetailsModel[];
 }

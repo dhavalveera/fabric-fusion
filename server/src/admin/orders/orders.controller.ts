@@ -1,10 +1,9 @@
-import { Controller, Get, Post, Body, Patch, Param, Query } from "@nestjs/common";
+import { Controller, Get, Body, Patch, Param, Query } from "@nestjs/common";
 
 // Service
 import { OrdersService } from "./orders.service";
 
 // DTO (Data Transfer Object)
-import { CreateOrderDto } from "./dto/create-order.dto";
 import { UpdateOrderDto } from "./dto/update-order.dto";
 
 // Interface/Type
@@ -13,11 +12,6 @@ import { OrderStatusType } from "./types/interfaces";
 @Controller("admin/orders")
 export class OrdersController {
   constructor(private readonly ordersService: OrdersService) {}
-
-  @Post("create")
-  create(@Body() createOrderDto: CreateOrderDto) {
-    return this.ordersService.create(createOrderDto);
-  }
 
   @Get("all")
   findAll(@Query("pageNumber") pageNumber: string, @Query("pageSize") pageSize: string, @Query("orderStatus") orderStatus: OrderStatusType) {

@@ -21,11 +21,20 @@ export class OrderItemsModel extends BaseCommonModel {
   @Column({ type: "decimal", precision: 10, scale: 2, nullable: false })
   totalAmount: number; // Quantity * Price
 
+  @Column({ type: "decimal", precision: 10, scale: 1, nullable: true })
+  cGstPercent: number;
+
   @Column({ type: "decimal", precision: 10, scale: 2, nullable: true })
   totalCgstAmount: number;
 
+  @Column({ type: "decimal", precision: 10, scale: 1, nullable: true })
+  sGstPercent: number;
+
   @Column({ type: "decimal", precision: 10, scale: 2, nullable: true })
   totalSgstAmount: number;
+
+  @Column({ type: "decimal", precision: 10, scale: 1, nullable: true })
+  iGstPercent: number;
 
   @Column({ type: "decimal", precision: 10, scale: 2, nullable: true })
   totalIgstAmount: number;

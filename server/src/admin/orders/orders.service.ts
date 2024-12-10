@@ -13,7 +13,6 @@ import { UnsuccessfulException } from "src/exception-filters/unsuccessful.except
 import { capitalizeFirstLetter } from "src/utils/make-capitalize";
 
 // DTO (Data Transfer Object)
-import { CreateOrderDto } from "./dto/create-order.dto";
 import { UpdateOrderDto } from "./dto/update-order.dto";
 
 // Model
@@ -36,27 +35,6 @@ export class OrdersService {
     private readonly dataSource: DataSource,
   ) {
     this.deliveryDetailModel = this.dataSource.getRepository(DeliveryDetailsModel);
-  }
-
-  async create(createOrderDto: CreateOrderDto): Promise<OrderDetailsModel> {
-    // Check if the Order is CGST + SGST or IGST
-    // const isIntraState = "Maharashtra" === process.env.BUSINESS_OPERATED_IN_STATE;
-
-    // this.logger.log(`Is Intra State or Inter State => ${isIntraState}`);
-
-    const createOrdersPaylaod = this.orderDetailsRepository.create(createOrderDto);
-
-    const orderDetailsPayload = await this.orderDetailsRepository.save(createOrdersPaylaod);
-
-    if (orderDetailsPayload) {
-      this.logger.log(`Order Created Successfully with Order ID - ${orderDetailsPayload.orderDetailId}`);
-
-      return orderDetailsPayload;
-    } else {
-      this.logger.warn(`Unable to Create Order!.`);
-
-      throw new UnsuccessfulException();
-    }
   }
 
   async findAll(pageNumber: number, pageSize: number, orderStatus: OrderStatusType): Promise<FindAllResp> {
