@@ -236,7 +236,7 @@ export class OrderService {
       .leftJoinAndSelect("orderDetails.customerAddressFk", "customerAddress")
       .select(selectAllPurchasedProducts())
       .where("paymentDetail.customerDetailsFk.customerDetailsId = :customerDetailsId", { customerDetailsId: userInfo.customerDetailsId })
-      .andWhere("paymentDetail.paymentStatus = :paymentStatus", { paymentStatus: "Created" })
+      .andWhere("paymentDetail.paymentStatus = :paymentStatus", { paymentStatus: "Completed" })
       .orderBy("paymentDetail.createdAt", "DESC")
       .getManyAndCount();
 
@@ -262,7 +262,7 @@ export class OrderService {
       .select(selectAllPurchasedProducts())
       .where("orderDetails.orderDetailId = :orderDetailId", { orderDetailId: orderId })
       .andWhere("paymentDetail.customerDetailsFk.customerDetailsId = :customerDetailsId", { customerDetailsId: userInfo.customerDetailsId })
-      .andWhere("paymentDetail.paymentStatus = :paymentStatus", { paymentStatus: "Created" })
+      .andWhere("paymentDetail.paymentStatus = :paymentStatus", { paymentStatus: "Completed" })
       .getOne();
 
     if (isPurchasedProductAvailable) {
