@@ -16,11 +16,15 @@ import { UnsuccessfulException } from "src/exception-filters/unsuccessful.except
 import { calculateTaxForItem } from "src/utils/calculate-tax-for-item";
 import { calculateGST, calculatePaymentGatewayFee, totalPriceWithGST, totalPriceWithoutGST } from "src/utils/calculate-order-amounts";
 
+// createQueryBuilder() - select() array function to return array of values
+import { selectAllPurchasedProducts, selectGetAllCartDetailsBasedOnOrder } from "src/utils/query-selector";
+
 // Models
 import { OrderDetailsModel } from "src/admin/orders/entities/order.entity";
 import { OrderItemsModel } from "src/admin/orders/entities/order-items.entity";
 import { CartsModel } from "../cart/entities/cart.entity";
 import { CustomerAddressModel } from "../address/entities/address.entity";
+import { PaymentDetailsModel } from "../payment/entities/payment.entity";
 
 // CONSTANTS
 import { CartStatus } from "../cart/constants";
@@ -36,12 +40,14 @@ export class OrderService {
   private readonly orderDetailsRepository: Repository<OrderDetailsModel>;
   private readonly orderItemsRepository: Repository<OrderItemsModel>;
   private readonly addressRepository: Repository<CustomerAddressModel>;
+  private readonly paymentDetailsRepository: Repository<PaymentDetailsModel>;
 
   constructor(private readonly dataSource: DataSource) {
     this.cartsTableRepository = this.dataSource.getRepository(CartsModel);
     this.orderDetailsRepository = this.dataSource.getRepository(OrderDetailsModel);
     this.orderItemsRepository = this.dataSource.getRepository(OrderItemsModel);
     this.addressRepository = this.dataSource.getRepository(CustomerAddressModel);
+    this.paymentDetailsRepository = this.dataSource.getRepository(PaymentDetailsModel);
   }
 
   async create(createOrderDto: CreateOrderDto, userInfo: UserType) {
@@ -162,34 +168,7 @@ export class OrderService {
       .leftJoinAndSelect("oD.orderItemsFk", "oI")
       .leftJoinAndSelect("oI.productDetailsFk", "pD")
       .leftJoinAndSelect("oD.customerAddressFk", "cA")
-      .select([
-        "oD.isDeleted",
-        "oD.createdAt",
-        "oD.updatedAt",
-        "oD.orderDetailId",
-        "oD.discountAmount",
-        "oD.totalAmount",
-        "oD.orderStatus",
-        "oD.orderDate",
-        "oI.isDeleted",
-        "oI.createdAt",
-        "oI.updatedAt",
-        "oI.orderItemId",
-        "oI.quantity",
-        "oI.perQuantityPrice",
-        "oI.totalAmount",
-        "oI.cGstPercent",
-        "oI.totalCgstAmount",
-        "oI.sGstPercent",
-        "oI.totalSgstAmount",
-        "oI.iGstPercent",
-        "oI.totalIgstAmount",
-        "pD.productDetailsId",
-        "pD.productName",
-        "pD.productPrice",
-        "pD.productDisplayImage",
-        "cA.state",
-      ])
+      .select(selectGetAllCartDetailsBasedOnOrder())
       .where("oD.orderDetailId = :orderDetailId", { orderDetailId: orderId })
       .andWhere("oD.orderStatus = :orderStatus", { orderStatus: "Pending" })
       .andWhere("oD.isDeleted = :isDeleted", { isDeleted: false })
@@ -247,7 +226,53 @@ export class OrderService {
     }
   }
 
-  findAll(userInfo: UserType) {
-    return `This action returns all order`;
+  async findAll(userInfo: UserType): Promise<{ count: number; rows: PaymentDetailsModel[] }> {
+    const [rows, count] = await this.paymentDetailsRepository
+      .createQueryBuilder("paymentDetail")
+      .leftJoinAndSelect("paymentDetail.orderDetailsFk", "orderDetails")
+      .leftJoinAndSelect("orderDetails.orderItemsFk", "orderItems")
+      .leftJoinAndSelect("orderItems.productDetailsFk", "productDetails")
+      .leftJoinAndSelect("paymentDetail.customerDetailsFk", "customerDetail")
+      .leftJoinAndSelect("orderDetails.customerAddressFk", "customerAddress")
+      .select(selectAllPurchasedProducts())
+      .where("paymentDetail.customerDetailsFk.customerDetailsId = :customerDetailsId", { customerDetailsId: userInfo.customerDetailsId })
+      .andWhere("paymentDetail.paymentStatus = :paymentStatus", { paymentStatus: "Created" })
+      .orderBy("paymentDetail.createdAt", "DESC")
+      .getManyAndCount();
+
+    if (count > 0) {
+      this.logger.log(`Found total ${count} Purchased (Payment Completed) Products`);
+
+      return { count, rows };
+    } else {
+      this.logger.log(`No Purchased (Payment Completed) Products Found!.`);
+
+      throw new UnsuccessfulException();
+    }
+  }
+
+  async findOne(orderId: string, userInfo: UserType): Promise<PaymentDetailsModel> {
+    const isPurchasedProductAvailable = await this.paymentDetailsRepository
+      .createQueryBuilder("paymentDetail")
+      .leftJoinAndSelect("paymentDetail.orderDetailsFk", "orderDetails")
+      .leftJoinAndSelect("orderDetails.orderItemsFk", "orderItems")
+      .leftJoinAndSelect("orderItems.productDetailsFk", "productDetails")
+      .leftJoinAndSelect("paymentDetail.customerDetailsFk", "customerDetail")
+      .leftJoinAndSelect("orderDetails.customerAddressFk", "customerAddress")
+      .select(selectAllPurchasedProducts())
+      .where("orderDetails.orderDetailId = :orderDetailId", { orderDetailId: orderId })
+      .andWhere("paymentDetail.customerDetailsFk.customerDetailsId = :customerDetailsId", { customerDetailsId: userInfo.customerDetailsId })
+      .andWhere("paymentDetail.paymentStatus = :paymentStatus", { paymentStatus: "Created" })
+      .getOne();
+
+    if (isPurchasedProductAvailable) {
+      this.logger.log(`Found Purchased (Payment Completed) Product!.`);
+
+      return isPurchasedProductAvailable;
+    } else {
+      throw new NotFoundException(`No Purchased (Payment Completed) Product Found!.`);
+
+      throw new NotFoundException();
+    }
   }
 }

@@ -31,8 +31,13 @@ export class OrderController {
     return this.orderService.getAllCartDetailsBasedOnOrder(orderId, userInfo);
   }
 
-  @Get()
+  @Get("purchased/all")
   findAll(@UserInRequest() userInfo: UserType) {
     return this.orderService.findAll(userInfo);
+  }
+
+  @Get("purchased/:orderId/details")
+  findOne(@Param("orderId") orderId: string, @UserInRequest() userInfo: UserType) {
+    return this.orderService.findOne(orderId, userInfo);
   }
 }
