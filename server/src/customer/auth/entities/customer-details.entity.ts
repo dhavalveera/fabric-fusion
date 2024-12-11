@@ -11,6 +11,8 @@ import { CartsModel } from "src/customer/cart/entities/cart.entity";
 import { ProductReviewModel } from "src/customer/product-reviews/entities/product-review.entity";
 import { ReviewsReportedModel } from "src/customer/product-reviews/entities/reviews-reported.entity";
 import { RecentlyViewedProductsModel } from "src/customer/recently-viewed/entities/recently-viewed.entity";
+import { PaymentDetailsModel } from "src/customer/payment/entities/payment.entity";
+import { CouponUsageModel } from "src/admin/coupon/entities/coupon-usage.entity";
 import { CustomerRegistrationsModel } from "./customer-registrations.entity";
 
 @Entity({ name: "customerDetails" })
@@ -51,4 +53,10 @@ export class CustomerDetailsModel extends BaseCommonModel {
 
   @OneToMany(() => RecentlyViewedProductsModel, recentViewProdTable => recentViewProdTable.customerDetailsFk)
   recentlyViewedProdFk: RecentlyViewedProductsModel[];
+
+  @OneToMany(() => PaymentDetailsModel, paymentDetailsTable => paymentDetailsTable.customerDetailsFk)
+  paymentDetailsFk: PaymentDetailsModel[];
+
+  @OneToMany(() => CouponUsageModel, couponUsageTable => couponUsageTable.customerDetailsFk)
+  couponUsageFk: CouponUsageModel[];
 }

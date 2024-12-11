@@ -3,7 +3,8 @@ import { Column, Entity, JoinColumn, ManyToOne, Relation } from "typeorm";
 // Common Base Model for createdAt, updatedAt, isDeleted
 import { BaseCommonModel } from "src/common/common-column.entity";
 
-// Coupons Model
+// Relationship Models
+import { CustomerDetailsModel } from "src/customer/auth/entities/customer-details.entity";
 import { CouponDetailsModel } from "./coupon.entity";
 
 @Entity({ name: "couponUsage" })
@@ -17,4 +18,8 @@ export class CouponUsageModel extends BaseCommonModel {
   @ManyToOne(() => CouponDetailsModel, coupon => coupon.couponUsagesId, { onDelete: "CASCADE" })
   @JoinColumn({ name: "couponDetailsId" })
   couponDetailsId: Relation<CouponDetailsModel>;
+
+  @ManyToOne(() => CustomerDetailsModel, customerDetailsTable => customerDetailsTable.couponUsageFk, { nullable: false })
+  @JoinColumn({ name: "customerDetailsFk" })
+  customerDetailsFk: Relation<CustomerDetailsModel>;
 }

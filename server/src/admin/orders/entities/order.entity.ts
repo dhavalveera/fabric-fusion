@@ -8,6 +8,7 @@ import { CustomerDetailsModel } from "src/customer/auth/entities/customer-detail
 import { DeliveryDetailsModel } from "src/admin/shipping/entities/shipping.entity";
 import { CartsModel } from "src/customer/cart/entities/cart.entity";
 import { CustomerAddressModel } from "src/customer/address/entities/address.entity";
+import { PaymentDetailsModel } from "src/customer/payment/entities/payment.entity";
 import { OrderItemsModel } from "./order-items.entity";
 
 @Entity({ name: "orderDetails" })
@@ -44,6 +45,9 @@ export class OrderDetailsModel extends BaseCommonModel {
   @ManyToOne(() => CustomerAddressModel, addressTable => addressTable.orderDetailsFk, { cascade: true, nullable: true })
   @JoinColumn({ name: "customerAddressFk" })
   customerAddressFk: Relation<CustomerAddressModel>;
+
+  @OneToMany(() => PaymentDetailsModel, paymentDetailsTable => paymentDetailsTable.orderDetailsFk)
+  paymentDetailsFk: PaymentDetailsModel[];
 
   @BeforeInsert()
   generateOrderId(): void {

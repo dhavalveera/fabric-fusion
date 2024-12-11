@@ -3,6 +3,9 @@ import { Column, Entity, OneToMany } from "typeorm";
 // Base Common Model for createdAt, updatedAt, isDeleted
 import { BaseCommonModel } from "src/common/common-column.entity";
 
+// Relationship Model
+import { PaymentDetailsModel } from "src/customer/payment/entities/payment.entity";
+
 // Coupon Usage Model
 import { CouponUsageModel } from "./coupon-usage.entity";
 
@@ -29,6 +32,9 @@ export class CouponDetailsModel extends BaseCommonModel {
   @Column({ type: "decimal", nullable: false, precision: 10, scale: 2 })
   minimumCartValue: number; // Minimum Cart Value to Apply the Coupon
 
+  @Column({ type: "decimal", nullable: false, precision: 10, scale: 2 })
+  maximumCartValue: number; // Maximum Cart Value to Apply the Coupon
+
   @Column({ type: "integer", default: 0, nullable: false })
   usageLimitPerUser: number; // How many times a user can use the Coupon
 
@@ -46,4 +52,7 @@ export class CouponDetailsModel extends BaseCommonModel {
 
   @Column({ type: "boolean", nullable: false, default: false })
   isExpired: boolean;
+
+  @OneToMany(() => PaymentDetailsModel, paymentDetailsTable => paymentDetailsTable.couponDetailsFk)
+  paymentDetailsFk: PaymentDetailsModel[];
 }

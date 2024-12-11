@@ -52,12 +52,16 @@ import { SearchModule as CustomerSearchModule } from "./customer/search/search.m
 import { ProductReviewsModule as CustomerProductReviewsModule } from "./customer/product-reviews/product-reviews.module";
 import { RecentlyViewedModule as CustomerRecentlyViewedModule } from "./customer/recently-viewed/recently-viewed.module";
 import { OrderModule as CustomerOrderModule } from "./customer/order/order.module";
+import { PaymentModule as CustomerPaymentModule } from "./customer/payment/payment.module";
 
 // Cron Modules
 import { CouponsModule as CouponsCronModule } from "./cron_jobs/coupons/coupons.module";
 
 // Email Module
 import { EmailServiceModule } from "./email-service/email-service.module";
+
+// Utils Module
+import { UtilsServiceModule } from "./payment-utils/payment-utils.module";
 
 // Admin Controllers
 import { AuthController as AdminAuthController } from "./admin/auth/auth.controller";
@@ -83,6 +87,7 @@ import { SearchController as CustomerSearchController } from "./customer/search/
 import { ProductReviewsController as CustomerProductReviewsController } from "./customer/product-reviews/product-reviews.controller";
 import { RecentlyViewedController as CustomerRecentlyViewedController } from "./customer/recently-viewed/recently-viewed.controller";
 import { OrderController as CustomerOrderController } from "./customer/order/order.controller";
+import { PaymentController as CustomerPaymentController } from "./customer/payment/payment.controller";
 
 @Module({
   imports: [
@@ -90,6 +95,7 @@ import { OrderController as CustomerOrderController } from "./customer/order/ord
     ConfigModule.forRoot({
       isGlobal: true,
       envFilePath: [".env.development", ".env.test", ".env.production"],
+      cache: true,
     }),
 
     // TypeORM DB Connection
@@ -145,6 +151,9 @@ import { OrderController as CustomerOrderController } from "./customer/order/ord
     // Email Module
     EmailServiceModule,
 
+    // Utils Module
+    UtilsServiceModule,
+
     // Customer Modules
     CommonModule,
     CustomerAuthModule,
@@ -156,6 +165,7 @@ import { OrderController as CustomerOrderController } from "./customer/order/ord
     CustomerProductReviewsModule,
     CustomerRecentlyViewedModule,
     CustomerOrderModule,
+    CustomerPaymentModule,
   ],
   controllers: [AppController],
   providers: [
@@ -194,6 +204,7 @@ export class AppModule implements NestModule {
         CustomerProductReviewsController,
         CustomerRecentlyViewedController,
         CustomerOrderController,
+        CustomerPaymentController,
       );
   }
 }

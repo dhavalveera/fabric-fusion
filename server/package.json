@@ -41,6 +41,7 @@
     "moment-timezone": "^0.5.46",
     "nodemailer": "^6.9.16",
     "pg": "^8.13.0",
+    "razorpay": "^2.9.5",
     "reflect-metadata": "^0.1.13",
     "rxjs": "^7.8.1",
     "typeorm": "^0.3.20"
