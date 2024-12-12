@@ -23,10 +23,10 @@ export class CouponDetailsModel extends BaseCommonModel {
   @Column({ type: "decimal", nullable: true, precision: 10, scale: 2 })
   discountAmount: number; // for fixed discount amount
 
-  @Column({ type: "date", nullable: false })
+  @Column({ type: "timestamp without time zone", nullable: false })
   startDate: Date;
 
-  @Column({ type: "date", nullable: false })
+  @Column({ type: "timestamp without time zone", nullable: false })
   expiryDate: Date;
 
   @Column({ type: "decimal", nullable: false, precision: 10, scale: 2 })
