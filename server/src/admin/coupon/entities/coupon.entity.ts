@@ -44,8 +44,8 @@ export class CouponDetailsModel extends BaseCommonModel {
   @Column({ type: "integer", nullable: false })
   remainingQuantity: number; // Remaining usage for the Coupon
 
-  @OneToMany(() => CouponUsageModel, couponUsag => couponUsag.couponDetailsId, { eager: true, cascade: true })
-  couponUsagesId: CouponUsageModel[]; // Track the usage of the Coupon
+  @OneToMany(() => CouponUsageModel, couponUsag => couponUsag.couponDetailsFk, { eager: true, cascade: true })
+  couponUsagesFk: CouponUsageModel[]; // Track the usage of the Coupon
 
   @Column({ type: "boolean", nullable: false, default: false })
   isActive: boolean;

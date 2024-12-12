@@ -22,6 +22,7 @@ import { UnsuccessfulException } from "src/exception-filters/unsuccessful.except
 
 // Models
 import { CouponDetailsModel } from "src/admin/coupon/entities/coupon.entity";
+import { CouponUsageModel } from "src/admin/coupon/entities/coupon-usage.entity";
 import { OrderDetailsModel } from "src/admin/orders/entities/order.entity";
 import { CartsModel } from "../cart/entities/cart.entity";
 import { PaymentDetailsModel } from "./entities/payment.entity";
@@ -37,6 +38,7 @@ export class PaymentService {
   private logger = new Logger(`Customer${PaymentService.name}`);
 
   private readonly couponDetailsRepository: Repository<CouponDetailsModel>;
+  private readonly couponUsageRepository: Repository<CouponUsageModel>;
   private readonly orderDetailsRepository: Repository<OrderDetailsModel>;
   private readonly cartsRepository: Repository<CartsModel>;
 
@@ -46,6 +48,7 @@ export class PaymentService {
     private readonly utilsService: UtilsServiceService,
   ) {
     this.couponDetailsRepository = this.dataSource.getRepository(CouponDetailsModel);
+    this.couponUsageRepository = this.dataSource.getRepository(CouponUsageModel);
     this.orderDetailsRepository = this.dataSource.getRepository(OrderDetailsModel);
     this.cartsRepository = this.dataSource.getRepository(CartsModel);
   }
@@ -209,7 +212,12 @@ export class PaymentService {
             if (couponDetailsFk) {
               // Fetch Coupon Detail & Update Quantity
               const couponData = await this.couponDetailsRepository.findOne({ where: { couponDetailsId: couponDetailsFk.couponDetailsId } });
+
               await this.couponDetailsRepository.update({ couponDetailsId: couponDetailsFk.couponDetailsId }, { remainingQuantity: couponData.remainingQuantity - 1 });
+
+              const couponUsageData = await this.couponUsageRepository.findOne({ where: { couponDetailsFk: { couponDetailsId: couponDetailsFk.couponDetailsId } } });
+
+              await this.couponUsageRepository.update({ couponDetailsFk: { couponDetailsId: couponDetailsFk.couponDetailsId } }, { usageCount: couponUsageData.usageCount + 1 });
             }
 
             await this.cartsRepository.update({ orderDetailsFk: { orderDetailId } }, { cartStatus: CartStatus.Completed });

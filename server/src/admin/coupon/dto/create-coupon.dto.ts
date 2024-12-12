@@ -27,6 +27,10 @@ export class CreateCouponDto {
 
   @IsNotEmpty()
   @IsNumber({ allowNaN: false })
+  maximumCartValue: number;
+
+  @IsNotEmpty()
+  @IsNumber({ allowNaN: false })
   usageLimitPerUser: number;
 
   @IsNotEmpty()

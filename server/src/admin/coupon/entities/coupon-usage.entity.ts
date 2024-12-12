@@ -15,9 +15,9 @@ export class CouponUsageModel extends BaseCommonModel {
   @Column({ type: "integer", default: 1 })
   usageCount: number; // Number of times a user has used this coupon.
 
-  @ManyToOne(() => CouponDetailsModel, coupon => coupon.couponUsagesId, { onDelete: "CASCADE" })
+  @ManyToOne(() => CouponDetailsModel, coupon => coupon.couponUsagesFk, { onDelete: "CASCADE" })
   @JoinColumn({ name: "couponDetailsId" })
-  couponDetailsId: Relation<CouponDetailsModel>;
+  couponDetailsFk: Relation<CouponDetailsModel>;
 
   @ManyToOne(() => CustomerDetailsModel, customerDetailsTable => customerDetailsTable.couponUsageFk, { nullable: false })
   @JoinColumn({ name: "customerDetailsFk" })

@@ -54,7 +54,7 @@ export class UtilsServiceService {
       // Step 3: Calculate Price With GST (User's Payable Amount)
       priceWithGST = totalPriceWithGST(priceBeforeGST, gstAmount);
 
-      discountPrice = discountAmount(priceWithGST, isCouponAvailable?.discountPercentage ?? 0);
+      discountPrice = discountAmount(priceWithGST, isCouponAvailable?.discountPercentage ?? 0, isCouponAvailable.discountAmount ?? 0);
 
       priceWithDiscountWithGST = getAmountAfterDiscount(priceWithGST, discountPrice);
 
