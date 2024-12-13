@@ -14,6 +14,7 @@ import { WishlistModel } from "src/customer/wishlist/entities/wishlist.entity";
 import { CartsModel } from "src/customer/cart/entities/cart.entity";
 import { ProductReviewModel } from "src/customer/product-reviews/entities/product-review.entity";
 import { RecentlyViewedProductsModel } from "src/customer/recently-viewed/entities/recently-viewed.entity";
+import { RegionTagModel } from "src/admin/region-tags/entities/region-tag.entity";
 
 // CONSTANTS
 import { Gender } from "../constants/gender";
@@ -101,6 +102,10 @@ export class ProductsModel extends BaseCommonModel {
 
   @OneToMany(() => RecentlyViewedProductsModel, recentlyViewProdTable => recentlyViewProdTable.productDetailsFk)
   recentlyViewProdFk: RecentlyViewedProductsModel[];
+
+  @ManyToOne(() => RegionTagModel, regionTagTable => regionTagTable.productDetailsFk)
+  @JoinColumn({ name: "regionTagsFk" })
+  regionTagsFk: Relation<RegionTagModel>;
 
   @BeforeInsert()
   createSlugFromTitle(): void {

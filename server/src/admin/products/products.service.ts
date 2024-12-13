@@ -14,6 +14,7 @@ import { CareInstructionModel } from "../care-instruction/entities/care-instruct
 import { ProductSizeModel } from "../product-size/entities/product-size.entity";
 import { ReturnPolicyModel } from "../return-policy/entities/return-policy.entity";
 import { ProductSubCategoryModel } from "../product-sub-category/entities/product-sub-category.entity";
+import { RegionTagModel } from "../region-tags/entities/region-tag.entity";
 import { ProductsModel } from "./entities/product.entity";
 
 // DTO
@@ -26,6 +27,7 @@ export class ProductsService {
   private readonly productSizeRepository: Repository<ProductSizeModel>;
   private readonly returnPolicyRepository: Repository<ReturnPolicyModel>;
   private readonly subCategRepository: Repository<ProductSubCategoryModel>;
+  private readonly regionTagsRepository: Repository<RegionTagModel>;
 
   constructor(
     @InjectRepository(ProductsModel) private readonly productDetailsRepository: Repository<ProductsModel>,
@@ -35,16 +37,20 @@ export class ProductsService {
     this.productSizeRepository = this.dataSource.getRepository(ProductSizeModel);
     this.returnPolicyRepository = this.dataSource.getRepository(ReturnPolicyModel);
     this.subCategRepository = this.dataSource.getRepository(ProductSubCategoryModel);
+    this.regionTagsRepository = this.dataSource.getRepository(RegionTagModel);
   }
   private readonly logger = new Logger("AdminProductDetails");
 
   async create(createProductDto: CreateProductDto) {
     const isProdSubCategoryAvailable = await this.subCategRepository.findOne({ where: { productSubCategoryId: createProductDto.productSubCategoryId, isDeleted: false } });
 
+    const isRegionTagsAvailable = await this.regionTagsRepository.findOne({ where: { productRegionTagId: createProductDto.productRegionId, isDeleted: false } });
+
     if (isProdSubCategoryAvailable) {
       const insertProductData = this.productDetailsRepository.create({
         ...createProductDto.productDetails,
         productSubCategoryFk: isProdSubCategoryAvailable,
+        regionTagsFk: isRegionTagsAvailable,
       });
 
       const productData = await this.productDetailsRepository.save(insertProductData);

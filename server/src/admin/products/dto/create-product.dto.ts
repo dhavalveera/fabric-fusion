@@ -16,6 +16,10 @@ export class CreateProductDto {
   @IsString()
   productSubCategoryId: string;
 
+  @IsNotEmpty()
+  @IsString()
+  productRegionId: string;
+
   @IsOptional()
   @ValidateNested()
   @Type(() => CareInstructionDto)

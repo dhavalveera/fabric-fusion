@@ -40,6 +40,7 @@ import { ProductAttributesModule as AdminProductAttributesModule } from "./admin
 import { OrdersModule as AdminOrdersModule } from "./admin/orders/orders.module";
 import { ShippingModule as AdminShippingModule } from "./admin/shipping/shipping.module";
 import { ProductReviewsModule as AdminProductReviewsModule } from "./admin/product-reviews/product-reviews.module";
+import { RegionTagsModule as AdminRegionTagsModule } from "./admin/region-tags/region-tags.module";
 
 // Customer Modules
 import { CommonModule } from "./customer/common/common.module";
@@ -76,6 +77,7 @@ import { ProductAttributesController as AdminProductAttributesController } from 
 import { OrdersController as AdminOrdersController } from "./admin/orders/orders.controller";
 import { ShippingController as AdminShippingController } from "./admin/shipping/shipping.controller";
 import { ProductReviewsController as AdminProductReviewsController } from "./admin/product-reviews/product-reviews.controller";
+import { RegionTagsController as AdminRegionTagsController } from "./admin/region-tags/region-tags.controller";
 
 // Customer Controllers
 import { CommonController as CustomerCommonController } from "./customer/common/common.controller";
@@ -146,6 +148,7 @@ import { CouponController as CustomerCouponController } from "./customer/coupon/
     AdminOrdersModule,
     AdminShippingModule,
     AdminProductReviewsModule,
+    AdminRegionTagsModule,
 
     // Cron Modules
     CouponsCronModule,
@@ -197,6 +200,7 @@ export class AppModule implements NestModule {
         AdminOrdersController,
         AdminShippingController,
         AdminProductReviewsController,
+        AdminRegionTagsController,
         CustomerCommonController,
         CustomerAuthController,
         CustomerAddressController,
