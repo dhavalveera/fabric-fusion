@@ -57,4 +57,16 @@ export class CommonController {
   findMostLovedProducts() {
     return this.commonService.findMostLovedProductsService();
   }
+
+  @SkipAuth()
+  @Get("product-region-tags")
+  getAllRegionTags() {
+    return this.commonService.getAllRegionTags();
+  }
+
+  @SkipAuth()
+  @Get("product-region-tags/:regionTagId/products")
+  getAllProductsOfRegionTags(@Param("regionTagId") regionTagId: string) {
+    return this.commonService.getAllProductsOfSingleRegionTag(regionTagId);
+  }
 }

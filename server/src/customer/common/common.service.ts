@@ -16,6 +16,7 @@ import { AdsModel } from "src/admin/ads/entities/ad.entity";
 import { ProductCategoryModel } from "src/admin/product-category/entities/product-category.entity";
 import { ProductSubCategoryModel } from "src/admin/product-sub-category/entities/product-sub-category.entity";
 import { ProductsModel } from "src/admin/products/entities/product.entity";
+import { RegionTagModel } from "src/admin/region-tags/entities/region-tag.entity";
 
 @Injectable()
 export class CommonService {
@@ -25,6 +26,7 @@ export class CommonService {
   private readonly productCategRepository: Repository<ProductCategoryModel>;
   private readonly productSubCategRepository: Repository<ProductSubCategoryModel>;
   private readonly productsRepository: Repository<ProductsModel>;
+  private readonly regionTagRepository: Repository<RegionTagModel>;
 
   constructor(
     @Inject(CACHE_MANAGER) private cacheManager: Cache,
@@ -34,6 +36,7 @@ export class CommonService {
     this.productCategRepository = this.dataSource.getRepository(ProductCategoryModel);
     this.productSubCategRepository = this.dataSource.getRepository(ProductSubCategoryModel);
     this.productsRepository = this.dataSource.getRepository(ProductsModel);
+    this.regionTagRepository = this.dataSource.getRepository(RegionTagModel);
   }
 
   async getAllAdsService(): Promise<{ rows: AdsModel[]; count: number }> {
@@ -301,6 +304,69 @@ export class CommonService {
       this.logger.warn(`Unable to find Most Loved Products`);
 
       throw new UnsuccessfulException(`Unable to find Most Loved Products`);
+    }
+  }
+
+  async getAllRegionTags(): Promise<{ count: number; rows: RegionTagModel[] }> {
+    const cachedValue = await this.cacheManager.get("commonAllRegionTags");
+
+    if (typeof cachedValue === "string") {
+      this.logger.log(`Line # 314, returned All Product Region Tags from Cache.`);
+
+      return JSON.parse(cachedValue);
+    }
+
+    const [rows, count] = await this.regionTagRepository.findAndCount({ where: { isDeleted: false }, order: { createdAt: "DESC" } });
+
+    if (count > 0) {
+      this.logger.log(`Found total ${count} Product Region Tags`);
+
+      this.logger.log(`Line # 211, returning Value from DB`);
+
+      await this.cacheManager.set("commonAllRegionTags", JSON.stringify({ count, rows }), 0);
+
+      this.logger.log(`Stored the DB Value (Product Region Tags) to Cache`);
+
+      return { count, rows };
+    } else {
+      this.logger.error(`Unable to find Product Region Tags`);
+
+      throw new UnsuccessfulException();
+    }
+  }
+
+  async getAllProductsOfSingleRegionTag(regionTagId: string): Promise<{ count: number; rows: ProductsModel[] }> {
+    const cachedValue = await this.cacheManager.get("commonAllRegionTagsProducts");
+
+    if (typeof cachedValue === "string") {
+      this.logger.log(`Line # 342, returned All Products of Region Tags from Cache.`);
+
+      return JSON.parse(cachedValue);
+    }
+
+    const [rows, count] = await this.productsRepository
+      .createQueryBuilder("pD")
+      .leftJoinAndSelect("pD.regionTagsFk", "rT")
+      .select(["rT.regionTagName", "rT.productRegionTagId", "pD.productDetailsId", "pD.productName", "pD.productPrice", "pD.productDisplayImage", "pD.productSlug"])
+      .where("rT.productRegionTagId = :productRegionTagId", { productRegionTagId: regionTagId })
+      .andWhere("pD.isDeleted = :isDeleted", { isDeleted: false })
+      .orderBy("pD.createdAt", "DESC")
+      .getManyAndCount();
+
+    if (count > 0) {
+      this.logger.log(`Found total ${count} Products of Region Tags`);
+
+      this.logger.log(`Line # 355, returning Value from DB`);
+
+      await this.cacheManager.set("commonAllRegionTagsProducts", JSON.stringify({ count, rows }), 0);
+
+      this.logger.log(`Stored the DB Value (Products of Region Tags) to Cache`);
+
+      return { count, rows };
+    } else {
+      this.logger.error(`Unable to find Products of Region Tags`);
+
+      throw new UnsuccessfulException();
     }
   }
 }
