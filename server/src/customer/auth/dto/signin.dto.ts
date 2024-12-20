@@ -1,5 +1,5 @@
 import { Transform } from "class-transformer";
-import { IsEmail, IsNotEmpty, IsString, IsStrongPassword } from "class-validator";
+import { IsBoolean, IsEmail, IsNotEmpty, IsOptional, IsString, IsStrongPassword } from "class-validator";
 
 export class SignInDto {
   @IsNotEmpty({ message: "Email Address is required" })
@@ -20,4 +20,8 @@ export class SignInDto {
     { message: "Password must be at least 8 characters long and contain at least one lowercase, one uppercase letter, one number, and one symbol." },
   )
   password: string;
+
+  @IsOptional()
+  @IsBoolean({ message: "Remember Me should be Boolean Value" })
+  rememberMe?: boolean;
 }

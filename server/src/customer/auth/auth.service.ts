@@ -116,7 +116,7 @@ export class AuthService {
           this.logger.log(`Account Details verified for Login for Customer Name: - ${customerData.customerDetailsFk.firstName}`);
 
           return {
-            access_token: await this.jwtService.signAsync(tokenPayload, { expiresIn: "7d" }),
+            access_token: await this.jwtService.signAsync(tokenPayload, { expiresIn: signInDto.rememberMe ? "30d" : "7d" }),
           };
         } else {
           this.logger.warn(`Unable to Find Customer Data.`);

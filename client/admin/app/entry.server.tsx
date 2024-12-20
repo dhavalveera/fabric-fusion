@@ -1,0 +1,63 @@
+import { PassThrough } from "node:stream";
+
+import type { AppLoadContext, EntryContext } from "react-router";
+import { createReadableStreamFromReadable } from "@react-router/node";
+import { ServerRouter } from "react-router";
+import { isbot } from "isbot";
+import type { RenderToPipeableStreamOptions } from "react-dom/server";
+import { renderToPipeableStream } from "react-dom/server";
+
+const ABORT_DELAY = 5_000;
+
+export default function handleRequest(request: Request, responseStatusCode: number, responseHeaders: Headers, routerContext: EntryContext, loadContext: AppLoadContext) {
+  return new Promise((resolve, reject) => {
+    let shellRendered = false;
+    let userAgent = request.headers.get("user-agent");
+
+    // Ensure requests from bots and SPA Mode renders wait for all content to load before responding
+    // https://react.dev/reference/react-dom/server/renderToPipeableStream#waiting-for-all-content-to-load-for-crawlers-and-static-generation
+    let readyOption: keyof RenderToPipeableStreamOptions = (userAgent && isbot(userAgent)) || routerContext.isSpaMode ? "onAllReady" : "onShellReady";
+
+    const { pipe, abort } = renderToPipeableStream(<ServerRouter context={routerContext} url={request.url} abortDelay={ABORT_DELAY} />, {
+      [readyOption]() {
+        shellRendered = true;
+        const body = new PassThrough();
+        const stream = createReadableStreamFromReadable(body);
+
+        responseHeaders.set("Content-Type", "text/html");
+
+        // set, append global headers
+        responseHeaders.set("X-App-Version", routerContext.manifest.version);
+        responseHeaders.set("X-Robots-Tag", "index, follow");
+        responseHeaders.set("Strict-Transport-Security", "max-age=31536000; includeSubDomains; preload");
+        responseHeaders.set("X-Content-Type-Options", "nosniff");
+        responseHeaders.set("X-Frame-Options", "SAMEORIGIN");
+        responseHeaders.set("Referrer-Policy", "strict-origin-when-cross-origin");
+        responseHeaders.set("Permissions-Policy", "fullscreen=(self)");
+
+        resolve(
+          new Response(stream, {
+            headers: responseHeaders,
+            status: responseStatusCode,
+          }),
+        );
+
+        pipe(body);
+      },
+      onShellError(error: unknown) {
+        reject(error);
+      },
+      onError(error: unknown) {
+        responseStatusCode = 500;
+        // Log streaming rendering errors from inside the shell.  Don't log
+        // errors encountered during initial shell rendering since they'll
+        // reject and get logged in handleDocumentRequest.
+        if (shellRendered) {
+          console.error(error);
+        }
+      },
+    });
+
+    setTimeout(abort, ABORT_DELAY);
+  });
+}

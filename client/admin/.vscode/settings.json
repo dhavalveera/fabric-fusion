@@ -1,0 +1,14 @@
+{
+  "tailwindCSS.classAttributes": ["class", "className", "theme", "headingClass", "headingTextSpanClass", "cardBodyClass"],
+  "tailwindCSS.experimental.classRegex": [
+    ["twMerge\\(([^)]*)\\)", "[\"'`]([^\"'`]*).*?[\"'`]"],
+    ["createTheme\\(([^)]*)\\)", "[\"'`]([^\"'`]*).*?[\"'`]"],
+    ["headingClass\\(([^)]*)\\)", "[\"'`]([^\"'`]*).*?[\"'`]"],
+    ["headingTextSpanClass\\(([^)]*)\\)", "[\"'`]([^\"'`]*).*?[\"'`]"],
+    ["cardBodyClass\\(([^)]*)\\)", "[\"'`]([^\"'`]*).*?[\"'`]"],
+    ],
+  "typescript.tsdk": "node_modules/typescript/lib",
+  "files.associations": {
+    "*.css": "tailwindcss"
+  }
+}

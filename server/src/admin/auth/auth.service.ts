@@ -82,7 +82,7 @@ export class AdminAuthService {
         this.logger.log(`Passowrd verified for Admin Name: - (${isRegistrationAvailable.name}) & EMail: - (${isRegistrationAvailable.email})`);
 
         return {
-          access_token: await this.jwtService.signAsync(payload),
+          access_token: await this.jwtService.signAsync(payload, { expiresIn: signInAdminAuthDto.rememberMe ? "30d" : "7d" }),
         };
       } else {
         this.logger.log(`Admin Name: - (${isRegistrationAvailable.name}) has used invalid Password which is (${signInAdminAuthDto.password}). Please re-check the password and try again`);
