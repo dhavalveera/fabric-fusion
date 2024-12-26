@@ -7,12 +7,15 @@
     "dev": "react-router dev",
     "reveal-entry-server": "react-router reveal",
     "start": "cross-env NODE_ENV=production react-router-serve ./build/server/index.js",
-    "typecheck": "react-router typegen && tsc"
+    "typegen": "react-router typegen && tsc",
+    "typegen-watch": "react-router typegen --watch"
   },
   "dependencies": {
     "@headlessui/react": "^2.2.0",
+    "@heroicons/react": "^2.2.0",
     "@react-router/node": "^7.0.2",
     "@react-router/serve": "^7.0.2",
+    "axios": "^1.7.9",
     "dayjs": "^1.11.13",
     "flowbite-react": "^0.10.2",
     "formik": "^2.4.6",
@@ -21,11 +24,11 @@
     "react-dom": "^19.0.0",
     "react-router": "^7.0.2",
     "sweetalert2": "^11.15.2",
-    "tailwind-merge": "^2.5.5",
     "yup": "^1.6.1"
   },
   "devDependencies": {
     "@react-router/dev": "^7.0.2",
+    "@tailwindcss/forms": "^0.5.9",
     "@tailwindcss/typography": "^0.5.15",
     "@types/node": "^20",
     "@types/react": "^19.0.1",

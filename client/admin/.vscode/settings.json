@@ -8,6 +8,7 @@
     ["cardBodyClass\\(([^)]*)\\)", "[\"'`]([^\"'`]*).*?[\"'`]"],
     ],
   "typescript.tsdk": "node_modules/typescript/lib",
+  "editor.cursorSmoothCaretAnimation": "on",
   "files.associations": {
     "*.css": "tailwindcss"
   }

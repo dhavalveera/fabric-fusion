@@ -28,7 +28,7 @@ export default function handleRequest(request: Request, responseStatusCode: numb
 
         // set, append global headers
         responseHeaders.set("X-App-Version", routerContext.manifest.version);
-        responseHeaders.set("X-Robots-Tag", "index, follow");
+        responseHeaders.set("X-Robots-Tag", "noindex, nofollow");
         responseHeaders.set("Strict-Transport-Security", "max-age=31536000; includeSubDomains; preload");
         responseHeaders.set("X-Content-Type-Options", "nosniff");
         responseHeaders.set("X-Frame-Options", "SAMEORIGIN");
