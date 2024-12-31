@@ -7,5 +7,6 @@ export default [
   ...prefix("dashboard", [index("routes/dashboard/home.tsx")]),
 
   // API Routes
-  route("/api/login", "routes/api/login.tsx"),
+  route("/api/auth/login", "routes/api/auth/login.tsx"),
+  route("/api/auth/logout", "routes/api/auth/logout.tsx"),
 ] satisfies RouteConfig;

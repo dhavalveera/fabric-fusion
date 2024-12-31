@@ -5,9 +5,9 @@ import { DarkThemeToggle, Tooltip, type CustomFlowbiteTheme } from "flowbite-rea
 
 const customDarkThemeToggleTheme: CustomFlowbiteTheme["darkThemeToggle"] = {
   root: {
-    base: "rounded-lg p-2.5 text-sm text-gray-500 hover:bg-gray-100 focus:outline-none focus:ring-4 focus:ring-gray-200 dark:text-gray-400 dark:hover:bg-gray-700 dark:focus:ring-gray-700 mr-2",
+    base: "rounded-lg p-2 text-sm text-gray-500 hover:bg-gray-100 focus:outline-none focus:ring-4 focus:ring-gray-200 dark:text-gray-400 dark:hover:bg-gray-700 dark:focus:ring-gray-700 mr-2",
 
-    icon: "h-7 w-7",
+    icon: "h-5 w-5",
   },
 };
 

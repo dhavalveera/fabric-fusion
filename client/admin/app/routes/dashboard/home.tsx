@@ -2,7 +2,9 @@ import { data, redirect, type LoaderFunctionArgs } from "react-router";
 
 import { authenticate } from "~/utils/auth-guard";
 
-import Sidebar from "~/components/page-components/dashboard/dashboard-layout/sidebar-component";
+import DashboardLayout from "~/components/page-components/dashboard/dashboard-layout/dashboard-layout";
+
+import type { Route } from "./+types/home";
 
 // export const loader = async ({ request }: LoaderFunctionArgs) => {
 //   const user = await authenticate(request, redirect);
@@ -12,14 +14,16 @@ import Sidebar from "~/components/page-components/dashboard/dashboard-layout/sid
 //   });
 // };
 
+export function meta({}: Route.MetaArgs) {
+  return [{ title: "Dashboard | Fabric Fusion Admin" }];
+}
+
 export default function DashboardPage() {
   return (
-    <div className="flex h-screen">
-      <Sidebar>
-        <div>
-          <p>Hi</p>
-        </div>
-      </Sidebar>
-    </div>
+    <DashboardLayout>
+      <div>
+        <p>Hi</p>
+      </div>
+    </DashboardLayout>
   );
 }

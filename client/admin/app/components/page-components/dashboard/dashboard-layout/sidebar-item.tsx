@@ -1,4 +1,4 @@
-import { useEffect, useState, type FC, type ReactNode } from "react";
+import { useEffect, useState, type FC, type ReactNode, type SVGProps } from "react";
 
 // Heroicons
 import { ChevronRightIcon } from "@heroicons/react/24/outline";
@@ -8,7 +8,7 @@ import { clsx } from "~/helpers/clsx";
 import { Link, useLocation } from "react-router";
 
 interface SidebarItemProps {
-  icon: ReactNode;
+  icon: FC<SVGProps<SVGSVGElement>>;
   label: string;
   linkHref?: string;
   isNested?: boolean;
@@ -23,14 +23,16 @@ interface SubMenuItemProps extends Omit<SidebarItemProps, "expanded" | "subMenu"
 }
 
 // This component is used to render the sub-menu items when hovered
-const HoveredSubMenuItem: FC<SubMenuItemProps> = ({ icon, label, linkHref }) => {
+const HoveredSubMenuItem: FC<SubMenuItemProps> = ({ icon: Icon, label, linkHref }) => {
   const { pathname } = useLocation();
 
   return (
     <Link to={linkHref as string}>
       <div className={clsx(["my-2 rounded-md p-2", linkHref === pathname ? "bg-gray-300" : "hover:bg-indigo-50"])}>
         <div className="flex items-center justify-center">
-          <span className="h-6 w-6 text-primaryColor">{icon}</span>
+          <span className="h-6 w-6 text-primaryColor">
+            <Icon className={clsx(["text-black dark:text-white", pathname === linkHref ? "stroke-primaryColor" : "stroke-black dark:stroke-white"])} />
+          </span>
           <span className="ml-3 w-28 text-start text-primaryColor">{label}</span>
           <div className="h-1 bg-slate-200" />
         </div>
@@ -39,7 +41,7 @@ const HoveredSubMenuItem: FC<SubMenuItemProps> = ({ icon, label, linkHref }) => 
   );
 };
 
-export const SidebarItem: FC<SidebarItemProps> = ({ icon, label, linkHref, expanded = false, subMenu = null }) => {
+export const SidebarItem: FC<SidebarItemProps> = ({ icon: Icon, label, linkHref, expanded = false, subMenu = null }) => {
   const [expandSubMenu, setExpandSubMenu] = useState(false);
 
   const { pathname } = useLocation();
@@ -57,7 +59,7 @@ export const SidebarItem: FC<SidebarItemProps> = ({ icon, label, linkHref, expan
         <button
           className={clsx([
             "group relative m-1 flex w-full cursor-pointer items-center rounded-md px-3 py-2 font-medium transition-colors",
-            pathname === linkHref && !subMenu ? "bg-gradient-to-tr from-indigo-200 to-indigo-100 text-primaryColor" : "text-gray-600 hover:bg-indigo-50",
+            pathname === linkHref && !subMenu ? "bg-gradient-to-tr from-indigo-200 to-indigo-100 text-primaryColor" : "text-gray-600 hover:bg-indigo-200",
             !expanded ? "flex items-center justify-center" : "",
           ])}
           type="button"
@@ -65,14 +67,20 @@ export const SidebarItem: FC<SidebarItemProps> = ({ icon, label, linkHref, expan
         >
           {/* Icon wrapped in Link when sidebar is collapsed */}
           {linkHref ? (
-            <Link to={linkHref} className="flex h-6 w-6 items-center justify-center text-gray-600 hover:text-indigo-500">
-              <span className="h-6 w-6">{icon}</span>
+            <Link to={linkHref} className="flex h-6 w-6 items-center justify-center">
+              <span className="h-6 w-6">
+                <Icon className={clsx(["stroke-black text-black dark:text-white", pathname === linkHref ? "stroke-primaryColor" : "stroke-black dark:stroke-white"])} />
+              </span>
             </Link>
           ) : (
-            <span className="h-6 w-6">{icon}</span>
+            <span className="h-6 w-6">
+              <Icon className="stroke-black text-black dark:text-white" />
+            </span>
           )}
 
-          <span className={clsx(["overflow-hidden text-start transition-all", expanded ? "ml-3 w-44" : "w-0"])}>{linkHref ? <Link to={linkHref}>{label}</Link> : label}</span>
+          <span className={clsx(["overflow-hidden text-start transition-all", expanded ? "ml-3 w-44" : "w-0", pathname === linkHref ? "text-primaryColor" : "text-white"])}>
+            {linkHref ? <Link to={linkHref}>{label}</Link> : label}
+          </span>
 
           {subMenu ? (
             <div className={clsx(["absolute right-2 flex h-4 w-4 transition-all", expanded ? "top-1/3" : "hidden", expandSubMenu ? "rotate-90" : "rotate-0"])}>
@@ -83,7 +91,7 @@ export const SidebarItem: FC<SidebarItemProps> = ({ icon, label, linkHref, expan
           {!expanded ? (
             <div
               className={clsx([
-                "invisible absolute left-full z-auto ml-6 -translate-x-3 rounded-md bg-indigo-100 px-2 py-1 text-sm text-primaryColor opacity-20 transition-all group-hover:visible group-hover:translate-x-0 group-hover:opacity-100",
+                "invisible absolute left-full z-auto ml-6 -translate-y-3 rounded-md bg-indigo-100 px-2 py-1 text-sm text-primaryColor opacity-20 transition-all group-hover:visible group-hover:translate-y-0 group-hover:opacity-100",
               ])}
             >
               {!subMenu ? label : subMenu && Array.isArray(subMenu) && subMenu?.map((item, index) => <HoveredSubMenuItem key={index} label={item.label} icon={item.icon} linkHref={item.linkHref} />)}

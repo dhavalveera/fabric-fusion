@@ -1,7 +1,7 @@
 import { isRouteErrorResponse, Links, Meta, Outlet, Scripts, ScrollRestoration } from "react-router";
 
-// flowbite-react
-import { ThemeModeScript } from "flowbite-react";
+// Preline
+import PrelineScript from "./components/common/preline/preline.client";
 
 import type { Route } from "./+types/root";
 import stylesheet from "./app.css?url";
@@ -45,19 +45,21 @@ export function Layout({ children }: { children: React.ReactNode }) {
         <meta name="format-detection" content="telephone=no, date=no, address=no, email=no, url=no" />
         <meta name="mobile-web-app-capable" content="yes" />
 
-        {/* flowbite-react */}
-        <ThemeModeScript />
+        {/* Preline */}
 
         <Meta />
 
         <Links />
       </head>
-      <body className="dark:bg-black">
+      <body className="font-primaryFont dark:bg-black">
         {children}
 
         <ScrollRestoration />
 
         <Scripts />
+
+        {/* Add preline script on every page */}
+        {PrelineScript && <PrelineScript />}
       </body>
     </html>
   );

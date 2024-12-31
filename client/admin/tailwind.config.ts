@@ -4,9 +4,13 @@ import type { Config } from "tailwindcss";
 import { content as FRContent, plugin as FRPlugin } from "flowbite-react/tailwind";
 
 export default {
+  darkMode: "class",
   content: [
     // flowbite-react
     FRContent(),
+
+    // Preline
+    "./node_modules/preline/preline.js",
 
     "./app/**/{**,.client,.server}/**/*.{js,jsx,ts,tsx}",
   ],
@@ -35,6 +39,9 @@ export default {
   plugins: [
     // flowbite-react
     FRPlugin(),
+
+    // Preline
+    require("preline/plugin"),
 
     require("@tailwindcss/typography"),
 

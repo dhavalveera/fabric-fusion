@@ -1,7 +1,7 @@
-import type { ReactNode } from "react";
+import type { FC, SVGProps } from "react";
 
 // Heroicons
-import { CogIcon, HomeIcon, MapPinIcon, PercentBadgeIcon, PhotoIcon, ShoppingBagIcon } from "@heroicons/react/24/outline";
+import { DocumentTextIcon, HomeIcon, MapPinIcon, PercentBadgeIcon, PhotoIcon, ShoppingBagIcon, UsersIcon } from "@heroicons/react/24/outline";
 
 // Custom Icons
 import CategoryIcon from "~/icons/category";
@@ -9,13 +9,13 @@ import InventoryIcon from "~/icons/inventory";
 import ProductReviewIcon from "~/icons/product-review";
 
 interface SubMenuProps {
-  icon: ReactNode;
+  icon: FC<SVGProps<SVGSVGElement>>;
   label: string;
   linkHref: string;
 }
 
 interface SidebarItemsProps {
-  icon: ReactNode;
+  icon: FC<SVGProps<SVGSVGElement>>;
   label: string;
   linkHref?: string;
   subMenu?: SubMenuProps[];
@@ -23,60 +23,64 @@ interface SidebarItemsProps {
 
 export const sideBarItemsData: SidebarItemsProps[] = [
   {
-    label: "Home",
-    icon: <HomeIcon />,
+    label: "Dashboard",
+    icon: HomeIcon,
     linkHref: "/dashboard",
   },
   {
-    icon: <CogIcon />,
-    label: "Settings",
-    linkHref: "/dashboard/settings",
-  },
-  {
-    icon: <ShoppingBagIcon />,
+    icon: ShoppingBagIcon,
     label: "Orders",
     linkHref: "/dashboard/orders",
   },
-
   {
-    icon: <InventoryIcon />,
+    icon: InventoryIcon,
     label: "Products",
     subMenu: [
       {
-        icon: <InventoryIcon />,
+        icon: InventoryIcon,
         label: "Products",
         linkHref: "/dashboard/products",
       },
       {
-        icon: <InventoryIcon />,
+        icon: InventoryIcon,
         label: "Product Size",
         linkHref: "/dashboard/product-size",
       },
       {
-        icon: <MapPinIcon />,
+        icon: MapPinIcon,
         label: "Regional Tags",
         linkHref: "/dashboard/product-regional-tags",
       },
       {
-        icon: <ProductReviewIcon />,
+        icon: ProductReviewIcon,
         label: "Product Reviews",
         linkHref: "/dashboard/product-reviews",
       },
     ],
   },
   {
-    icon: <CategoryIcon />,
+    icon: CategoryIcon,
     label: "Product Categories",
     linkHref: "/dashboard/categories",
   },
   {
-    icon: <PercentBadgeIcon />,
+    icon: PercentBadgeIcon,
     label: "Coupons",
     linkHref: "/dashboard/coupons",
   },
   {
-    icon: <PhotoIcon />,
+    icon: DocumentTextIcon,
+    label: "Invoice",
+    linkHref: "/dashboard/invoices",
+  },
+  {
+    icon: PhotoIcon,
     label: "Ads",
     linkHref: "/dashboard/ads",
+  },
+  {
+    icon: UsersIcon,
+    label: "Customers",
+    linkHref: "/dashboard/customers",
   },
 ];

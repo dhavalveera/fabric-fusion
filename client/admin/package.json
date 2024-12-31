@@ -20,6 +20,7 @@
     "flowbite-react": "^0.10.2",
     "formik": "^2.4.6",
     "isbot": "^5.1.17",
+    "preline": "^2.6.0",
     "react": "^19.0.0",
     "react-dom": "^19.0.0",
     "react-router": "^7.0.2",
