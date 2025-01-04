@@ -4,6 +4,9 @@ import { authenticate } from "~/utils/auth-guard";
 
 import DashboardLayout from "~/components/page-components/dashboard/dashboard-layout/dashboard-layout";
 
+// Page Components
+import DashboardDiffCount from "~/components/page-components/dashboard/home/count";
+
 import type { Route } from "./+types/home";
 
 // export const loader = async ({ request }: LoaderFunctionArgs) => {
@@ -19,10 +22,14 @@ export function meta({}: Route.MetaArgs) {
 }
 
 export default function DashboardPage() {
+  const adminName = "Admin Name";
+
   return (
     <DashboardLayout>
       <div>
-        <p>Hi</p>
+        <p className="text-3xl font-bold dark:text-white">Hello {adminName}</p>
+
+        <DashboardDiffCount />
       </div>
     </DashboardLayout>
   );

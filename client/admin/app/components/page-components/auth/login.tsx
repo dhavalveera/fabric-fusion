@@ -8,7 +8,7 @@ import { Field, Form, Formik, type FormikProps } from "formik";
 import * as Yup from "yup";
 
 // Common Components
-import { CustomButton } from "~/components/common/custom-button";
+import { CustomButton } from "~/components/common/library/custom-button";
 import { InputField } from "~/components/common/input-field";
 
 type LoginFormProps = {
@@ -24,9 +24,9 @@ const AuthLoginForm: FC = () => {
 
   return (
     <div className="bg-white/37 w-full rounded-lg border border-[#d1d5db]/30 p-6 backdrop-blur-[14px] backdrop-saturate-[124%]">
-      <h2 className="font-primaryFont text-center text-4xl capitalize text-white">welcome</h2>
+      <h2 className="text-center font-primaryFont text-4xl capitalize text-white">welcome</h2>
 
-      <p className="font-primaryFont my-5 text-center text-xl capitalize text-white sm:text-lg sm:uppercase">please login to admin dashboard.</p>
+      <p className="my-5 text-center font-primaryFont text-xl capitalize text-white sm:text-lg sm:uppercase">please login to admin dashboard.</p>
 
       <div>
         <Formik

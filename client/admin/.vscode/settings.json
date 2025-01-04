@@ -1,9 +1,9 @@
 {
-  "tailwindCSS.classAttributes": ["class", "className", "theme", "headingClass", "headingTextSpanClass", "cardBodyClass"],
+  "tailwindCSS.classAttributes": ["class", "className", "theme", "strokeClass", "headingTextSpanClass", "cardBodyClass"],
   "tailwindCSS.experimental.classRegex": [
     ["twMerge\\(([^)]*)\\)", "[\"'`]([^\"'`]*).*?[\"'`]"],
     ["createTheme\\(([^)]*)\\)", "[\"'`]([^\"'`]*).*?[\"'`]"],
-    ["headingClass\\(([^)]*)\\)", "[\"'`]([^\"'`]*).*?[\"'`]"],
+    ["strokeClass\\(([^)]*)\\)", "[\"'`]([^\"'`]*).*?[\"'`]"],
     ["headingTextSpanClass\\(([^)]*)\\)", "[\"'`]([^\"'`]*).*?[\"'`]"],
     ["cardBodyClass\\(([^)]*)\\)", "[\"'`]([^\"'`]*).*?[\"'`]"],
     ],

@@ -78,7 +78,7 @@ export const SidebarItem: FC<SidebarItemProps> = ({ icon: Icon, label, linkHref,
             </span>
           )}
 
-          <span className={clsx(["overflow-hidden text-start transition-all", expanded ? "ml-3 w-44" : "w-0", pathname === linkHref ? "text-primaryColor" : "text-white"])}>
+          <span className={clsx(["overflow-hidden text-start transition-all", expanded ? "ml-3 w-44" : "w-0", pathname === linkHref ? "text-primaryColor" : "text-black dark:text-white"])}>
             {linkHref ? <Link to={linkHref}>{label}</Link> : label}
           </span>
 

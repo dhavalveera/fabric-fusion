@@ -28,7 +28,7 @@ const DashboardLayout: FC<PropsWithChildren> = ({ children }) => {
 
           {/* Main Body */}
           <main className="flex-1 overflow-auto pt-20">
-            <div className="relative z-50 pl-5 pt-4">{children}</div>
+            <div className="relative z-50 mx-auto px-5 pt-4">{children}</div>
           </main>
         </div>
       </div>
