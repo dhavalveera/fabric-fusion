@@ -1,5 +1,8 @@
 import { Controller, Get, Post, Body, Patch, Param, Delete } from "@nestjs/common";
 
+// Swagger Modules
+import { ApiBearerAuth } from "@nestjs/swagger";
+
 // Service
 import { CouponService } from "./coupon.service";
 
@@ -7,6 +10,7 @@ import { CouponService } from "./coupon.service";
 import { CreateCouponDto } from "./dto/create-coupon.dto";
 import { UpdateCouponDto } from "./dto/update-coupon.dto";
 
+@ApiBearerAuth()
 @Controller("admin/coupon")
 export class CouponController {
   constructor(private readonly couponService: CouponService) {}

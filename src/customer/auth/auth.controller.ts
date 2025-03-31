@@ -10,6 +10,8 @@ import { AuthService } from "./auth.service";
 import { SignUpDto } from "./dto/signup.dto";
 import { SignInDto } from "./dto/signin.dto";
 import { VerifyOTPDto } from "./dto/verify-otp.dto";
+import { ForgotPasswordDto } from "./dto/forgot-password.dto";
+import { ResetPasswordDto } from "./dto/reset-password.dto";
 
 @Controller("auth/user")
 export class AuthController {
@@ -35,13 +37,13 @@ export class AuthController {
 
   @SkipAuth()
   @Post("forgot-password")
-  forgotPassword(@Body() forgotPasswordPayload: { emailAddress: string }) {
+  forgotPassword(@Body() forgotPasswordPayload: ForgotPasswordDto) {
     return this.authService.forgotPassword(forgotPasswordPayload);
   }
 
   @SkipAuth()
   @Post("reset-password")
-  resetPassword(@Param("token") token: string, @Body() newPasswordPayload: { newPassword: string }) {
+  resetPassword(@Param("token") token: string, @Body() newPasswordPayload: ResetPasswordDto) {
     return this.authService.resetPassword(token, newPasswordPayload);
   }
 }

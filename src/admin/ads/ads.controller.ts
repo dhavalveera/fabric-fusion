@@ -1,5 +1,8 @@
 import { Controller, Get, Post, Body, Patch, Param, Delete } from "@nestjs/common";
 
+// Swagger
+import { ApiBearerAuth, ApiTags } from "@nestjs/swagger";
+
 // Service
 import { AdsService } from "./ads.service";
 
@@ -7,6 +10,8 @@ import { AdsService } from "./ads.service";
 import { CreateAdDto } from "./dto/create-ad.dto";
 import { UpdateAdDto } from "./dto/update-ad.dto";
 
+@ApiTags("Ads")
+@ApiBearerAuth()
 @Controller("admin/ads")
 export class AdsController {
   constructor(private readonly adsService: AdsService) {}

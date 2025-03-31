@@ -1,8 +1,16 @@
 import { Controller, Get, Post, Body, Patch, Param, Delete } from "@nestjs/common";
+
+// Swagger Modules
+import { ApiBearerAuth } from "@nestjs/swagger";
+
+// Services
 import { ProductsService } from "./products.service";
+
+// DTO
 import { CreateProductDto } from "./dto/create-product.dto";
 import { UpdateProductDto } from "./dto/update-product.dto";
 
+@ApiBearerAuth()
 @Controller("admin/products")
 export class ProductsController {
   constructor(private readonly productsService: ProductsService) {}

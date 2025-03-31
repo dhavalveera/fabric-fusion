@@ -1,5 +1,8 @@
 import { Controller, Post, Body, HttpStatus, HttpCode } from "@nestjs/common";
 
+// Swagger
+import { ApiTags } from "@nestjs/swagger";
+
 // Auth Service
 import { AdminAuthService } from "./auth.service";
 
@@ -9,6 +12,7 @@ import { CreateAdminAuthDto, SignInAdminAuthDto } from "./dto/create-auth.dto";
 // Decorator
 import { SkipAuth } from "./decorators/public.decorator";
 
+@ApiTags("Auth")
 @Controller("auth/admin")
 export class AuthController {
   constructor(private readonly adminAuthService: AdminAuthService) {}

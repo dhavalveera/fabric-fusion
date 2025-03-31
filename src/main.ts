@@ -1,16 +1,28 @@
 import { NestFactory, Reflector } from "@nestjs/core";
 import { ClassSerializerInterceptor, Logger, ValidationPipe } from "@nestjs/common";
 
+// Express
+import * as express from "express";
+
+// path
+import { join } from "path";
+
 // App Module
 import { AppModule } from "./app.module";
 
 // Middleware
 import { requireQueryParamsMiddleware } from "./middleware/query-param-checker/query-param-checker.logger";
 
+// Swagger Initializer
+import { InitiateSwagger } from "./lib/swagger-config";
+
 async function bootstrap(): Promise<void> {
   const logger = new Logger("AppRunning");
 
   const app = await NestFactory.create(AppModule);
+
+  // Serve static files (Express)
+  app.use("/public", express.static(join(__dirname, "..", "public")));
 
   // global prefix e.g. verisioning the URL
   app.setGlobalPrefix("api");
@@ -23,6 +35,8 @@ async function bootstrap(): Promise<void> {
 
   // Middleware to check Query Params based on Routes
   app.use(requireQueryParamsMiddleware);
+
+  InitiateSwagger(app);
 
   const PORT = process.env.PORT || 7080;
 

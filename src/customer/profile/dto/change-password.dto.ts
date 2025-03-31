@@ -1,6 +1,11 @@
+// Swagger Modules
+import { ApiProperty } from "@nestjs/swagger";
+
+// class-validator -- to validate the body
 import { IsNotEmpty, IsString, IsStrongPassword } from "class-validator";
 
 export class ChangePasswordDto {
+  @ApiProperty({ example: "OldPassword@123" })
   @IsNotEmpty({ message: "Password is required" })
   @IsString({ message: "Password must be a string" })
   @IsStrongPassword(
@@ -15,6 +20,7 @@ export class ChangePasswordDto {
   )
   oldPassword: string;
 
+  @ApiProperty({ example: "newPassword!231$" })
   @IsNotEmpty({ message: "Password is required" })
   @IsString({ message: "Password must be a string" })
   @IsStrongPassword(

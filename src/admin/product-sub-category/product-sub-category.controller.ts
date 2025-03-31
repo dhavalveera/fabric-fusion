@@ -1,5 +1,8 @@
 import { Controller, Get, Post, Body, Patch, Param, Delete } from "@nestjs/common";
 
+// Swagger
+import { ApiBearerAuth, ApiTags } from "@nestjs/swagger";
+
 // Service
 import { ProductSubCategoryService } from "./product-sub-category.service";
 
@@ -7,6 +10,8 @@ import { ProductSubCategoryService } from "./product-sub-category.service";
 import { CreateProductSubCategoryDto } from "./dto/create-product-sub-category.dto";
 import { UpdateProductSubCategoryDto } from "./dto/update-product-sub-category.dto";
 
+@ApiTags("Product Sub Category")
+@ApiBearerAuth()
 @Controller("admin/product-sub-category")
 export class ProductSubCategoryController {
   constructor(private readonly productSubCategoryService: ProductSubCategoryService) {}

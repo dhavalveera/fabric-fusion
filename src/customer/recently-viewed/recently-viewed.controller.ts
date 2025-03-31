@@ -1,5 +1,8 @@
 import { Controller, Get, Post, Body, Delete } from "@nestjs/common";
 
+// Swagger Modules
+import { ApiBearerAuth, ApiTags } from "@nestjs/swagger";
+
 // Decorator
 import { UserInRequest } from "src/admin/auth/decorators/user.decorator";
 
@@ -12,6 +15,8 @@ import { RecentlyViewedService } from "./recently-viewed.service";
 // DTO
 import { CreateRecentlyViewedDto } from "./dto/create-recently-viewed.dto";
 
+@ApiTags("Recently Viewed Products")
+@ApiBearerAuth()
 @Controller("user/recently-viewed/products")
 export class RecentlyViewedController {
   constructor(private readonly recentlyViewedService: RecentlyViewedService) {}

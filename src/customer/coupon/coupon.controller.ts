@@ -1,5 +1,8 @@
 import { Controller, Get, Post, Body, HttpCode } from "@nestjs/common";
 
+// Swagger Modules
+import { ApiBearerAuth } from "@nestjs/swagger";
+
 // SkipAuth Decorator to Skip the Auth
 import { SkipAuth } from "src/admin/auth/decorators/public.decorator";
 import { UserInRequest } from "src/admin/auth/decorators/user.decorator";
@@ -17,6 +20,7 @@ import { CreateCouponDto } from "./dto/create-coupon.dto";
 export class CouponController {
   constructor(private readonly couponService: CouponService) {}
 
+  @ApiBearerAuth()
   @Post("apply")
   @HttpCode(200)
   create(@Body() createCouponDto: CreateCouponDto, @UserInRequest() userInfo: UserType) {

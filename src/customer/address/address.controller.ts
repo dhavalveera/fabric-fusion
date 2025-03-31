@@ -1,5 +1,8 @@
 import { Controller, Get, Post, Body, Patch, Param, Delete } from "@nestjs/common";
 
+// Swagger Modules
+import { ApiBearerAuth } from "@nestjs/swagger";
+
 // Decorator (taking User from req appended in Auth Guard)
 import { UserInRequest } from "src/admin/auth/decorators/user.decorator";
 
@@ -13,6 +16,7 @@ import { AddressService } from "./address.service";
 import { CreateAddressDto } from "./dto/create-address.dto";
 import { UpdateAddressDto } from "./dto/update-address.dto";
 
+@ApiBearerAuth()
 @Controller("user/address")
 export class AddressController {
   constructor(private readonly addressService: AddressService) {}

@@ -1,5 +1,8 @@
 import { Controller, Get, Post, Body, Patch, Param, Delete } from "@nestjs/common";
 
+// Swagger
+import { ApiBearerAuth, ApiTags } from "@nestjs/swagger";
+
 // Service
 import { RegionTagsService } from "./region-tags.service";
 
@@ -7,6 +10,8 @@ import { RegionTagsService } from "./region-tags.service";
 import { CreateRegionTagDto } from "./dto/create-region-tag.dto";
 import { UpdateRegionTagDto } from "./dto/update-region-tag.dto";
 
+@ApiTags("Region Tags")
+@ApiBearerAuth()
 @Controller("admin/region-tags")
 export class RegionTagsController {
   constructor(private readonly regionTagsService: RegionTagsService) {}

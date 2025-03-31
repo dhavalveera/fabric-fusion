@@ -1,5 +1,8 @@
 import { Controller, Get, Post, Body, Patch, Param, Delete } from "@nestjs/common";
 
+// Swagger Modules
+import { ApiBearerAuth, ApiTags } from "@nestjs/swagger";
+
 // Decorator
 import { UserInRequest } from "src/admin/auth/decorators/user.decorator";
 
@@ -14,6 +17,8 @@ import { CreateProductReviewDto } from "./dto/create-product-review.dto";
 import { UpdateProductReviewDto } from "./dto/update-product-review.dto";
 import { ReportReviewDto } from "./dto/report-review.dto";
 
+@ApiTags("Product Reviews")
+@ApiBearerAuth()
 @Controller("user/product-reviews")
 export class ProductReviewsController {
   constructor(private readonly productReviewsService: ProductReviewsService) {}

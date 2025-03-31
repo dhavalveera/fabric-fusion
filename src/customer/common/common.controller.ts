@@ -1,11 +1,15 @@
 import { Controller, Get, Param } from "@nestjs/common";
 
+// Swagger Modules
+import { ApiTags } from "@nestjs/swagger";
+
 // Decorator to Skip Auth Check
 import { SkipAuth } from "src/admin/auth/decorators/public.decorator";
 
 // Service
 import { CommonService } from "./common.service";
 
+@ApiTags("Home Page APIs")
 @Controller("common/recommendation")
 export class CommonController {
   constructor(private readonly commonService: CommonService) {}

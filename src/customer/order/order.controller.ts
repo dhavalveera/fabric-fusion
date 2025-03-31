@@ -1,5 +1,8 @@
 import { Controller, Get, Post, Body, Patch, Param, Query } from "@nestjs/common";
 
+// Swagger Modules
+import { ApiBearerAuth } from "@nestjs/swagger";
+
 // Decorator
 import { UserInRequest } from "src/admin/auth/decorators/user.decorator";
 
@@ -12,6 +15,7 @@ import { OrderService } from "./order.service";
 // DTO
 import { CreateOrderDto } from "./dto/create-order.dto";
 
+@ApiBearerAuth()
 @Controller("user/order")
 export class OrderController {
   constructor(private readonly orderService: OrderService) {}

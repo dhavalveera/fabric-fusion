@@ -1,5 +1,8 @@
 import { Controller, Get, Body, Patch, Param, Query } from "@nestjs/common";
 
+// Swagger
+import { ApiBearerAuth, ApiTags } from "@nestjs/swagger";
+
 // Service
 import { ProductReviewsService } from "./product-reviews.service";
 
@@ -9,6 +12,8 @@ import { UpdateProductReviewDto } from "./dto/update-product-review.dto";
 // Types
 import { StatusType } from "./types";
 
+@ApiTags("Product Reviews")
+@ApiBearerAuth()
 @Controller("admin/product-reviews")
 export class ProductReviewsController {
   constructor(private readonly productReviewsService: ProductReviewsService) {}

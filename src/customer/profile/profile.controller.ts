@@ -1,5 +1,8 @@
 import { Body, Controller, Get, Patch } from "@nestjs/common";
 
+// Swagger Modules
+import { ApiBearerAuth } from "@nestjs/swagger";
+
 // Service
 import { ProfileService } from "./profile.service";
 
@@ -12,6 +15,7 @@ import { UserType } from "src/all-types";
 // DTO (Data Transfer Object)
 import { ChangePasswordDto } from "./dto/change-password.dto";
 
+@ApiBearerAuth()
 @Controller("user/profile")
 export class ProfileController {
   constructor(private readonly profileService: ProfileService) {}

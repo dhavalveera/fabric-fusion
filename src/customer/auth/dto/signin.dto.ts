@@ -1,12 +1,18 @@
+// Swagger Modules
+import { ApiProperty, ApiPropertyOptional } from "@nestjs/swagger";
+
+// class-validator -- to validate the body
 import { Transform } from "class-transformer";
 import { IsBoolean, IsEmail, IsNotEmpty, IsOptional, IsString, IsStrongPassword } from "class-validator";
 
 export class SignInDto {
+  @ApiProperty()
   @IsNotEmpty({ message: "Email Address is required" })
   @IsEmail({ allow_underscores: true }, { message: "Invalid Email Address." })
   @Transform(({ value }) => value?.trim()) // Trim the string value to avoid leading/trailing spaces
   emailAddress: string;
 
+  @ApiProperty()
   @IsNotEmpty({ message: "Password is required" })
   @IsString({ message: "Password must be a string" })
   @IsStrongPassword(
@@ -21,6 +27,7 @@ export class SignInDto {
   )
   password: string;
 
+  @ApiPropertyOptional()
   @IsOptional()
   @IsBoolean({ message: "Remember Me should be Boolean Value" })
   rememberMe?: boolean;
