@@ -6,6 +6,9 @@ import tailwindcss from "@tailwindcss/vite";
 
 import path from "path";
 
+// vite web font downloader (GFont)
+import webfontDownload from "vite-plugin-webfont-dl";
+
 // https://vite.dev/config/
 export default defineConfig({
   plugins: [
@@ -13,6 +16,9 @@ export default defineConfig({
 
     // tailwindcss
     tailwindcss(),
+
+    // vite web font downloader (GFont)
+    webfontDownload(),
   ],
   resolve: {
     alias: {

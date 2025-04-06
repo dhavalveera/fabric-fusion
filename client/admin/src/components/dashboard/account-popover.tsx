@@ -55,7 +55,7 @@ const AccountPopoverOption = forwardRef<
       >
         <Icon focusable="false" aria-hidden="true" className="size-4" />
       </motion.span>
-      <span>{text}</span>
+      <span className="font-della-respira">{text}</span>
     </motion.li>
   );
 });
@@ -114,7 +114,9 @@ const AccountPopover: FC = () => {
               <div>
                 <FaUserCircle className="size-8" />
               </div>
-              <p className="text-xs font-medium">Admin Name</p>
+              <p className="text-xs font-medium font-della-respira">
+                Admin Name
+              </p>
             </div>
 
             <hr className="border-gray-400 pb-1" />

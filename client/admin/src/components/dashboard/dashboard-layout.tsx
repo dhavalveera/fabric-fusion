@@ -8,7 +8,7 @@ const DashboardLayout: FC<PropsWithChildren> = ({ children }) => {
   const [openSidebar, setOpenSidebar] = useState<boolean>(true);
 
   return (
-    <div className="flex min-h-screen bg-indigo-50">
+    <div className="flex min-h-screen">
       {/* Sidebar --- Fixed Width, full Height */}
       <DashboardSidebar
         openSidebar={openSidebar}

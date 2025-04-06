@@ -1,14 +1,25 @@
-import type { FC } from "react";
+import { useState, type FC } from "react";
 
-import DashboardLayout from "./components/dashboard/dashboard-layout";
+// react router
+import { Routes, Route } from "react-router";
+
+// Auth Checker
+import authService from "./components/authentication";
+
+// Protected Route
+import ProtectRoute from "./components/protected-route-component";
+
+// Login Component
+import LoginForm from "./components/login-component";
 
 const App: FC = () => {
+  const [isLoggedIn] = useState<boolean>(authService.isLoggedIn() !== null);
+
   return (
-    <>
-      <DashboardLayout>
-        <p>Home Page</p>
-      </DashboardLayout>
-    </>
+    <Routes>
+      <Route path="/" element={<LoginForm isLoggedIn={isLoggedIn} />} />
+      <Route path="/dashboard/*" element={<ProtectRoute />}></Route>
+    </Routes>
   );
 };
 

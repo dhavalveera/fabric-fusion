@@ -1,2 +1,67 @@
 @import "tailwindcss";
-@custom-variant dark (&:where(.dark, .dark *));
+
+.della-respira-regular {
+  font-family: "Della Respira", serif;
+  font-weight: 400;
+  font-style: normal;
+}
+
+@theme {
+  --font-della-respira: "Della Respira", serif;
+}
+
+:root {
+  --font-della-respira: "Della Respira", serif;
+}
+
+* {
+  box-sizing: border-box;
+  scroll-behavior: smooth;
+  font-display: swap;
+  font-feature-settings: normal;
+
+  font-synthesis: none;
+
+  -webkit-font-feature-settings: normal;
+  -moz-font-feature-settings: normal;
+
+  text-rendering: optimizeLegibility;
+
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+html {
+  height: 100%;
+  min-height: 100%;
+  width: 100%;
+  scroll-behavior: smooth;
+  text-rendering: optimizeLegibility;
+}
+
+body {
+  margin: 0 auto;
+  margin-bottom: 80px;
+
+  scroll-behavior: smooth;
+  min-height: calc(100vh - 200px);
+  overflow-x: hidden;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-size-adjust: 100%;
+}
+
+body::-webkit-scrollbar {
+  display: none;
+}
+
+body::-webkit-scrollbar-thumb {
+  display: none;
+}
+
+a {
+  display: block;
+  width: fit-content;
+  font-family: var(--font-della-respira);
+}

@@ -37,7 +37,9 @@ const DashboardSidebarTitle: FC<DashboardSidebarTitleProps> = ({ open }) => {
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.125 }}
             >
-              <span className="text-xs flex font-semibold">Fabric Fusion</span>
+              <span className="text-xs flex font-semibold font-della-respira">
+                Fabric Fusion
+              </span>
             </motion.div>
           ) : null}
         </motion.button>
