@@ -101,4 +101,39 @@ export class EmailServiceService {
       throw new UnsuccessfulException("Unable to Verify SMTP Transporter Connection. Please try again later.");
     }
   }
+
+  async sendMFAOtp(email: string, otp: string): Promise<{ statusCode: number; message: string }> {
+    const mailOption: ISendMailOptions = {
+      from: `Fabric Fusion ${process.env.MAIL_USERNAME}`,
+      to: email,
+      subject: "Fabric Fusion: 2FA Verification OTP",
+      text: `
+        Hello,
+
+        OTP: ${otp}
+
+        Expires in 10 minutes
+      `,
+      headers: {
+        priority: "high",
+        date: new Date().toISOString(),
+      },
+      // template: "./sendOTPNewRegistration",
+      // context: {
+      //   name: receiverName,
+      //   otpCode,
+      // },
+    };
+
+    return await this.mailerService
+      .sendMail(mailOption)
+      .then(() => {
+        return { statusCode: 200, message: "2FA Verification OTP Email Sent!." };
+      })
+      .catch(err => {
+        this.logger.error(`Sending Email Error : ${JSON.stringify(err)}`);
+
+        return { statusCode: 400, message: "Sending Email Failed" };
+      });
+  }
 }

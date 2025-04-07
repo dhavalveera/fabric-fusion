@@ -1,5 +1,4 @@
 import { HttpException, HttpStatus, Injectable, Logger, UnauthorizedException } from "@nestjs/common";
-import { JwtService } from "@nestjs/jwt";
 import { InjectRepository } from "@nestjs/typeorm";
 
 // TypeORM
@@ -13,6 +12,10 @@ import { randomBytes } from "crypto";
 
 // Email Service
 import { EmailServiceService } from "src/email-service/email-service.service";
+
+// 2FA OTP Service + ENUM
+import { AuthOtpService } from "src/auth-otp/auth-otp.service";
+import { Role } from "src/auth-otp/constants";
 
 // Custom Exception Filters
 import { NotFoundException } from "src/exception-filters/not-found.exception";
@@ -40,7 +43,7 @@ export class AuthService {
     @InjectRepository(CustomerDetailsModel) private readonly customerDetailsModel: Repository<CustomerDetailsModel>,
     @InjectRepository(CustomerRegistrationsModel) private readonly customerRegModel: Repository<CustomerRegistrationsModel>,
     @InjectRepository(PasswordResetTokenModel) private readonly pwdResetTokenModel: Repository<PasswordResetTokenModel>,
-    private readonly jwtService: JwtService,
+    private readonly authOtpService: AuthOtpService,
     private readonly emailService: EmailServiceService,
   ) {}
 
@@ -104,20 +107,19 @@ export class AuthService {
         });
 
         if (customerData) {
-          const tokenPayload = {
-            userId: customerData.customerRegistrationId,
-            phoneNumber: customerData.phoneNumber,
-            email: customerData.emailAddress,
-            name: `${customerData.customerDetailsFk.firstName} ${customerData.customerDetailsFk.lastName}`,
-            customerDetailsId: customerData.customerDetailsFk.customerDetailsId,
-            accountType: "user",
-          };
-
           this.logger.log(`Account Details verified for Login for Customer Name: - ${customerData.customerDetailsFk.firstName}`);
 
-          return {
-            access_token: await this.jwtService.signAsync(tokenPayload, { expiresIn: signInDto.rememberMe ? "30d" : "7d" }),
-          };
+          const { statusCode, message: MFAMsg } = await this.authOtpService.generateAndSendOtp({ email: customerData.emailAddress, role: Role.User });
+
+          if (statusCode === 201) {
+            this.logger.log(MFAMsg);
+
+            throw new SuccessException(MFAMsg);
+          } else {
+            this.logger.error(MFAMsg);
+
+            throw new UnsuccessfulException(MFAMsg);
+          }
         } else {
           this.logger.warn(`Unable to Find Customer Data.`);
 

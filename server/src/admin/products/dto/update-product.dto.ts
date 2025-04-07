@@ -24,7 +24,7 @@ export class UpdateProductDto extends PartialType(OmitType(CreateProductDto, ["p
   careInstruction?: CareInstructionDto;
 
   @ApiPropertyOptional({ type: () => ProductSizeDto })
-  productSize?: ProductSizeDto;
+  productSize?: ProductSizeDto[];
 
   @ApiPropertyOptional()
   returnPolicy?: ReturnPolicyDto;

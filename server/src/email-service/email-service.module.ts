@@ -1,9 +1,9 @@
 import { Global, Module } from "@nestjs/common";
 import { MailerModule } from "@nestjs-modules/mailer";
 import { ConfigService } from "@nestjs/config";
-import { EjsAdapter } from "@nestjs-modules/mailer/dist/adapters/ejs.adapter";
+// import { EjsAdapter } from "@nestjs-modules/mailer/dist/adapters/ejs.adapter";
 
-import { join } from "path";
+// import { join } from "path";
 
 // Controller + Service
 import { EmailServiceService } from "./email-service.service";
@@ -17,6 +17,10 @@ import { EmailServiceController } from "./email-service.controller";
         transport: {
           host: config.get("MAIL_HOST"),
           port: Number(config.get("MAIL_PORT")),
+          secure: false,
+          tls: {
+            rejectUnauthorized: false,
+          },
           auth: {
             user: config.get("MAIL_USERNAME"),
             pass: config.get("MAIL_PASSWORD"),

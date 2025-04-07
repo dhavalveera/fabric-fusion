@@ -1,11 +1,10 @@
-import { ConfigModule, ConfigService } from "@nestjs/config";
 import { Module } from "@nestjs/common";
 
 // TypeORM
 import { TypeOrmModule } from "@nestjs/typeorm";
 
-// Nestjs JWT
-import { JwtModule } from "@nestjs/jwt";
+// 2FA OTP Module
+import { AuthOtpModule } from "src/auth-otp/auth-otp.module";
 
 // Controller + Service
 import { AdminAuthService } from "./auth.service";
@@ -17,15 +16,9 @@ import { AuthModel } from "./entities/auth.entity";
 @Module({
   imports: [
     TypeOrmModule.forFeature([AuthModel]),
-    JwtModule.registerAsync({
-      imports: [ConfigModule],
-      inject: [ConfigService],
-      global: true,
-      useFactory: async (configService: ConfigService) => ({
-        secret: configService.get<string>("JWT_SECRET"),
-        signOptions: { expiresIn: "7d" },
-      }),
-    }),
+
+    // 2FA OTP Module
+    AuthOtpModule,
   ],
   controllers: [AuthController],
   providers: [AdminAuthService],

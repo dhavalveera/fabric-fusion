@@ -91,7 +91,7 @@ export class CouponService {
       }
 
       // Check if the coupon has already been used.
-      const couponUsageCount = await this.couponUsageRepository.count({ where: { couponDetailsId: isCouponsAvailable } });
+      const couponUsageCount = await this.couponUsageRepository.count({ where: { couponDetailsFk: { couponDetailsId: isCouponsAvailable.couponDetailsId } } });
 
       if (couponUsageCount > 0) {
         if (updateCouponDto.discountAmount || updateCouponDto.discountPercentage || updateCouponDto.totalQuantity) {

@@ -7,7 +7,7 @@ import { ScheduleModule } from "@nestjs/schedule";
 import { TypeOrmModule } from "@nestjs/typeorm";
 
 // RateLimiter
-import { ThrottlerModule } from "@nestjs/throttler";
+import { ThrottlerGuard, ThrottlerModule } from "@nestjs/throttler";
 
 // Nestjs Cache
 import { CacheModule } from "@nestjs/cache-manager";
@@ -58,6 +58,7 @@ import { CouponModule as CustomerCouponModule } from "./customer/coupon/coupon.m
 
 // Cron Modules
 import { CouponsModule as CouponsCronModule } from "./cron_jobs/coupons/coupons.module";
+import { OtpAuthModule } from "./cron_jobs/otp-auth/otp-auth.module";
 
 // Email Module
 import { EmailServiceModule } from "./email-service/email-service.module";
@@ -93,6 +94,10 @@ import { OrderController as CustomerOrderController } from "./customer/order/ord
 import { PaymentController as CustomerPaymentController } from "./customer/payment/payment.controller";
 import { CouponController as CustomerCouponController } from "./customer/coupon/coupon.controller";
 
+// Common Module + Controller
+import { AuthOtpModule } from "./auth-otp/auth-otp.module";
+import { AuthOtpController } from "./auth-otp/auth-otp.controller";
+
 @Module({
   imports: [
     // for .env
@@ -111,19 +116,22 @@ import { CouponController as CustomerCouponController } from "./customer/coupon/
     // no more than 3 calls in a second, 20 calls in 10 seconds, and 100 calls in a minute.
     ThrottlerModule.forRoot([
       {
+        // 1 Seconds => 3 Requests per 1 Second
         name: "short",
         ttl: 1000,
         limit: 3,
       },
       {
+        // 10 Seconds => 20 Requests per 10 Second
         name: "medium",
         ttl: 10000,
         limit: 20,
       },
       {
+        // 60 Seconds => 30 Requests per 60 Second / 1 Minute
         name: "long",
         ttl: 60000,
-        limit: 100,
+        limit: 30,
       },
     ]),
 
@@ -172,9 +180,18 @@ import { CouponController as CustomerCouponController } from "./customer/coupon/
     CustomerOrderModule,
     CustomerPaymentModule,
     CustomerCouponModule,
+
+    // Common Module
+    AuthOtpModule,
+
+    OtpAuthModule,
   ],
   controllers: [AppController],
   providers: [
+    {
+      provide: APP_GUARD,
+      useClass: ThrottlerGuard,
+    },
     {
       provide: APP_GUARD,
       useClass: AuthGuard,
@@ -213,6 +230,7 @@ export class AppModule implements NestModule {
         CustomerOrderController,
         CustomerPaymentController,
         CustomerCouponController,
+        AuthOtpController,
       );
   }
 }

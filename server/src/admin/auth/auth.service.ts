@@ -1,5 +1,4 @@
 import { Injectable, Logger, UnauthorizedException } from "@nestjs/common";
-import { JwtService } from "@nestjs/jwt";
 import { InjectRepository } from "@nestjs/typeorm";
 
 // bcrypt
@@ -8,11 +7,16 @@ import { compareSync, hashSync } from "bcryptjs";
 // TypeORM
 import { Repository } from "typeorm";
 
+// 2FA OTP Service + ENUM
+import { AuthOtpService } from "src/auth-otp/auth-otp.service";
+import { Role } from "src/auth-otp/constants";
+
 // Custom Exception
+import { SuccessException } from "src/exception-filters/success.exception";
 import { UnsuccessfulException } from "src/exception-filters/unsuccessful.exception";
 
 // DTO (Data Transfer Object)
-import { AccessToken, CreateAdminAuthDto, SignInAdminAuthDto } from "./dto/create-auth.dto";
+import { CreateAdminAuthDto, SignInAdminAuthDto } from "./dto/create-auth.dto";
 
 // Model
 import { AuthModel } from "./entities/auth.entity";
@@ -21,7 +25,7 @@ import { AuthModel } from "./entities/auth.entity";
 export class AdminAuthService {
   constructor(
     @InjectRepository(AuthModel) private readonly adminReg: Repository<AuthModel>,
-    private readonly jwtService: JwtService,
+    private readonly authOtpService: AuthOtpService,
   ) {}
   private readonly logger = new Logger("AdminAuthService");
 
@@ -58,7 +62,7 @@ export class AdminAuthService {
     }
   }
 
-  async signIn(signInAdminAuthDto: SignInAdminAuthDto): Promise<AccessToken> {
+  async signIn(signInAdminAuthDto: SignInAdminAuthDto) {
     const isRegistrationAvailable = await this.adminReg.findOne({
       where: {
         email: signInAdminAuthDto.email,
@@ -72,18 +76,19 @@ export class AdminAuthService {
 
       const verifiedPassword = compareSync(signInAdminAuthDto.password, isRegistrationAvailable.password);
       if (verifiedPassword) {
-        const payload = {
-          adminId: isRegistrationAvailable.adminRegistrationId,
-          email: isRegistrationAvailable.email,
-          name: isRegistrationAvailable.name,
-          accountType: "admin",
-        };
-
         this.logger.log(`Passowrd verified for Admin Name: - (${isRegistrationAvailable.name}) & EMail: - (${isRegistrationAvailable.email})`);
 
-        return {
-          access_token: await this.jwtService.signAsync(payload, { expiresIn: signInAdminAuthDto.rememberMe ? "30d" : "7d" }),
-        };
+        const { statusCode, message: MFAMsg } = await this.authOtpService.generateAndSendOtp({ email: isRegistrationAvailable.email, role: Role.Admin });
+
+        if (statusCode === 201) {
+          this.logger.log(`${MFAMsg}`);
+
+          throw new SuccessException(MFAMsg);
+        } else {
+          this.logger.warn(MFAMsg);
+
+          throw new UnsuccessfulException(MFAMsg);
+        }
       } else {
         this.logger.log(`Admin Name: - (${isRegistrationAvailable.name}) has used invalid Password which is (${signInAdminAuthDto.password}). Please re-check the password and try again`);
 

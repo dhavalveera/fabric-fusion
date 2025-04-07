@@ -35,7 +35,3 @@ export class SignInAdminAuthDto {
   @IsBoolean({ message: "Remember Me should be boolean" })
   rememberMe?: boolean;
 }
-
-export class AccessToken {
-  access_token: string;
-}

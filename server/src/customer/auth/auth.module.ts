@@ -4,6 +4,9 @@ import { TypeOrmModule } from "@nestjs/typeorm";
 // Email Module
 import { EmailServiceModule } from "src/email-service/email-service.module";
 
+// 2FA OTP Module
+import { AuthOtpModule } from "src/auth-otp/auth-otp.module";
+
 // Controller + Service
 import { AuthService } from "./auth.service";
 import { AuthController } from "./auth.controller";
@@ -14,7 +17,13 @@ import { CustomerRegistrationsModel } from "./entities/customer-registrations.en
 import { PasswordResetTokenModel } from "./entities/password-reset-token.entity";
 
 @Module({
-  imports: [TypeOrmModule.forFeature([CustomerDetailsModel, CustomerRegistrationsModel, PasswordResetTokenModel]), EmailServiceModule],
+  imports: [
+    TypeOrmModule.forFeature([CustomerDetailsModel, CustomerRegistrationsModel, PasswordResetTokenModel]),
+    EmailServiceModule,
+
+    // 2FA OTP Module
+    AuthOtpModule,
+  ],
   controllers: [AuthController],
   providers: [AuthService],
   exports: [TypeOrmModule],
