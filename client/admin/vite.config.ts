@@ -10,7 +10,7 @@ import path from "path";
 import webfontDownload from "vite-plugin-webfont-dl";
 
 // https://vite.dev/config/
-export default defineConfig({
+export default defineConfig(({ mode }) => ({
   plugins: [
     react(),
 
@@ -25,4 +25,10 @@ export default defineConfig({
       "@": path.resolve(__dirname, "./src"),
     },
   },
-});
+  build: {
+    chunkSizeWarningLimit: 2000, // Increase limit to suppress warnings
+  },
+  esbuild: {
+    drop: ["production", "staging"].includes(mode) ? ["console", "debugger"] : undefined,
+  },
+}));

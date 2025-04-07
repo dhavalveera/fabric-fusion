@@ -27,6 +27,13 @@ async function bootstrap(): Promise<void> {
   // global prefix e.g. verisioning the URL
   app.setGlobalPrefix("api");
 
+  // CORS
+  app.enableCors({
+    origin: ["http://localhost:5173"],
+    methods: ["GET", "POST", "PATCH", "PUT", "DELETE"],
+    allowedHeaders: ["Content-Type", "Authorization"],
+  });
+
   // Binding `ValidationPipe` ensuring all endpoints are protected from receiving incorrect data
   app.useGlobalPipes(new ValidationPipe({ transform: true }));
 

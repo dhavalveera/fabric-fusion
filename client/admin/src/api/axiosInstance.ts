@@ -49,7 +49,6 @@ const successHandler = (response: AxiosResponse): AxiosResponse => {
     console.info("✅ Successful request:", {
       url: response.config.url,
       method: response.config.method,
-      data: response.data,
     });
   }
 

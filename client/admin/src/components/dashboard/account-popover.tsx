@@ -10,16 +10,16 @@ import { motion } from "framer-motion";
 import { FaUserCircle } from "react-icons/fa";
 import { MdLogout } from "react-icons/md";
 
+// auth service
+import authService from "../authentication";
+
 // utils
 import { cn } from "@/utils/cn";
 
 // types
 import type { AccountPopoverOptionProps } from "@/types";
 
-const AccountPopoverOption = forwardRef<
-  HTMLLIElement,
-  AccountPopoverOptionProps
->((props, ref) => {
+const AccountPopoverOption = forwardRef<HTMLLIElement, AccountPopoverOptionProps>((props, ref) => {
   const { className = "", icon: Icon, text, ...rest } = props;
 
   return (
@@ -40,10 +40,7 @@ const AccountPopoverOption = forwardRef<
           },
         },
       }}
-      className={cn(
-        "flex items-center gap-2 w-full p-2 text-xs font-medium whitespace-nowrap rounded-md hover:bg-indigo-100 text-slate-700 transition-colors cursor-pointer",
-        className,
-      )}
+      className={cn("flex w-full cursor-pointer items-center gap-2 rounded-md p-2 text-xs font-medium whitespace-nowrap text-slate-700 transition-colors hover:bg-indigo-100", className)}
       ref={ref}
       {...rest}
     >
@@ -68,17 +65,9 @@ const AccountPopover: FC = () => {
   return (
     <div className="flex items-center justify-center">
       <motion.div animate={open ? "open" : "closed"} className="relative">
-        <button
-          type="button"
-          onClick={() => setOpen((prev) => !prev)}
-          className="flex items-center gap-2 px-3 py-2 cursor-pointer rounded-md transition-colors"
-        >
+        <button type="button" onClick={() => setOpen(prev => !prev)} className="flex cursor-pointer items-center gap-2 rounded-md px-3 py-2 transition-colors">
           <span>
-            <FaUserCircle
-              className="size-8"
-              focusable="false"
-              aria-hidden="true"
-            />
+            <FaUserCircle className="size-8" focusable="false" aria-hidden="true" />
           </span>
         </button>
 
@@ -107,16 +96,14 @@ const AccountPopover: FC = () => {
             },
           }}
           style={{ originY: "top", translateX: "-80%" }}
-          className="flex flex-col gap-2 p-2 rounded-lg bg-white shadow-xl absolute top-[120%] left-[50%] w-48 overflow-hidden"
+          className="absolute top-[120%] left-[50%] flex w-48 flex-col gap-2 overflow-hidden rounded-lg bg-white p-2 shadow-xl"
         >
           <div>
-            <div className="flex items-center p-2 gap-1">
+            <div className="flex items-center gap-1 p-2">
               <div>
                 <FaUserCircle className="size-8" />
               </div>
-              <p className="text-xs font-medium font-della-respira">
-                Admin Name
-              </p>
+              <p className="font-della-respira text-xs font-medium">Admin Name</p>
             </div>
 
             <hr className="border-gray-400 pb-1" />
@@ -125,6 +112,8 @@ const AccountPopover: FC = () => {
               icon={MdLogout}
               text="Logout"
               onClick={() => {
+                authService?.logout();
+
                 setOpen(false);
 
                 navigate("/", {

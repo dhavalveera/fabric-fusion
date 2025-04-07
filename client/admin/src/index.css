@@ -8,10 +8,14 @@
 
 @theme {
   --font-della-respira: "Della Respira", serif;
+  --color-primary-color: #02909f;
+  --color-secondary-color: #f5812c;
 }
 
 :root {
   --font-della-respira: "Della Respira", serif;
+  --primary-color: #02909f;
+  --secondary-color: #f5812c;
 }
 
 * {
