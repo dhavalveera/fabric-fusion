@@ -1,7 +1,7 @@
-import { useEffect, type FC } from "react";
+import { useEffect, useState, type FC } from "react";
 
 // react router
-import { useNavigate } from "react-router";
+import { useNavigate, useSearchParams } from "react-router";
 
 // Formik + Yup
 import { useFormik } from "formik";
@@ -16,6 +16,9 @@ import { MdAlternateEmail } from "react-icons/md";
 // SVG Icon
 import { LoginPasswordIcon } from "@/icons";
 
+// types
+import { VerifyOtpPayloadProps } from "@/types";
+
 // Auth Checker
 import authService from "../authentication";
 
@@ -25,15 +28,27 @@ import Checkbox from "../library/checkbox";
 import CustomButton from "../library/custom-button";
 import Image from "../library/image";
 import Input from "../library/input";
+import CustomModal from "../library/modal";
+
+// Login Component
+import MFAOtpForm from "./mfa-otp-form";
 
 const LoginForm: FC<{ isLoggedIn: boolean }> = ({ isLoggedIn }) => {
   const navigate = useNavigate();
+  const [searchParams] = useSearchParams();
+
+  const returnUrl = searchParams.get("returnUrl");
+
+  const [showModal, setShowModal] = useState<boolean>(false);
+  const [verifyOtpPayload, setVerifyOtpPayload] = useState<VerifyOtpPayloadProps>({ email: "", rememberMe: false });
 
   useEffect(() => {
     if (authService.isLoggedIn() !== null) {
-      navigate("/dashboard", { preventScrollReset: false, viewTransition: true });
+      const changeRoute = returnUrl ?? "/dashboard";
+
+      navigate(changeRoute, { preventScrollReset: false, replace: true, viewTransition: true });
     }
-  }, [isLoggedIn, navigate]);
+  }, [isLoggedIn, navigate, returnUrl]);
 
   const formik = useFormik({
     initialValues: {
@@ -57,12 +72,14 @@ const LoginForm: FC<{ isLoggedIn: boolean }> = ({ isLoggedIn }) => {
 
         const { status, message } = await authService.login(values);
 
-        console.log({ status });
-
         switch (status) {
           case 200:
-            navigate("/dashboard", { preventScrollReset: false, viewTransition: true });
-            toast.success("Login Successful");
+            setVerifyOtpPayload({
+              email: values.email,
+              rememberMe: values.rememberMe,
+            });
+            toast.success("OTP Sent Successfully!.");
+            setShowModal(true);
             break;
           case 400:
             helpers.setErrors({ submit: message });
@@ -167,6 +184,10 @@ const LoginForm: FC<{ isLoggedIn: boolean }> = ({ isLoggedIn }) => {
           </div>
         </div>
       </div>
+
+      <CustomModal isOpen={showModal} modalTitle="Verify OTP" setIsOpen={setShowModal} showCloseButton={false}>
+        <MFAOtpForm {...verifyOtpPayload} />
+      </CustomModal>
     </>
   );
 };

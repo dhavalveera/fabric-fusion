@@ -53,7 +53,30 @@ export interface LoginCredentialProps {
   rememberMe?: boolean;
 }
 
-export interface LoginCredentialRespProps {
+export interface VerifyOtpPayloadProps {
+  email: string;
+  rememberMe: boolean;
+}
+
+export interface VerifyOtpCredentialProps {
+  email: string;
+  role: string;
+  otp: string;
+  rememberMe?: boolean;
+}
+
+export interface ResendOtpCredsProps {
+  email: string;
+  role: string;
+}
+
+export interface LoginCredsRespProps {
+  status: number;
+  statusCode: number;
+  message: string;
+}
+
+export interface VerifyOTPRespProps {
   status: number;
   token: string;
   statusCode?: number;
@@ -61,6 +84,11 @@ export interface LoginCredentialRespProps {
 }
 
 export interface LoginAPIResp {
+  statusCode: number;
+  message: string;
+}
+
+export interface VerifyOtpApiResp {
   access_token?: string;
   statusCode?: number;
   message?: string;
@@ -144,4 +172,44 @@ export interface ColorMapsProps {
   warning: Record<BadgeVariant, BadgeStyleProps>;
   error: Record<BadgeVariant, BadgeStyleProps>;
   iconSize: string;
+}
+
+export interface BottomDrawerProps extends HTMLMotionProps<"div"> {
+  /**
+   * Boolean value true/false, to see if the Drawer is OPEN or not
+   */
+  openDrawer: boolean;
+
+  /**
+   * React State to store the boolean value as true or false
+   */
+  setOpenDrawer: Dispatch<SetStateAction<boolean>>;
+
+  /**
+   * this will store the Number for the height of the drawer, but that will be converted to vh, like if it's 50 then it'll be 50vh.
+   *
+   * Default: 60vh
+   */
+  drawerHeight: number;
+  children: ReactNode;
+}
+
+export interface CustomModalProps extends Omit<HTMLMotionProps<"div">, "children"> {
+  isOpen: boolean;
+  isOtpSent?: boolean;
+  modalTitle: string;
+  setIsOpen: Dispatch<SetStateAction<boolean>>;
+  secondaryDivClassName?: string;
+  children: ReactNode;
+  showCloseButton?: boolean;
+}
+
+export interface StarRatingProps extends Omit<ComponentProps<"div">, "onChange"> {
+  maxStars?: number;
+  value: number;
+  onChange: (rating: number) => void;
+}
+
+export interface MFAOtpFormValuesProps {
+  otp: string;
 }

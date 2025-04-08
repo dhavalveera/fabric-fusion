@@ -1,5 +1,5 @@
 export const generateOtp = (): string => {
-  const length = 6;
+  const length = 5;
 
   const min = Math.pow(10, length - 1); // e.g., 100000
   const max = Math.pow(10, length) - 1; // e.g., 999999

@@ -17,7 +17,7 @@ const CustomButton = forwardRef<HTMLButtonElement, CustomButtonProps>((props, re
       ref={ref}
       {...rest}
       className={cn(
-        "from-primary-color to-secondary-color inline-flex cursor-pointer items-center justify-center rounded-md bg-gradient-to-r font-medium text-white capitalize transition-all hover:from-[#027a88] hover:to-[#e26f15] focus:outline-none disabled:cursor-not-allowed disabled:border-none disabled:bg-[#cccccc] disabled:text-[#666666] disabled:opacity-50",
+        "from-primary-color to-secondary-color inline-flex cursor-pointer items-center justify-center rounded-md bg-gradient-to-r font-medium text-white capitalize transition-all hover:from-[#027a88] hover:to-[#e26f15] focus:outline-none focus-visible:ring-2 focus-visible:ring-[#ff8800] focus-visible:ring-offset-2 focus-visible:outline-none disabled:cursor-not-allowed disabled:border-none disabled:bg-[#cccccc] disabled:text-[#666666] disabled:opacity-50",
         btnSizeVariant[btnSize],
         className,
       )}

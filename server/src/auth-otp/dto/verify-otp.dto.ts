@@ -18,7 +18,7 @@ export class VerifyOTPDto {
   @IsEnum(Role, { message: "Role must be one of the following values: User or Admin." })
   role: Role;
 
-  @ApiProperty({ description: "2FA OTP", example: "123456" })
+  @ApiProperty({ description: "2FA OTP", example: "12345", maxLength: 5 })
   @IsNotEmpty()
   @IsString()
   otp: string;

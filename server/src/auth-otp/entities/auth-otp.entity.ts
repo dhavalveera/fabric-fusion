@@ -13,7 +13,7 @@ export class AuthOtpModel {
   email: string;
 
   //   6-digit OTP
-  @Column({ type: "varchar", length: 6, unique: true, nullable: false })
+  @Column({ type: "varchar", length: 5, unique: true, nullable: false })
   otp: string;
 
   // Whether this OTP has been verified
