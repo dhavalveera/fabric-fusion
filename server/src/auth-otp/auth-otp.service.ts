@@ -1,4 +1,4 @@
-import { Injectable, Logger, UnauthorizedException } from "@nestjs/common";
+import { HttpException, HttpStatus, Injectable, Logger, UnauthorizedException } from "@nestjs/common";
 
 // Nestjs JWT
 import { JwtService } from "@nestjs/jwt";
@@ -148,9 +148,13 @@ export class AuthOtpService {
               accountType: "admin",
             };
 
-            return {
-              access_token: await this.jwtService.signAsync(payload, { expiresIn: verifyOtpDto.rememberMe ? "30d" : "7d" }),
-            };
+            throw new HttpException(
+              {
+                status: HttpStatus.OK,
+                access_token: await this.jwtService.signAsync(payload, { expiresIn: verifyOtpDto.rememberMe ? "30d" : "7d" }),
+              },
+              HttpStatus.OK,
+            );
           } else {
             this.logger.log(`Sorry, No Admin found with (${email}). Please check the credentials again!.`);
 
@@ -177,9 +181,13 @@ export class AuthOtpService {
               accountType: "user",
             };
 
-            return {
-              access_token: await this.jwtService.signAsync(tokenPayload, { expiresIn: verifyOtpDto.rememberMe ? "30d" : "7d" }),
-            };
+            throw new HttpException(
+              {
+                status: HttpStatus.OK,
+                access_token: await this.jwtService.signAsync(tokenPayload, { expiresIn: verifyOtpDto.rememberMe ? "30d" : "7d" }),
+              },
+              HttpStatus.OK,
+            );
           } else {
             this.logger.error(`No Customer Account found with given Email Address - (${email})`);
 
@@ -257,11 +265,17 @@ export class AuthOtpService {
       if (statusCode === 200) {
         this.logger.log(`2FA OTP Sent on Email Successfully!..`);
 
-        return { statusCode: 201, message: "2FA OTP Sent on Email Successfully!." };
+        throw new HttpException(
+          {
+            status: HttpStatus.OK,
+            message: "2FA OTP Sent on Email Successfully!.",
+          },
+          HttpStatus.OK,
+        );
       } else {
         this.logger.warn(`${emailMessage}`);
 
-        return { statusCode: 400, message: "Unable to send 2FA OTP Email." };
+        throw new UnsuccessfulException("Unable to send 2FA OTP Email.");
       }
     } else {
       this.logger.warn(`Unable to Insert the 2FA OTP in the Database!.`);

@@ -99,9 +99,9 @@ const MFAOtpForm: FC<VerifyOtpPayloadProps> = ({ email, rememberMe }) => {
 
   return (
     <div>
-      <div className="flex min-h-screen items-center justify-center bg-gradient-to-t from-[#e0f2ff] to-[#cce7ff] bg-cover bg-center bg-no-repeat p-4">
+      <div className="flex items-center justify-center">
         {/* Card */}
-        <div className="w-full max-w-md rounded-2xl border border-white/30 bg-white/20 p-8 text-center shadow-xl backdrop-blur-lg">
+        <div className="w-full max-w-md rounded-2xl border border-white/30 bg-white/20 p-2 text-center">
           <div className="mb-5 flex flex-col items-center justify-center">
             {/* Lock Icon */}
             <div className="rounded-full bg-[#cce7ff] p-3">
@@ -182,7 +182,7 @@ const MFAOtpForm: FC<VerifyOtpPayloadProps> = ({ email, rememberMe }) => {
                             onChange={(e: ChangeEvent<HTMLInputElement>) => handleInput(e, values, setFieldValue)}
                             onKeyDown={(e: KeyboardEvent<HTMLInputElement>) => handleKeyDown(e, values, setFieldValue)}
                             onPaste={(e: ClipboardEvent<HTMLInputElement>) => handlePaste(e, setFieldValue)}
-                            className="border-stroke text-gray-5 flex w-[64px] items-center justify-center rounded-lg border bg-white p-2 text-center text-2xl font-medium shadow-xs outline-none sm:text-4xl"
+                            className="border-stroke text-gray-5 flex w-[45px] items-center justify-center rounded-lg border bg-white p-2 text-center text-xl font-medium shadow-xs outline-none sm:w-[64px] sm:text-4xl"
                           />
                         );
                       })}
