@@ -174,26 +174,6 @@ export interface ColorMapsProps {
   iconSize: string;
 }
 
-export interface BottomDrawerProps extends HTMLMotionProps<"div"> {
-  /**
-   * Boolean value true/false, to see if the Drawer is OPEN or not
-   */
-  openDrawer: boolean;
-
-  /**
-   * React State to store the boolean value as true or false
-   */
-  setOpenDrawer: Dispatch<SetStateAction<boolean>>;
-
-  /**
-   * this will store the Number for the height of the drawer, but that will be converted to vh, like if it's 50 then it'll be 50vh.
-   *
-   * Default: 60vh
-   */
-  drawerHeight: number;
-  children: ReactNode;
-}
-
 export interface CustomModalProps extends Omit<HTMLMotionProps<"div">, "children"> {
   isOpen: boolean;
   isOtpSent?: boolean;
@@ -212,4 +192,14 @@ export interface StarRatingProps extends Omit<ComponentProps<"div">, "onChange">
 
 export interface MFAOtpFormValuesProps {
   otp: string;
+}
+
+export interface FileUploadProps {
+  onChange: (files: File[]) => void;
+}
+
+export interface RightDrawerProps extends ComponentProps<"div"> {
+  openRightSidebar: boolean;
+  setOpenRightSidebar: Dispatch<SetStateAction<boolean>>;
+  pageTitle: string;
 }

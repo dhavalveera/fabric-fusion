@@ -23,23 +23,25 @@ const App: FC = () => {
   const [isLoggedIn] = useState<boolean>(authService.isLoggedIn() !== null);
 
   return (
-    <Routes>
-      <Route path="/" element={<LoginForm isLoggedIn={isLoggedIn} />} />
-      <Route path="/dashboard/*" element={<ProtectRoute />}>
-        <Route element={<DashboardLayout />}>
-          <Route index element={<DashboardPage />} />
-          <Route path="products" element={<ProductsPage />} />
-          <Route path="product-size" element={<p>Product Size Pages</p>} />
-          <Route path="product-schema" element={<p>Product Schema Pages</p>} />
-          <Route path="product-region" element={<p>Product Region Pages</p>} />
-          <Route path="orders" element={<p>Orders Pages</p>} />
-          <Route path="category" element={<p>Category Pages</p>} />
-          <Route path="coupons" element={<p>Coupons Pages</p>} />
-          <Route path="ads" element={<p>Ads Pages</p>} />
-          <Route path="reviews" element={<p>Reviews Pages</p>} />
+    <>
+      <Routes>
+        <Route path="/" element={<LoginForm isLoggedIn={isLoggedIn} />} />
+        <Route path="/dashboard/*" element={<ProtectRoute />}>
+          <Route element={<DashboardLayout />}>
+            <Route index element={<DashboardPage />} />
+            <Route path="products" element={<ProductsPage />} />
+            <Route path="product-size" element={<p>Product Size Pages</p>} />
+            <Route path="product-schema" element={<p>Product Schema Pages</p>} />
+            <Route path="product-region" element={<p>Product Region Pages</p>} />
+            <Route path="orders" element={<p>Orders Pages</p>} />
+            <Route path="category" element={<p>Category Pages</p>} />
+            <Route path="coupons" element={<p>Coupons Pages</p>} />
+            <Route path="ads" element={<p>Ads Pages</p>} />
+            <Route path="reviews" element={<p>Reviews Pages</p>} />
+          </Route>
         </Route>
-      </Route>
-    </Routes>
+      </Routes>
+    </>
   );
 };
 
