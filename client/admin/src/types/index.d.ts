@@ -1,4 +1,4 @@
-import type { ComponentProps, Dispatch, FC, PropsWithChildren, ReactNode, SetStateAction, SVGProps } from "react";
+import type { ComponentProps, Dispatch, FC, InputHTMLAttributes, PropsWithChildren, ReactNode, SetStateAction, SVGProps } from "react";
 
 // Framer Motion => types
 import type { HTMLMotionProps } from "framer-motion";
@@ -202,4 +202,25 @@ export interface RightDrawerProps extends ComponentProps<"div"> {
   openRightSidebar: boolean;
   setOpenRightSidebar: Dispatch<SetStateAction<boolean>>;
   pageTitle: string;
+}
+
+export interface QuantityInputProps extends InputHTMLAttributes<HTMLInputElement> {
+  /**
+   * The `value: number;` in the `QuantityInputProps` interface is defining a property called `value`
+  which is expected to be a number type. This property is used to store the quantity value in a
+  quantity input component. */
+  value: number;
+
+  /**
+   *  The `onIncrement: () => void;` in the `QuantityInputProps` interface is defining a property called `onIncrement` which is a function that takes no arguments and returns nothing (`void`). This property is used to handle the increment action in a quantity input component. When called, it should increment the quantity value associated with the input component.
+   */
+  onIncrement: () => void;
+
+  /**
+   * The `onDecrement: () => void;` property in the `QuantityInputProps` interface is defining a function property called `onDecrement`. This function takes no arguments (`()`) and returns nothing (`void`).
+   */
+  onDecrement: () => void;
+
+  /* The `label: string;` property in the `QuantityInputProps` interface is defining a property called `label` which is expected to be a string type. This property is used to provide a label or description for the quantity input component. It helps in identifying or describing the purpose of the quantity input field to the user. */
+  label: string;
 }
