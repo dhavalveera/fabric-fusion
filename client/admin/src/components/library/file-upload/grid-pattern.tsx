@@ -1,4 +1,4 @@
-import type { FC } from "react";
+import { memo, type FC } from "react";
 
 const GridPattern: FC = () => {
   const columns = 41;
@@ -25,4 +25,4 @@ const GridPattern: FC = () => {
   );
 };
 
-export default GridPattern;
+export default memo(GridPattern);

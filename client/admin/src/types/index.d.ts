@@ -195,7 +195,7 @@ export interface MFAOtpFormValuesProps {
 }
 
 export interface FileUploadProps {
-  onChange: (files: File[]) => void;
+  onChange: (files: File | null) => void;
 }
 
 export interface RightDrawerProps extends ComponentProps<"div"> {
@@ -223,4 +223,20 @@ export interface QuantityInputProps extends InputHTMLAttributes<HTMLInputElement
 
   /* The `label: string;` property in the `QuantityInputProps` interface is defining a property called `label` which is expected to be a string type. This property is used to provide a label or description for the quantity input component. It helps in identifying or describing the purpose of the quantity input field to the user. */
   label: string;
+}
+
+export interface BottomDrawerProps extends HTMLMotionProps<"div"> {
+  /**
+   * The `openDrawer: boolean;` property is defining a boolean variable named `openDrawer` in the `BottomDrawerProps` interface. This variable is used to track the state of whether the bottom drawer component is currently open or closed. When `openDrawer` is `true`, it indicates that the bottom drawer is open, and when it is `false`, it indicates that the bottom drawer is closed. This property helps in managing the visibility and state of the bottom drawer component within the application.
+   */
+  openDrawer: boolean;
+
+  /***
+   * The `setOpenDrawer: Dispatch<SetStateAction<boolean>>;` in the `BottomDrawerProps` interface is defining a property named `setOpenDrawer` which is a function used to update the state of the `openDrawer` boolean variable.
+   */
+  setOpenDrawer: Dispatch<SetStateAction<boolean>>;
+
+  /***
+   * The `children: ReactNode;` property in TypeScript interfaces is used to define a property named `children` that can accept any valid React node as its value. */
+  children: ReactNode;
 }
