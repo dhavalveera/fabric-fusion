@@ -1,5 +1,6 @@
 import { Injectable, Logger } from "@nestjs/common";
 import { InjectRepository } from "@nestjs/typeorm";
+import { EventEmitter2 } from "@nestjs/event-emitter";
 
 // TypeORM
 import { Repository } from "typeorm";
@@ -8,6 +9,9 @@ import { Repository } from "typeorm";
 import { NotFoundException } from "src/exception-filters/not-found.exception";
 import { SuccessException } from "src/exception-filters/success.exception";
 import { UnsuccessfulException } from "src/exception-filters/unsuccessful.exception";
+
+// Cache Invalidator Keys
+import { CUSTOMER_CACHE_KEYS } from "src/constants/cache-keys";
 
 // DTO (Data Transfer Object)
 import { CreateAdDto } from "./dto/create-ad.dto";
@@ -18,7 +22,10 @@ import { AdsModel } from "./entities/ad.entity";
 
 @Injectable()
 export class AdsService {
-  constructor(@InjectRepository(AdsModel) private readonly adsRepository: Repository<AdsModel>) {}
+  constructor(
+    @InjectRepository(AdsModel) private readonly adsRepository: Repository<AdsModel>,
+    private readonly eventEmitter: EventEmitter2,
+  ) {}
   private readonly logger = new Logger("AdminAdsService");
 
   async create(createAdDto: CreateAdDto) {
@@ -26,6 +33,8 @@ export class AdsService {
 
     if (adsData) {
       this.logger.log("Ads created Successfully!.");
+
+      this.eventEmitter.emit(CUSTOMER_CACHE_KEYS.ADS);
 
       throw new SuccessException();
     } else {

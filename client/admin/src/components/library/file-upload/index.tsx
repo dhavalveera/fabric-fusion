@@ -17,6 +17,11 @@ import GridPattern from "./grid-pattern";
 import { cn } from "@/utils/cn";
 import { CiSquareRemove } from "react-icons/ci";
 
+/**
+ *
+ * URL.createObjectURL(files) => here replace the `files` with the state value or anything then it'll be with `files`..
+ */
+
 const FileUpload: FC<FileUploadProps> = ({ onChange }) => {
   const [files, setFiles] = useState<File | null>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);

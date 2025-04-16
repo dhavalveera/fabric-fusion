@@ -18,6 +18,9 @@ import { ProductSubCategoryModel } from "src/admin/product-sub-category/entities
 import { ProductsModel } from "src/admin/products/entities/product.entity";
 import { RegionTagModel } from "src/admin/region-tags/entities/region-tag.entity";
 
+// Cache Invalidator Keys
+import { CUSTOMER_CACHE_KEYS } from "src/constants/cache-keys";
+
 @Injectable()
 export class CommonService {
   private readonly logger = new Logger("CustomerCommonService");
@@ -40,7 +43,7 @@ export class CommonService {
   }
 
   async getAllAdsService(): Promise<{ rows: AdsModel[]; count: number }> {
-    const cachedValue = await this.cacheManager.get("commonAllAds");
+    const cachedValue = await this.cacheManager.get(CUSTOMER_CACHE_KEYS.ADS);
 
     if (typeof cachedValue === "string") {
       this.logger.log(`Line # 43, returned All Ads from Cache.`);
@@ -54,7 +57,7 @@ export class CommonService {
 
         this.logger.log(`Line # 53, returning Value from DB`);
 
-        await this.cacheManager.set("commonAllAds", JSON.stringify({ count, rows }), 0);
+        await this.cacheManager.set(CUSTOMER_CACHE_KEYS.ADS, JSON.stringify({ count, rows }), 0);
 
         this.logger.log(`Stored the DB Value (All Ads) to Cache`);
 

@@ -2,6 +2,7 @@ import { APP_GUARD } from "@nestjs/core";
 import { MiddlewareConsumer, Module, NestModule } from "@nestjs/common";
 import { ConfigModule } from "@nestjs/config";
 import { ScheduleModule } from "@nestjs/schedule";
+import { EventEmitterModule } from "@nestjs/event-emitter";
 
 // Nestjs TypeOrm
 import { TypeOrmModule } from "@nestjs/typeorm";
@@ -98,6 +99,9 @@ import { CouponController as CustomerCouponController } from "./customer/coupon/
 import { AuthOtpModule } from "./auth-otp/auth-otp.module";
 import { AuthOtpController } from "./auth-otp/auth-otp.controller";
 
+// Cache Invalidator Module
+import { CacheInvalidatorModule } from "./cache-invalidator/cache-invalidator.module";
+
 @Module({
   imports: [
     // for .env
@@ -135,11 +139,14 @@ import { AuthOtpController } from "./auth-otp/auth-otp.controller";
       },
     ]),
 
+    // Event Emitter
+    EventEmitterModule.forRoot({ global: true }),
+
     // ScheduleModule -> for CRON Jobs
     ScheduleModule.forRoot(),
 
     // Cache
-    CacheModule.register({ isGlobal: true }),
+    CacheModule.register({ isGlobal: true, ttl: 0 }),
 
     // Admin Modules
     AdminAuthModule,
@@ -184,7 +191,11 @@ import { AuthOtpController } from "./auth-otp/auth-otp.controller";
     // Common Module
     AuthOtpModule,
 
+    // 2FA Module
     OtpAuthModule,
+
+    // Cache Invalidator Module
+    CacheInvalidatorModule,
   ],
   controllers: [AppController],
   providers: [
