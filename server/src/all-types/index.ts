@@ -99,3 +99,9 @@ export type GetPriceBreakDetailsType = {
 };
 
 export interface RazorPayPaymentType extends Payments.RazorpayPayment {}
+
+export interface PostgreError {
+  code: string;
+  detail: string;
+  constraint: string;
+}

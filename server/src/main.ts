@@ -13,6 +13,9 @@ import { AppModule } from "./app.module";
 // Middleware
 import { requireQueryParamsMiddleware } from "./middleware/query-param-checker/query-param-checker.logger";
 
+// Exception Filter
+import { TypeOrmExceptionFilter } from "./exception-filters/typeorm.exception";
+
 // Swagger Initializer
 import { InitiateSwagger } from "./lib/swagger-config";
 
@@ -33,6 +36,9 @@ async function bootstrap(): Promise<void> {
     methods: ["GET", "POST", "PATCH", "PUT", "DELETE"],
     allowedHeaders: ["Content-Type", "Authorization"],
   });
+
+  // Bind TypeORM Exception Filter Globally
+  app.useGlobalFilters(new TypeOrmExceptionFilter());
 
   // Binding `ValidationPipe` ensuring all endpoints are protected from receiving incorrect data
   app.useGlobalPipes(new ValidationPipe({ transform: true }));
