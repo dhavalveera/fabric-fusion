@@ -81,6 +81,8 @@ export class AdsService {
       if (updatedData) {
         this.logger.log(`Updated Ads Successfully!.`);
 
+        this.eventEmitter.emit(CUSTOMER_CACHE_KEYS.ADS);
+
         throw new SuccessException();
       } else {
         this.logger.log(`Unable to Update Ads with Ads ID - (${id}) with Name - (${isAdsAvailable.imgTitle})`);

@@ -1,5 +1,6 @@
 import { Injectable, Logger } from "@nestjs/common";
 import { InjectRepository } from "@nestjs/typeorm";
+import { EventEmitter2 } from "@nestjs/event-emitter";
 
 // TypeORM
 import { DataSource, Repository } from "typeorm";
@@ -8,6 +9,9 @@ import { DataSource, Repository } from "typeorm";
 import { NotFoundException } from "src/exception-filters/not-found.exception";
 import { SuccessException } from "src/exception-filters/success.exception";
 import { UnsuccessfulException } from "src/exception-filters/unsuccessful.exception";
+
+// ENUM
+import { ADMIN_CACHE_KEYS } from "src/constants/cache-keys";
 
 // DTO (Data Transfer Object)
 import { CreateProductSubCategoryDto } from "./dto/create-product-sub-category.dto";
@@ -24,6 +28,7 @@ export class ProductSubCategoryService {
   constructor(
     @InjectRepository(ProductSubCategoryModel) private readonly subCategRepository: Repository<ProductSubCategoryModel>,
     private dataSource: DataSource,
+    private readonly eventEmitter: EventEmitter2,
   ) {
     this.categoryRespository = this.dataSource.getRepository(ProductCategoryModel);
   }
@@ -43,6 +48,8 @@ export class ProductSubCategoryService {
 
       if (insertedData) {
         this.logger.log(`Inserted ${createProductSubCategoryDto.productSubCategoryName} Successfully!.`);
+
+        this.eventEmitter.emit(ADMIN_CACHE_KEYS.SUB_CATEGORY);
 
         return insertedData;
       } else {
@@ -96,6 +103,8 @@ export class ProductSubCategoryService {
       const updatedData = await this.subCategRepository.update({ productSubCategoryId: id }, isSubCategoryAvailable);
 
       if (updatedData) {
+        this.eventEmitter.emit(ADMIN_CACHE_KEYS.SUB_CATEGORY);
+
         throw new SuccessException();
       } else {
         throw new UnsuccessfulException();

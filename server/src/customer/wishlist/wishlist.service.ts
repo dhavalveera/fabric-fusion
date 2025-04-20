@@ -1,5 +1,6 @@
 import { Injectable, Logger } from "@nestjs/common";
 import { InjectRepository } from "@nestjs/typeorm";
+import { EventEmitter2 } from "@nestjs/event-emitter";
 
 // TypeORM
 import { Repository } from "typeorm";
@@ -15,6 +16,9 @@ import { UserInRequest } from "src/admin/auth/decorators/user.decorator";
 // Types
 import { UserType } from "src/all-types";
 
+// ENUM
+import { CUSTOMER_CACHE_KEYS } from "src/constants/cache-keys";
+
 // DTO (Data Transfer Object)
 import { CreateWishlistDto } from "./dto/create-wishlist.dto";
 
@@ -25,7 +29,10 @@ import { WishlistModel } from "./entities/wishlist.entity";
 export class WishlistService {
   private readonly logger = new Logger(WishlistService.name);
 
-  constructor(@InjectRepository(WishlistModel) private readonly wishlistRepository: Repository<WishlistModel>) {}
+  constructor(
+    @InjectRepository(WishlistModel) private readonly wishlistRepository: Repository<WishlistModel>,
+    private readonly eventEmitter: EventEmitter2,
+  ) {}
 
   async create(createWishlistDto: CreateWishlistDto, @UserInRequest() userInfo: UserType) {
     const createdWishlistData = this.wishlistRepository.create({
@@ -37,6 +44,8 @@ export class WishlistService {
 
     if (insertedData) {
       this.logger.log(`Added Product successfully to the Wishlist.`);
+
+      this.eventEmitter.emit(CUSTOMER_CACHE_KEYS.LOVED_PRODS);
 
       throw new SuccessException(`Added Product successfully to the Wishlist.`);
     } else {
@@ -77,6 +86,8 @@ export class WishlistService {
 
       if (updatedData) {
         this.logger.log(`Item Removed from Wishlist Successfully with ID - (${id})`);
+
+        this.eventEmitter.emit(CUSTOMER_CACHE_KEYS.LOVED_PRODS);
 
         throw new SuccessException();
       } else {

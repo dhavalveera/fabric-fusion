@@ -19,7 +19,7 @@ import { ProductsModel } from "src/admin/products/entities/product.entity";
 import { RegionTagModel } from "src/admin/region-tags/entities/region-tag.entity";
 
 // Cache Invalidator Keys
-import { CUSTOMER_CACHE_KEYS } from "src/constants/cache-keys";
+import { ADMIN_CACHE_KEYS, CUSTOMER_CACHE_KEYS } from "src/constants/cache-keys";
 
 @Injectable()
 export class CommonService {
@@ -71,7 +71,7 @@ export class CommonService {
   }
 
   async getAllCategoryService(): Promise<{ rows: ProductCategoryModel[]; count: number }> {
-    const cachedValue = await this.cacheManager.get(`commonAllCategory`);
+    const cachedValue = await this.cacheManager.get(ADMIN_CACHE_KEYS.CATEGORY);
 
     if (typeof cachedValue === "string") {
       this.logger.log(`Line # 71, returned All Categories from Cache.`);
@@ -85,7 +85,7 @@ export class CommonService {
 
         this.logger.log(`Line # 80, returning Value from DB`);
 
-        await this.cacheManager.set("commonAllCategory", JSON.stringify({ count, rows }), 0);
+        await this.cacheManager.set(ADMIN_CACHE_KEYS.CATEGORY, JSON.stringify({ count, rows }), 0);
 
         this.logger.log(`Stored the DB Value (All Category) to Cache`);
 
@@ -99,7 +99,7 @@ export class CommonService {
   }
 
   async getAllSubCategoryService(id: string): Promise<{ rows: ProductSubCategoryModel[]; count: number }> {
-    const cachedValue = await this.cacheManager.get("commongetAllSubCateg");
+    const cachedValue = await this.cacheManager.get(ADMIN_CACHE_KEYS.SUB_CATEGORY);
 
     if (typeof cachedValue === "string") {
       this.logger.log(`Line # 99, returned ALl Sub Categories from Cache.`);
@@ -118,7 +118,7 @@ export class CommonService {
 
           this.logger.log(`Line # 113, returning Value from DB`);
 
-          await this.cacheManager.set("commongetAllSubCateg", JSON.stringify({ count, rows }), 0);
+          await this.cacheManager.set(ADMIN_CACHE_KEYS.SUB_CATEGORY, JSON.stringify({ count, rows }), 0);
 
           this.logger.log(`Stored the DB Value (All Sub Categories) to Cache`);
 
@@ -201,7 +201,7 @@ export class CommonService {
   }
 
   async getNewestProducts(): Promise<{ rows: ProductsModel[]; count: number }> {
-    const cachedValue = await this.cacheManager.get("commonNewestProducts");
+    const cachedValue = await this.cacheManager.get(ADMIN_CACHE_KEYS.NEWEST_PRODUCTS);
 
     if (typeof cachedValue === "string") {
       this.logger.log(`Line # 201, returned Newest Products from Cache.`);
@@ -216,7 +216,7 @@ export class CommonService {
 
       this.logger.log(`Line # 211, returning Value from DB`);
 
-      await this.cacheManager.set("commonNewestProducts", JSON.stringify({ count, rows }), 0);
+      await this.cacheManager.set(ADMIN_CACHE_KEYS.NEWEST_PRODUCTS, JSON.stringify({ count, rows }), 0);
 
       this.logger.log(`Stored the DB Value (Newest Products) to Cache`);
 
@@ -270,7 +270,7 @@ export class CommonService {
   }
 
   async findMostLovedProductsService(): Promise<{ rows: ProductsModel[]; count: number }> {
-    const cachedValue = await this.cacheManager.get("commonMostLovedProducts");
+    const cachedValue = await this.cacheManager.get(CUSTOMER_CACHE_KEYS.LOVED_PRODS);
 
     if (typeof cachedValue === "string") {
       this.logger.log(`Line # 270, returned Most Loved Products from Cache.`);
@@ -298,7 +298,7 @@ export class CommonService {
 
       this.logger.log(`Line # 293, returning Value from DB`);
 
-      await this.cacheManager.set("commonMostLovedProducts", JSON.stringify({ count, rows }), 0);
+      await this.cacheManager.set(CUSTOMER_CACHE_KEYS.LOVED_PRODS, JSON.stringify({ count, rows }), 0);
 
       this.logger.log(`Stored the DB Value (Most Loved Products) to Cache`);
 
@@ -311,7 +311,7 @@ export class CommonService {
   }
 
   async getAllRegionTags(): Promise<{ count: number; rows: RegionTagModel[] }> {
-    const cachedValue = await this.cacheManager.get("commonAllRegionTags");
+    const cachedValue = await this.cacheManager.get(ADMIN_CACHE_KEYS.REGION_TAGS);
 
     if (typeof cachedValue === "string") {
       this.logger.log(`Line # 314, returned All Product Region Tags from Cache.`);
@@ -326,7 +326,7 @@ export class CommonService {
 
       this.logger.log(`Line # 211, returning Value from DB`);
 
-      await this.cacheManager.set("commonAllRegionTags", JSON.stringify({ count, rows }), 0);
+      await this.cacheManager.set(ADMIN_CACHE_KEYS.REGION_TAGS, JSON.stringify({ count, rows }), 0);
 
       this.logger.log(`Stored the DB Value (Product Region Tags) to Cache`);
 

@@ -1,4 +1,5 @@
 import { Injectable, Logger } from "@nestjs/common";
+import { EventEmitter2 } from "@nestjs/event-emitter";
 
 // TypeORM
 import { InjectRepository } from "@nestjs/typeorm";
@@ -9,6 +10,9 @@ import { UnsuccessfulException } from "src/exception-filters/unsuccessful.except
 import { NotFoundException } from "src/exception-filters/not-found.exception";
 import { SuccessException } from "src/exception-filters/success.exception";
 
+// ENUM
+import { ADMIN_CACHE_KEYS } from "src/constants/cache-keys";
+
 // DTO (Data Transfer Object)
 import { CreateProductCategoryDto } from "./dto/create-product-category.dto";
 import { UpdateProductCategoryDto } from "./dto/update-product-category.dto";
@@ -18,7 +22,10 @@ import { ProductCategoryModel } from "./entities/product-category.entity";
 
 @Injectable()
 export class ProductCategoryService {
-  constructor(@InjectRepository(ProductCategoryModel) private readonly productCategRepository: Repository<ProductCategoryModel>) {}
+  constructor(
+    @InjectRepository(ProductCategoryModel) private readonly productCategRepository: Repository<ProductCategoryModel>,
+    private readonly eventEmitter: EventEmitter2,
+  ) {}
   private readonly logger = new Logger("AdminProductCategory");
 
   async create(createProductCategoryDto: CreateProductCategoryDto): Promise<ProductCategoryModel> {
@@ -26,6 +33,8 @@ export class ProductCategoryService {
 
     if (insertedData) {
       this.logger.log(`${insertedData.productCategoryName} - inserted in Database successfully!.`);
+
+      this.eventEmitter.emit(ADMIN_CACHE_KEYS.CATEGORY);
 
       return insertedData;
     } else {
@@ -65,6 +74,8 @@ export class ProductCategoryService {
 
       if (updatedData) {
         this.logger.log(`Updated Product Category Successfully!.`);
+
+        this.eventEmitter.emit(ADMIN_CACHE_KEYS.CATEGORY);
 
         throw new SuccessException();
       } else {

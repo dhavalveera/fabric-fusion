@@ -1,5 +1,6 @@
 import { HttpException, HttpStatus, Injectable, Logger } from "@nestjs/common";
 import { InjectRepository } from "@nestjs/typeorm";
+import { EventEmitter2 } from "@nestjs/event-emitter";
 
 // TypeORM
 import { DataSource, Repository } from "typeorm";
@@ -8,6 +9,9 @@ import { DataSource, Repository } from "typeorm";
 import { NotFoundException } from "src/exception-filters/not-found.exception";
 import { SuccessException } from "src/exception-filters/success.exception";
 import { UnsuccessfulException } from "src/exception-filters/unsuccessful.exception";
+
+// ENUM
+import { ADMIN_CACHE_KEYS } from "src/constants/cache-keys";
 
 // Models
 import { CareInstructionModel } from "../care-instruction/entities/care-instruction.entity";
@@ -32,6 +36,7 @@ export class ProductsService {
   constructor(
     @InjectRepository(ProductsModel) private readonly productDetailsRepository: Repository<ProductsModel>,
     private readonly dataSource: DataSource,
+    private readonly eventEmitter: EventEmitter2,
   ) {
     this.careInstructionRepository = this.dataSource.getRepository(CareInstructionModel);
     this.productSizeRepository = this.dataSource.getRepository(ProductSizeModel);
@@ -56,6 +61,9 @@ export class ProductsService {
       const productData = await this.productDetailsRepository.save(insertProductData);
 
       if (productData) {
+        this.eventEmitter.emit(ADMIN_CACHE_KEYS.REGION_TAGS);
+        this.eventEmitter.emit(ADMIN_CACHE_KEYS.NEWEST_PRODUCTS);
+
         if (createProductDto.careInstruction && Object.keys(createProductDto.careInstruction).length !== 0) {
           const careInstructionPayload = {
             ...createProductDto.careInstruction,
@@ -99,12 +107,6 @@ export class ProductsService {
   }
 
   async findAll(): Promise<{ rows: ProductsModel[]; count: number }> {
-    // const [rows, count] = await this.productDetailsRepository.findAndCount({
-    //   where: { isDeleted: false },
-    //   order: { createdAt: "DESC" },
-    //   relations: ["productSubCategoryFk.productCategoryFk"],
-    // });
-
     const [rows, count] = await this.productDetailsRepository
       .createQueryBuilder("products")
       .leftJoinAndSelect("products.productSubCategoryFk", "productSubCategory")
@@ -131,10 +133,6 @@ export class ProductsService {
   }
 
   async findOne(id: string): Promise<ProductsModel> {
-    // const singleProductData = await this.productDetailsRepository.findOne({
-    //   where: { productDetailsId: id, isDeleted: false },
-    //   relations: ["productSubCategoryFk.productCategoryFk"],
-    // });
     const singleProductData = await this.productDetailsRepository
       .createQueryBuilder("products")
       .leftJoinAndSelect("products.productSubCategoryFk", "productSubCategory")
@@ -167,6 +165,8 @@ export class ProductsService {
 
       const updatedProductData = this.productDetailsRepository.merge(singleProductData, updateProductDto.productDetails);
       await this.productDetailsRepository.save(updatedProductData);
+
+      this.eventEmitter.emit(ADMIN_CACHE_KEYS.REGION_TAGS);
 
       // Update the Care Instruction
       if (updateProductDto.careInstruction && Object.keys(updateProductDto.careInstruction).length !== 0) {
