@@ -3,7 +3,7 @@ import { Cache, CACHE_MANAGER } from "@nestjs/cache-manager";
 import { OnEvent } from "@nestjs/event-emitter";
 
 // Invalidator Keys CONSTANTS
-import { ADMIN_CACHE_KEYS, CUSTOMER_CACHE_KEYS } from "src/constants/cache-keys";
+import { ADMIN_CACHE_KEYS, CUSTOMER_CACHE_KEYS, STATIC_PAGE_CACHE_KEYS } from "src/constants/cache-keys";
 
 @Injectable()
 export class CacheInvalidatorService {
@@ -39,6 +39,25 @@ export class CacheInvalidatorService {
   @OnEvent(ADMIN_CACHE_KEYS.NEWEST_PRODUCTS)
   async onNewProductCreate() {
     await this.del(ADMIN_CACHE_KEYS.NEWEST_PRODUCTS);
+  }
+
+  // When Create/Update Static Page Contents
+  // ABOUT
+  @OnEvent(STATIC_PAGE_CACHE_KEYS.ABOUT)
+  async onAboutStaticPage() {
+    await this.del(STATIC_PAGE_CACHE_KEYS.ABOUT);
+  }
+
+  // TNC
+  @OnEvent(STATIC_PAGE_CACHE_KEYS.TNC)
+  async onTncStaticPage() {
+    await this.del(STATIC_PAGE_CACHE_KEYS.TNC);
+  }
+
+  // PRIVACY
+  @OnEvent(STATIC_PAGE_CACHE_KEYS.PRIVACY)
+  async onPrivacyStaticPage() {
+    await this.del(STATIC_PAGE_CACHE_KEYS.PRIVACY);
   }
 
   // Invalidate all ADMIN CACHE together, if required

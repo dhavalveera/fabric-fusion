@@ -17,9 +17,13 @@ import { ProductCategoryModel } from "src/admin/product-category/entities/produc
 import { ProductSubCategoryModel } from "src/admin/product-sub-category/entities/product-sub-category.entity";
 import { ProductsModel } from "src/admin/products/entities/product.entity";
 import { RegionTagModel } from "src/admin/region-tags/entities/region-tag.entity";
+import { StaticPageModel } from "src/admin/static-pages/entities/static-page.entity";
 
 // Cache Invalidator Keys
-import { ADMIN_CACHE_KEYS, CUSTOMER_CACHE_KEYS } from "src/constants/cache-keys";
+import { ADMIN_CACHE_KEYS, CUSTOMER_CACHE_KEYS, STATIC_PAGE_CACHE_KEYS } from "src/constants/cache-keys";
+
+// ENUM => Static Page
+import { StaticPageType } from "src/admin/static-pages/constants";
 
 @Injectable()
 export class CommonService {
@@ -30,6 +34,7 @@ export class CommonService {
   private readonly productSubCategRepository: Repository<ProductSubCategoryModel>;
   private readonly productsRepository: Repository<ProductsModel>;
   private readonly regionTagRepository: Repository<RegionTagModel>;
+  private readonly staticPageRepository: Repository<StaticPageModel>;
 
   constructor(
     @Inject(CACHE_MANAGER) private cacheManager: Cache,
@@ -40,6 +45,7 @@ export class CommonService {
     this.productSubCategRepository = this.dataSource.getRepository(ProductSubCategoryModel);
     this.productsRepository = this.dataSource.getRepository(ProductsModel);
     this.regionTagRepository = this.dataSource.getRepository(RegionTagModel);
+    this.staticPageRepository = this.dataSource.getRepository(StaticPageModel);
   }
 
   async getAllAdsService(): Promise<{ rows: AdsModel[]; count: number }> {
@@ -370,6 +376,32 @@ export class CommonService {
       this.logger.error(`Unable to find Products of Region Tags`);
 
       throw new UnsuccessfulException();
+    }
+  }
+
+  async getStaticPageContent(pageType: StaticPageType): Promise<StaticPageModel> {
+    const cacheKey = STATIC_PAGE_CACHE_KEYS[pageType];
+
+    const cachedValue = await this.cacheManager.get(cacheKey);
+
+    if (typeof cachedValue === "string") {
+      this.logger.log(`Line # 388, returned All Static Page Content from Cache.`);
+
+      return JSON.parse(cachedValue);
+    }
+
+    const staticPageContent = await this.staticPageRepository.findOne({ where: { pageType, isDeleted: false } });
+
+    if (staticPageContent) {
+      this.logger.log(`Static Page Content Found for Page - ${pageType}`);
+
+      await this.cacheManager.set(STATIC_PAGE_CACHE_KEYS[pageType], JSON.stringify(staticPageContent), 0);
+
+      return staticPageContent;
+    } else {
+      this.logger.warn(`No Static Page Content Found for ${pageType}`);
+
+      throw new NotFoundException(`No Static Page Content Found for ${pageType}`);
     }
   }
 }

@@ -12,3 +12,9 @@ export const ADMIN_CACHE_KEYS = {
   NEWEST_PRODUCTS: "admin:commonNewestProducts",
   INVALIDATE_ALL: "admin.invalidate-all",
 };
+
+export const STATIC_PAGE_CACHE_KEYS = {
+  ABOUT: "static-page:ABOUT",
+  TNC: "static-page:TNC",
+  PRIVACY: "static-page:PRIVACY",
+};

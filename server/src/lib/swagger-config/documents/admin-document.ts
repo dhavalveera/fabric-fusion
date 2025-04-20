@@ -15,6 +15,7 @@ import { ProductAttributesModule } from "src/admin/product-attributes/product-at
 import { OrdersModule } from "src/admin/orders/orders.module";
 import { ProductReviewsModule } from "src/admin/product-reviews/product-reviews.module";
 import { RegionTagsModule } from "src/admin/region-tags/region-tags.module";
+import { StaticPagesModule } from "src/admin/static-pages/static-pages.module";
 
 export const AdminDocuments = (app: INestApplication) => {
   // Admin API options
@@ -34,6 +35,7 @@ export const AdminDocuments = (app: INestApplication) => {
       OrdersModule,
       ProductReviewsModule,
       RegionTagsModule,
+      StaticPagesModule,
     ],
   });
 
