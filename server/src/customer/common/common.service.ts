@@ -390,7 +390,10 @@ export class CommonService {
       return JSON.parse(cachedValue);
     }
 
-    const staticPageContent = await this.staticPageRepository.findOne({ where: { pageType, isDeleted: false } });
+    const staticPageContent = await this.staticPageRepository.findOne({
+      where: { pageType, isDeleted: false },
+      select: ["pageType", "pageMetaTitle", "pageMetaDescription", "staticPageId", "pageContent"],
+    });
 
     if (staticPageContent) {
       this.logger.log(`Static Page Content Found for Page - ${pageType}`);

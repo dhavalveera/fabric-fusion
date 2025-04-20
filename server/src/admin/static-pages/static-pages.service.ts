@@ -6,6 +6,7 @@ import { EventEmitter2 } from "@nestjs/event-emitter";
 import { Repository } from "typeorm";
 
 // Custom Exception Filters
+import { CreatedException } from "src/exception-filters/created.exception";
 import { NotFoundException } from "src/exception-filters/not-found.exception";
 import { SuccessException } from "src/exception-filters/success.exception";
 import { UnsuccessfulException } from "src/exception-filters/unsuccessful.exception";
@@ -43,7 +44,7 @@ export class StaticPagesService {
 
         this.eventEmitter.emit(STATIC_PAGE_CACHE_KEYS[createdStaticPage.pageType]);
 
-        throw new SuccessException();
+        throw new CreatedException();
       } else {
         this.logger.warn(`Unable to create Static Page Content for ${createStaticPageDto.pageType}.`);
 
@@ -66,7 +67,7 @@ export class StaticPagesService {
     if (count > 0) {
       this.logger.log(`Found ${count} Static Page Content!.`);
 
-      return { rows, count };
+      return { count, rows };
     } else {
       this.logger.warn(`No Static Page Contents Found!.`);
 
