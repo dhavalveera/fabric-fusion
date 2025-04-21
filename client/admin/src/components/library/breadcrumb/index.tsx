@@ -15,7 +15,7 @@ const Breadcrumb = forwardRef<HTMLOListElement, BreadcrumbProps>((props, ref) =>
   return (
     <ol className={cn("flex w-fit overflow-hidden rounded border border-gray-300 bg-white text-sm text-gray-700", className)} aria-label="Breadcrumb" ref={ref} {...rest} role="list">
       <li role="listitem">
-        <NavLink to="/" role="link" className="font-della-respira block h-10 bg-gray-100 px-4 leading-10 font-bold transition-colors hover:text-gray-900">
+        <NavLink to="/dashboard" role="link" className="font-della-respira block h-10 bg-gray-100 px-4 leading-10 font-bold transition-colors hover:text-gray-900">
           Home
         </NavLink>
       </li>

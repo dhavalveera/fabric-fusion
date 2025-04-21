@@ -1,4 +1,4 @@
-import type { ComponentProps, Dispatch, FC, InputHTMLAttributes, PropsWithChildren, ReactNode, SetStateAction, SVGProps } from "react";
+import type { ComponentProps, Dispatch, FC, InputHTMLAttributes, PropsWithChildren, ReactElement, ReactNode, SetStateAction, SVGProps } from "react";
 
 // Framer Motion => types
 import type { HTMLMotionProps } from "framer-motion";
@@ -240,3 +240,33 @@ export interface BottomDrawerProps extends HTMLMotionProps<"div"> {
    * The `children: ReactNode;` property in TypeScript interfaces is used to define a property named `children` that can accept any valid React node as its value. */
   children: ReactNode;
 }
+
+export interface EditorProps {
+  defaultValue: string;
+
+  onChange: (content: string) => void;
+}
+
+export type SettingsPageChipTabValue = "privacy" | "tnc" | "about-us";
+
+export interface SettingChipTabProps {
+  label: string;
+  chipTabValue: SettingsPageChipTabValue;
+}
+
+export interface ChipTabsProps extends ComponentProps<"button"> {
+  /* The `label: string;` property in the `ChipTabsProps` interface is defining a property named `label` which is expected to be a string type. This property is used to provide a label or text content for the `ChipTabs` component. It helps in displaying text or a label associated with the chip tab button to provide context or information to the user about the purpose or content represented by that specific chip tab. */
+  label: string;
+
+  /* The `chipTabValue: string;` property in the `ChipTabsProps` interface is defining a property named `chipTabValue` which is expected to be a string type. This property is used to store a specific value associated with the `ChipTabs` component. It can represent a unique identifier, a key, or any other relevant value that helps in distinguishing or identifying the specific chip tab within the component. This value can be used for various purposes such as handling interactions, managing state, or providing additional context about the chip tab. */
+  chipTabValue: string;
+
+  /* The `selected: boolean;` property in the `ChipTabsProps` interface is defining a boolean variable named `selected`. This variable is used to indicate whether the chip tab button is currently selected or not. When `selected` is `true`, it signifies that the chip tab button is in a selected state, and when it is `false`, it indicates that the chip tab button is not selected. This property helps in managing the visual state and behavior of the chip tab button component based on
+  its selection status. */
+  selected: boolean;
+
+  /* The `setSelected` property in the `ChipTabsProps` interface is defining a function that can be used to update the state of the `selected` property in the component that uses the `ChipTabs` component. */
+  setSelected: Dispatch<SetStateAction<string>>;
+}
+
+export type RenderTabComponentProps = Record<SettingsPageChipTabValue, ReactElement>;

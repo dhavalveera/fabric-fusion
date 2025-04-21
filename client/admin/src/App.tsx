@@ -18,6 +18,7 @@ import DashboardLayout from "./components/dashboard/dashboard-layout";
 // Page Components
 import DashboardPage from "./components/dashboard/pages/dashboard";
 import ProductsPage from "./components/dashboard/pages/products";
+import SettingsPage from "./components/dashboard/pages/settings";
 
 const App: FC = () => {
   const [isLoggedIn] = useState<boolean>(authService.isLoggedIn() !== null);
@@ -38,6 +39,7 @@ const App: FC = () => {
             <Route path="coupons" element={<p>Coupons Pages</p>} />
             <Route path="ads" element={<p>Ads Pages</p>} />
             <Route path="reviews" element={<p>Reviews Pages</p>} />
+            <Route path="settings" element={<SettingsPage />} />
           </Route>
         </Route>
       </Routes>

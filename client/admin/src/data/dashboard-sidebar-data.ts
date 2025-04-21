@@ -2,13 +2,8 @@ import type { DashboardSidebarDataProps } from "@/types";
 
 // react icons
 import { FiHome, FiShoppingCart } from "react-icons/fi";
-import {
-  MdCategory,
-  MdInventory,
-  MdOutlineRateReview,
-  MdOutlineSchema,
-} from "react-icons/md";
-import { CiDiscount1 } from "react-icons/ci";
+import { MdCategory, MdInventory, MdOutlineRateReview, MdOutlineSchema } from "react-icons/md";
+import { CiDiscount1, CiSettings } from "react-icons/ci";
 import { FaRegImage } from "react-icons/fa";
 import { LiaGlobeSolid } from "react-icons/lia";
 
@@ -74,5 +69,11 @@ export const dashboardSidebarData: DashboardSidebarDataProps[] = [
     title: "Reviews",
     linkHref: "/dashboard/reviews",
     icon: MdOutlineRateReview,
+  },
+
+  {
+    title: "Settings",
+    linkHref: "/dashboard/settings",
+    icon: CiSettings,
   },
 ];
