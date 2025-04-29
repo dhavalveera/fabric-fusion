@@ -11,19 +11,19 @@ const DashboardLayout: FC = () => {
   const [openSidebar, setOpenSidebar] = useState<boolean>(true);
 
   return (
-    <div className="flex min-h-screen">
-      {/* Sidebar --- Fixed Width, full Height */}
-      <DashboardSidebar openSidebar={openSidebar} setOpenSidebar={setOpenSidebar} />
-
-      {/* Ridght Section: Navbar + entire HTML Element */}
-      <div className="flex flex-1 flex-col">
+    <div className="w-full min-w-0 flex-auto">
+      <div className="relative">
         {/* Navbar at the Top */}
-        <DashboardNavbar setOpenSidebar={setOpenSidebar} />
+        <DashboardNavbar setOpenSidebar={setOpenSidebar} openSidebar={openSidebar} />
 
-        {/* Main content below Navbar */}
-        <main className="ml-4 flex-1 overflow-auto p-2">
-          <Outlet />
-        </main>
+        <div className="mx-auto w-full lg:flex">
+          {/* Sidebar --- Fixed Width, full Height */}
+          <DashboardSidebar openSidebar={openSidebar} setOpenSidebar={setOpenSidebar} />
+
+          <div className="w-full min-w-0 p-4">
+            <Outlet />
+          </div>
+        </div>
       </div>
     </div>
   );

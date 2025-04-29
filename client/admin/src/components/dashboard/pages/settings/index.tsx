@@ -7,9 +7,6 @@ import ChpTabs from "@/components/library/chip-tab";
 // Data
 import { settingsPageTab } from "@/data/settings-page-tabs";
 
-// constants
-import { APP_DETAILS } from "@/constants";
-
 // types
 import type { RenderTabComponentProps, SettingsPageChipTabValue } from "@/types";
 
@@ -29,7 +26,7 @@ const SettingsPage: FC = () => {
 
   return (
     <>
-      <title>Settings | {APP_DETAILS.APP_NAME}</title>
+      <title>Settings | Fabric Fusion</title>
 
       <div className="py-10">
         <Breadcrumb secondLabel="Settings" />

@@ -1,4 +1,4 @@
-import type { FC } from "react";
+import { useCallback, type FC } from "react";
 
 // react router
 import { useLocation, useNavigate } from "react-router";
@@ -13,17 +13,24 @@ import { cn } from "@/utils/cn";
 import type { DashboardSidebarOptionProps } from "@/types";
 
 const DashboardSidebarOptions: FC<DashboardSidebarOptionProps> = props => {
-  const { icon: Icon, linkHref, notifs, open, title, ...rest } = props;
+  const { icon: Icon, linkHref, notifs, open, setCloseSidebar, title, ...rest } = props;
 
   const navigate = useNavigate();
   const { pathname } = useLocation();
 
+  const handleClick = useCallback(() => {
+    navigate(linkHref, { preventScrollReset: false, viewTransition: true });
+
+    // Close sidebar on mobile only
+    if (window.innerWidth < 1024 && open) {
+      setCloseSidebar(false);
+    }
+  }, [linkHref, navigate, open, setCloseSidebar]);
+
   return (
     <motion.button
       layout
-      onClick={() => {
-        navigate(linkHref, { preventScrollReset: false, viewTransition: true });
-      }}
+      onClick={handleClick}
       className={cn(
         "relative flex h-10 w-full cursor-pointer items-center rounded-md transition-colors",
         pathname === linkHref ? "bg-indigo-100 text-indigo-800" : "text-slate-500 hover:bg-slate-100",

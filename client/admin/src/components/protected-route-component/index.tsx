@@ -1,31 +1,33 @@
 import { useEffect, type FC } from "react";
 
 // react router
-import { Outlet, useLocation, useNavigate } from "react-router";
+import { Outlet, useLocation } from "react-router";
 
 // react toastify
 import { toast } from "react-toastify";
+
+// useAppService
+import { navigateTo } from "@/navigation-service";
 
 // Auth Checker
 import authService from "../authentication";
 
 const ProtectRoute: FC = () => {
-  const navigate = useNavigate();
-  const { pathname, search } = useLocation();
+  // const { pathname, search } = useLocation();
 
-  const isAuth = authService.isLoggedIn();
+  // const isAuth = authService.isLoggedIn();
 
-  useEffect(() => {
-    if (!isAuth) {
-      toast.error("Unauthorized User");
+  // useEffect(() => {
+  //   if (!isAuth) {
+  //     toast.error("Unauthorized User");
 
-      const returnUrl = pathname + search;
+  //     const returnUrl = pathname + search;
 
-      navigate(`/?returnUrl=${encodeURIComponent(returnUrl)}`, { preventScrollReset: false, viewTransition: true });
-    }
-  }, [isAuth, navigate, pathname, search]);
+  //     navigateTo(`/?returnUrl=${encodeURIComponent(returnUrl)}`);
+  //   }
+  // }, [isAuth, pathname, search]);
 
-  if (!isAuth) return null;
+  // if (!isAuth) return null;
 
   return <Outlet />;
 };

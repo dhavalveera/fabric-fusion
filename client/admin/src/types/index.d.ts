@@ -6,6 +6,9 @@ import type { HTMLMotionProps } from "framer-motion";
 // axiox
 import type { InternalAxiosRequestConfig } from "axios";
 
+// Formik
+import { FormikProps } from "formik";
+
 export interface DashboardSidebarTitleProps {
   open: boolean;
 }
@@ -16,6 +19,7 @@ export interface DashboardSidebarOptionProps extends HTMLMotionProps<"button"> {
   open: boolean;
   notifs?: number;
   linkHref: string;
+  setCloseSidebar: Dispatch<SetStateAction<boolean>>;
 }
 
 export interface DashboardSidebarToggleCloseProps {
@@ -30,6 +34,7 @@ export interface DashboardSidebarProps {
 
 export interface DashboardNavbarProps {
   setOpenSidebar: Dispatch<SetStateAction<boolean>>;
+  openSidebar: boolean;
 }
 
 export type ThemeToggleOptionsType = "light" | "dark";
@@ -270,3 +275,69 @@ export interface ChipTabsProps extends ComponentProps<"button"> {
 }
 
 export type RenderTabComponentProps = Record<SettingsPageChipTabValue, ReactElement>;
+
+export interface CardProps extends ComponentProps<"div"> {
+  /* The `cardTitle: string;` property in the `CardProps` interface is defining a property named `cardTitle` which is expected to be a string type. This property is used to store the title or heading content for a card component. It allows developers to provide a specific title or heading text that will be displayed on the card component to give context or information about the content within the card. The `cardTitle` property helps in customizing and structuring the visual representation of the card component by including a title that describes the content or purpose of the card. */
+  cardTitle: string;
+
+  /* The `cardBody: ReactNode` property in the `CardProps` interface is defining a property named `cardBody` that expects a value of type `ReactNode`. */
+  cardBody: ReactNode;
+}
+
+export interface StepsDataProps {
+  label: string;
+  step: number;
+}
+
+export interface StepperProps extends ComponentProps<"div"> {
+  activeStep: number;
+  stepsData: StepsDataProps[];
+}
+
+export interface SelectDataProps {
+  value: string;
+  label: string;
+}
+
+export interface SelectProps extends ComponentProps<"select"> {
+  selectLabel: string;
+  data: Array<SelectDataProps>;
+  handleChange: (value: string) => void;
+  selectedValue: string;
+}
+
+export interface CreateProductFormValues {
+  productName: string;
+  productDescription: string;
+  productPrice: string;
+  productDisplayImage: string;
+  colorOptions: Array<string>;
+  fabricType: string;
+  styleOfFit: string;
+  tags: Array<string>;
+  gender: string;
+  metaTitle: string;
+  metaDescription: string;
+  metaKeywords: string;
+  productSubCategoryId: string;
+  productSize: Array<{ size: string; totalStock: number }>;
+  productRegionId: string;
+  careInstruction?: {
+    washingInstructions: string;
+    dryingInstructions: string;
+    ironingInstructions: string;
+    bleachingInstructions: string;
+    dryCleaningInstructions: string;
+    storageInstructions: string;
+  };
+  returnPolicy?: {
+    returnDuration: number;
+    returnWindow: string;
+    conditions: Array<string>;
+    policyInformation: string;
+  };
+}
+
+export interface CreateProductFormikProps {
+  formik: FormikProps<CreateProductFormValues>;
+}

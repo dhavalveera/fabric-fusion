@@ -11,6 +11,6 @@ export const btnSizeVariant: BtnSizeVariantProps = {
 
 export const MainParentLayout = "mx-auto max-w-screen-xl px-4 py-3 md:px-8";
 
-export const TwoColumnGrid = "mx-auto grid gap-12 max-md:max-w-lg md:grid-cols-2 lg:grid-cols-2";
+export const TwoColumnGrid = "mx-auto grid gap-4 max-md:max-w-lg md:grid-cols-2 lg:grid-cols-2";
 
-export const ThreeColumnGrid = "mx-auto grid gap-12 max-md:max-w-lg md:grid-cols-2 lg:grid-cols-3";
+export const ThreeColumnGrid = "mx-auto grid gap-4 max-md:max-w-lg md:grid-cols-2 lg:grid-cols-3";

@@ -37,7 +37,6 @@
 
 html {
   height: 100%;
-  min-height: 100%;
   width: 100%;
   scroll-behavior: smooth;
   text-rendering: optimizeLegibility;
@@ -46,9 +45,9 @@ html {
 body {
   margin: 0 auto;
   margin-bottom: 80px;
-
+  height: 100%;
+  min-height: 100%;
   scroll-behavior: smooth;
-  min-height: calc(100vh - 200px);
   overflow-x: hidden;
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
@@ -68,4 +67,16 @@ a {
   display: block;
   width: fit-content;
   font-family: var(--font-della-respira);
+}
+
+/* Number Input */
+.no-spinner::-webkit-inner-spin-button,
+.no-spinner::-webkit-outer-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+.no-spinner {
+  appearance: none;
+  -moz-appearance: textfield; /* Firefox */
 }

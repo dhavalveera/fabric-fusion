@@ -1,8 +1,5 @@
 import type { FC } from "react";
 
-// react router
-import { useNavigate } from "react-router";
-
 // react icons
 import { FaPlus } from "react-icons/fa6";
 
@@ -12,9 +9,14 @@ import CustomButton from "@/components/library/custom-button";
 // UI
 import { MainParentLayout } from "@/ui";
 import Breadcrumb from "@/components/library/breadcrumb";
+import { useAppNavigate } from "@/hooks/use-app-navigate";
 
 const ProductsPage: FC = () => {
-  const navigate = useNavigate();
+  const { goTo } = useAppNavigate();
+
+  const handleNavigate = () => {
+    goTo("/dashboard/product/create");
+  };
 
   return (
     <>
@@ -31,13 +33,7 @@ const ProductsPage: FC = () => {
               </div>
 
               <div>
-                <CustomButton
-                  btnLabel="add product"
-                  btnSize="md"
-                  icon={FaPlus}
-                  iconPlacement="start"
-                  onClick={() => navigate("/dashboard/products/new", { preventScrollReset: false, viewTransition: true })}
-                />
+                <CustomButton btnLabel="add product" btnSize="md" icon={FaPlus} iconPlacement="start" onClick={handleNavigate} />
               </div>
             </div>
           </div>

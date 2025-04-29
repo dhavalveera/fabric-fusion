@@ -83,9 +83,13 @@ const FileUpload: FC<FileUploadProps> = ({ onChange }) => {
           <GridPattern />
         </div>
         <div className="flex flex-col items-center justify-center">
-          <p className="font-della-respira relative z-20 text-base font-bold text-neutral-700 dark:text-neutral-300">Upload file</p>
-          <p className="font-della-respira relative z-20 mt-2 text-base font-normal text-neutral-400 dark:text-neutral-400">Drag or drop your files here or click to upload</p>
-          <em className="font-della-respira z-20 mt-2 text-sm font-normal text-neutral-400">(Only *.jpeg and *.png images will be accepted)</em>
+          {files ? null : (
+            <>
+              <p className="font-della-respira relative z-20 text-base font-bold text-neutral-700 dark:text-neutral-300">Upload file</p>
+              <p className="font-della-respira relative z-20 mt-2 text-sm font-normal text-neutral-400 dark:text-neutral-400">Drag or drop your files here or click to upload</p>
+              <em className="font-della-respira z-20 mt-2 text-sm font-normal text-neutral-400">(Only *.jpeg and *.png images will be accepted)</em>
+            </>
+          )}
           <div className="relative mx-auto mt-10 w-full max-w-lg">
             {files ? (
               <motion.div
