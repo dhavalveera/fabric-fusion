@@ -40,6 +40,8 @@ const CreateProductPage: FC = () => {
       try {
         helpers.setSubmitting(true);
 
+        console.log({ values });
+
         if (isLastStep) {
           helpers.setSubmitting(true);
         } else {

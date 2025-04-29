@@ -299,13 +299,6 @@ export interface SelectDataProps {
   label: string;
 }
 
-export interface SelectProps extends ComponentProps<"select"> {
-  selectLabel: string;
-  data: Array<SelectDataProps>;
-  handleChange: (value: string) => void;
-  selectedValue: string;
-}
-
 export interface CreateProductFormValues {
   productName: string;
   productDescription: string;

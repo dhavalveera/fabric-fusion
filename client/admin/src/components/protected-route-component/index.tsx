@@ -13,21 +13,21 @@ import { navigateTo } from "@/navigation-service";
 import authService from "../authentication";
 
 const ProtectRoute: FC = () => {
-  // const { pathname, search } = useLocation();
+  const { pathname, search } = useLocation();
 
-  // const isAuth = authService.isLoggedIn();
+  const isAuth = authService.isLoggedIn();
 
-  // useEffect(() => {
-  //   if (!isAuth) {
-  //     toast.error("Unauthorized User");
+  useEffect(() => {
+    if (!isAuth) {
+      toast.error("Unauthorized User");
 
-  //     const returnUrl = pathname + search;
+      const returnUrl = pathname + search;
 
-  //     navigateTo(`/?returnUrl=${encodeURIComponent(returnUrl)}`);
-  //   }
-  // }, [isAuth, pathname, search]);
+      navigateTo(`/?returnUrl=${encodeURIComponent(returnUrl)}`);
+    }
+  }, [isAuth, pathname, search]);
 
-  // if (!isAuth) return null;
+  if (!isAuth) return null;
 
   return <Outlet />;
 };
