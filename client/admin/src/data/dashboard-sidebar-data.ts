@@ -12,68 +12,73 @@ import { ClothSizeIcon } from "@/icons";
 
 export const dashboardSidebarData: DashboardSidebarDataProps[] = [
   {
-    title: "Dashboard",
-    linkHref: "/dashboard",
-    icon: FiHome,
+    title: "General",
+    items: [
+      {
+        title: "Dashboard",
+        url: "/dashboard",
+        icon: FiHome,
+      },
+    ],
   },
-
   {
-    title: "Products",
-    linkHref: "/dashboard/products",
-    icon: MdInventory,
+    title: "Management",
+    items: [
+      {
+        title: "Products",
+        url: "/dashboard/products",
+        icon: MdInventory,
+      },
+      {
+        title: "Product Size",
+        url: "/dashboard/product-size",
+        icon: ClothSizeIcon,
+      },
+      {
+        title: "Product Schema",
+        url: "/dashboard/product-schema",
+        icon: MdOutlineSchema,
+      },
+      {
+        title: "Product Region",
+        url: "/dashboard/product-region",
+        icon: LiaGlobeSolid,
+      },
+      {
+        title: "Orders",
+        url: "/dashboard/orders",
+        icon: FiShoppingCart,
+      },
+      {
+        title: "Category",
+        url: "/dashboard/category",
+        icon: MdCategory,
+      },
+      {
+        title: "Coupons",
+        url: "/dashboard/coupons",
+        icon: CiDiscount1,
+      },
+      {
+        title: "Ads",
+        url: "/dashboard/ads",
+        icon: FaRegImage,
+      },
+      {
+        title: "Reviews",
+        url: "/dashboard/reviews",
+        icon: MdOutlineRateReview,
+      },
+    ],
   },
-
   {
-    title: "Product Size",
-    linkHref: "/dashboard/product-size",
-    icon: ClothSizeIcon,
-  },
-
-  {
-    title: "Product Schema",
-    linkHref: "/dashboard/product-schema",
-    icon: MdOutlineSchema,
-  },
-
-  {
-    title: "Product Region",
-    linkHref: "/dashboard/product-region",
-    icon: LiaGlobeSolid,
-  },
-
-  {
-    title: "Orders",
-    linkHref: "/dashboard/orders",
-    icon: FiShoppingCart,
-  },
-
-  {
-    title: "Category",
-    linkHref: "/dashboard/category",
-    icon: MdCategory,
-  },
-
-  {
-    title: "Coupons",
-    linkHref: "/dashboard/coupons",
-    icon: CiDiscount1,
-  },
-
-  {
-    title: "Ads",
-    linkHref: "/dashboard/ads",
-    icon: FaRegImage,
-  },
-
-  {
-    title: "Reviews",
-    linkHref: "/dashboard/reviews",
-    icon: MdOutlineRateReview,
-  },
-
-  {
-    title: "Settings",
-    linkHref: "/dashboard/settings",
-    icon: CiSettings,
+    title: "Other",
+    items: [
+      {
+        title: "Settings",
+        url: "/dashboard/settings",
+        icon: CiSettings,
+      },
+    ],
   },
 ];

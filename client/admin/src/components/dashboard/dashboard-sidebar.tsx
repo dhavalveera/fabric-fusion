@@ -1,92 +1,105 @@
-import { useEffect, type FC } from "react";
+import { forwardRef, type ComponentProps } from "react";
 
-// Framer Motion
-import { AnimatePresence, domAnimation, LazyMotion, motion } from "framer-motion";
+// react router
+import { NavLink, useLocation } from "react-router";
+
+// framer motion
+import { motion } from "framer-motion";
+
+// react icons
+import { MdLogout } from "react-icons/md";
+
+// Hooks
+import { useAppNavigate } from "@/hooks/use-app-navigate";
+
+// ICON
+import { FabricFusionIcon } from "@/icons";
+
+// shadcn/ui
+import {
+  Sidebar,
+  SidebarContent,
+  SidebarFooter,
+  SidebarGroup,
+  SidebarGroupContent,
+  SidebarGroupLabel,
+  SidebarHeader,
+  SidebarMenu,
+  SidebarMenuButton,
+  SidebarMenuItem,
+  SidebarRail,
+} from "../library/shadcn-components/ui/sidebar";
 
 // data
 import { dashboardSidebarData } from "@/data/dashboard-sidebar-data";
 
-// utils
-import { cn } from "@/utils/cn";
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+const DashboardSidebar = forwardRef<ComponentProps<typeof Sidebar>>((props, _ref) => {
+  const { goTo } = useAppNavigate();
 
-// utils
-import { DashboardSidebarProps } from "@/types";
-
-// Sidebar Components
-import DashboardSidebarTitle from "./dashboard-sidebar-title";
-import DashboardSidebarOptions from "./dashboard-sidebar-options";
-// import DashboardSidebarToggleClose from "./dashboard-sidebar-toggle-close";
-
-const DashboardSidebar: FC<DashboardSidebarProps> = ({ openSidebar, setOpenSidebar }) => {
-  // Auto-Close sidebar on Mobile
-  useEffect(() => {
-    const handleResize = () => {
-      if (window.innerWidth < 768) {
-        setOpenSidebar(false); // Close on Mobile by default
-      } else {
-        setOpenSidebar(true); // Open on Desktop
-      }
-    };
-
-    // Initial check
-    handleResize();
-
-    // Optional: Listen to screen resize
-    window.addEventListener("resize", handleResize);
-
-    return () => window.removeEventListener("resize", handleResize);
-  }, [setOpenSidebar]);
+  const { pathname } = useLocation();
 
   return (
-    <>
-      <LazyMotion features={domAnimation}>
-        <AnimatePresence>
-          {openSidebar ? (
-            <motion.div
-              initial="unmount"
-              exit="unmount"
-              animate={openSidebar ? "mount" : "unmount"}
-              transition={{ duration: 0.3 }}
-              variants={{
-                unmount: {
-                  opacity: 0,
-                  transition: {
-                    delay: 0.3,
-                  },
-                },
-                mount: {
-                  opacity: 1,
-                },
-              }}
-              className="fixed inset-0 z-40 size-full bg-gray-900/50 backdrop-blur-sm lg:hidden dark:bg-gray-900/60"
-              onClick={() => setOpenSidebar(false)}
-            />
-          ) : null}
-        </AnimatePresence>
+    <Sidebar {...props} className="!border-none">
+      <SidebarHeader>
+        <motion.button layout onClick={() => goTo("/dashboard")} className="flex w-full cursor-pointer flex-col items-center justify-center">
+          <FabricFusionIcon className="size-22" />
 
-        <motion.div
-          layout
-          className={cn(
-            "fixed inset-0 size-full max-w-56 overflow-hidden border-r border-slate-300 bg-white p-2 transition-transform duration-300",
-            openSidebar ? "translate-x-0" : "-translate-x-full",
-            "z-50 md:translate-x-0 lg:sticky lg:top-[50px] lg:block lg:h-screen",
-          )}
-        >
-          <div className="px-1 pt-16 pb-8 pl-3 font-normal lg:pt-2 lg:pl-0">
-            <DashboardSidebarTitle open={openSidebar} />
+          <motion.div layout initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.125 }}>
+            <span className="font-della-respira flex text-xs font-semibold">Fabric Fusion</span>
+          </motion.div>
+        </motion.button>
+      </SidebarHeader>
 
-            <div className="mt-2 space-y-1 pr-1">
-              {dashboardSidebarData.map((sidebarData, index) => {
-                return <DashboardSidebarOptions icon={sidebarData.icon} title={sidebarData.title} open={openSidebar} linkHref={sidebarData.linkHref} setCloseSidebar={setOpenSidebar} key={index} />;
-              })}
-            </div>
-          </div>
+      <SidebarContent className="[-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
+        {dashboardSidebarData.map((item, index) => {
+          return (
+            <SidebarGroup key={index}>
+              <SidebarGroupLabel className="font-della-respira uppercase">{item.title}</SidebarGroupLabel>
 
-          {/* <DashboardSidebarToggleClose open={openSidebar} setOpen={setOpenSidebar} /> */}
-        </motion.div>
-      </LazyMotion>
-    </>
+              <SidebarGroupContent className="px-2">
+                <SidebarMenu>
+                  {item.items.map((subItem, indexTwo) => {
+                    return (
+                      <SidebarMenuItem key={indexTwo}>
+                        <SidebarMenuButton
+                          asChild
+                          className="group/menu-button hover:from-sidebar-accent hover:to-sidebar-accent/40 data-[active=true]:from-primary/20 data-[active=true]:to-primary/5 font-della-respira h-9 gap-3 rounded-md bg-gradient-to-r font-medium hover:bg-transparent [&>svg]:size-auto"
+                          isActive={pathname === subItem.url}
+                        >
+                          <NavLink to={subItem.url} role="link">
+                            {subItem.icon ? (
+                              <div className="text-lg">
+                                <subItem.icon className="text-muted-foreground/60 group-data-[active=true]/menu-button:text-primary size-5" aria-hidden="true" focusable="false" />
+                              </div>
+                            ) : null}
+
+                            <span>{subItem.title}</span>
+                          </NavLink>
+                        </SidebarMenuButton>
+                      </SidebarMenuItem>
+                    );
+                  })}
+                </SidebarMenu>
+              </SidebarGroupContent>
+            </SidebarGroup>
+          );
+        })}
+      </SidebarContent>
+      <SidebarFooter>
+        <hr className="border-border mx-2 -mt-px border-t" />
+        <SidebarMenu>
+          <SidebarMenuItem>
+            <SidebarMenuButton className="hover:from-sidebar-accent hover:to-sidebar-accent/40 data-[active=true]:from-primary/20 data-[active=true]:to-primary/5 h-9 cursor-pointer gap-3 rounded-md bg-gradient-to-r font-medium hover:bg-transparent [&>svg]:size-auto">
+              <MdLogout className="text-muted-foreground/60 group-data-[active=true]/menu-button:text-primary" size={22} aria-hidden="true" focusable="false" />
+              <span>Sign Out</span>
+            </SidebarMenuButton>
+          </SidebarMenuItem>
+        </SidebarMenu>
+      </SidebarFooter>
+      <SidebarRail />
+    </Sidebar>
   );
-};
+});
 
 export default DashboardSidebar;

@@ -1,20 +1,20 @@
-import { useState, type FC } from "react";
+import type { FC } from "react";
 
 // DRY
 import FileUpload from "@/components/library/file-upload";
 import Card from "@/components/library/card";
-import Image from "@/components/library/image";
 
 // types
 import type { CreateProductFormikProps } from "@/types";
+import { FileMetadata } from "@/components/library/shadcn-components/hooks/use-file-upload";
 
 const ThumbnailProductImage: FC<CreateProductFormikProps> = ({ formik }) => {
-  const [uploadedImage, setUploadedImage] = useState<File | null>(null);
-
-  const handleThumbnailUpload = (file: File | null) => {
-    setUploadedImage(file);
+  const handleThumbnailUpload = (file: File | FileMetadata | null) => {
+    console.log({ file });
 
     const imageUrl = "https://m.media-amazon.com/images/I/81ird6ruikL._AC_UY1100_.jpg";
+
+    formik.setFieldTouched("productDisplayImage", true);
 
     formik.setFieldValue("productDisplayImage", imageUrl);
   };
@@ -23,22 +23,12 @@ const ThumbnailProductImage: FC<CreateProductFormikProps> = ({ formik }) => {
     <>
       <Card
         cardTitle="Thumbnail"
+        cardTitleWithUnderline
         cardBody={
           <div className="p-2">
-            <div className="flex w-full flex-col items-center justify-between gap-4 md:flex-row">
-              <div className="w-full md:w-[40%]">
-                {uploadedImage ? (
-                  <div className="flex w-full items-center justify-center">
-                    <div className="size-1/4">
-                      <Image src={URL.createObjectURL(uploadedImage)} alt="Fabric Fusion" />
-                    </div>
-                  </div>
-                ) : null}
-              </div>
-              <div className="w-full md:w-[60%]">
-                <FileUpload onChange={handleThumbnailUpload} />
-              </div>
-            </div>
+            <FileUpload onChange={handleThumbnailUpload} />
+
+            {formik.touched.productDisplayImage && formik.errors.productDisplayImage && <p className="font-della-respira mt-1 text-xs text-red-500">{formik.errors.productDisplayImage}</p>}
           </div>
         }
       />

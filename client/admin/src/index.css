@@ -99,7 +99,6 @@ body::-webkit-scrollbar-thumb {
 }
 
 a {
-  display: block;
   width: fit-content;
   font-family: var(--font-della-respira);
 }

@@ -9,46 +9,19 @@ import type { InternalAxiosRequestConfig } from "axios";
 // Formik
 import { FormikProps } from "formik";
 
-export interface DashboardSidebarTitleProps {
-  open: boolean;
-}
+// shadcn/ui types
+import type { FileMetadata } from "@/components/library/shadcn-components/hooks/use-file-upload";
 
-export interface DashboardSidebarOptionProps extends HTMLMotionProps<"button"> {
-  icon: FC<SVGProps<SVGSVGElement>>;
+export interface NavItemProps {
   title: string;
-  open: boolean;
-  notifs?: number;
-  linkHref: string;
-  setCloseSidebar: Dispatch<SetStateAction<boolean>>;
-}
-
-export interface DashboardSidebarToggleCloseProps {
-  open: boolean;
-  setOpen: Dispatch<SetStateAction<boolean>>;
-}
-
-export interface DashboardSidebarProps {
-  openSidebar: boolean;
-  setOpenSidebar: Dispatch<SetStateAction<boolean>>;
-}
-
-export interface DashboardNavbarProps {
-  setOpenSidebar: Dispatch<SetStateAction<boolean>>;
-  openSidebar: boolean;
-}
-
-export type ThemeToggleOptionsType = "light" | "dark";
-
-export interface AccountPopoverOptionProps extends HTMLMotionProps<"li"> {
-  text: string;
+  url: string;
   icon: FC<SVGProps<SVGSVGElement>>;
+  isActive?: boolean;
 }
 
 export interface DashboardSidebarDataProps {
-  icon: FC<SVGProps<SVGSVGElement>>;
   title: string;
-  notifs?: number;
-  linkHref: string;
+  items: NavItemProps[];
 }
 
 // Authentication
@@ -200,7 +173,7 @@ export interface MFAOtpFormValuesProps {
 }
 
 export interface FileUploadProps {
-  onChange: (files: File | null) => void;
+  onChange: (files: File | FileMetadata | null) => void;
 }
 
 export interface RightDrawerProps extends ComponentProps<"div"> {
@@ -280,6 +253,9 @@ export interface CardProps extends ComponentProps<"div"> {
   /* The `cardTitle: string;` property in the `CardProps` interface is defining a property named `cardTitle` which is expected to be a string type. This property is used to store the title or heading content for a card component. It allows developers to provide a specific title or heading text that will be displayed on the card component to give context or information about the content within the card. The `cardTitle` property helps in customizing and structuring the visual representation of the card component by including a title that describes the content or purpose of the card. */
   cardTitle: string;
 
+  /*** The `cardTitleWithUnderline: boolean;` property in the `CardProps` interface is defining a boolean property that determines whether the title of the card component should have an underline decoration or not. When `cardTitleWithUnderline` is `true`, it indicates that the title of the card should be displayed with an underline decoration, typically used for visual styling to emphasize the title. If `cardTitleWithUnderline` is `false`, then the title of the card will not have an underline decoration. Developers can use this property to control the visual presentation of the card title based on the design requirements of the application. */
+  cardTitleWithUnderline: boolean;
+
   /* The `cardBody: ReactNode` property in the `CardProps` interface is defining a property named `cardBody` that expects a value of type `ReactNode`. */
   cardBody: ReactNode;
 }
@@ -299,10 +275,28 @@ export interface SelectDataProps {
   label: string;
 }
 
+export type ThemeOptions = "dark" | "light" | "system";
+
+export interface ThemeProviderProps {
+  children: ReactNode;
+  defaultTheme?: ThemeOptions;
+  storageKey?: string;
+}
+
+export interface ThemeProviderState {
+  theme: ThemeOptions;
+  setTheme: (theme: ThemeOptions) => void;
+}
+
+export interface DescriptionListItemProps extends ComponentProps<"div"> {
+  title: string;
+}
+
 export interface CreateProductFormValues {
   productName: string;
   productDescription: string;
   productPrice: string;
+  gstPercentage: string;
   productDisplayImage: string;
   colorOptions: Array<string>;
   fabricType: string;
@@ -311,11 +305,11 @@ export interface CreateProductFormValues {
   gender: string;
   metaTitle: string;
   metaDescription: string;
-  metaKeywords: string;
+  metaKeywords: Array<string>;
   productSubCategoryId: string;
   productSize: Array<{ size: string; totalStock: number }>;
   productRegionId: string;
-  careInstruction?: {
+  careInstruction: {
     washingInstructions: string;
     dryingInstructions: string;
     ironingInstructions: string;
@@ -323,7 +317,7 @@ export interface CreateProductFormValues {
     dryCleaningInstructions: string;
     storageInstructions: string;
   };
-  returnPolicy?: {
+  returnPolicy: {
     returnDuration: number;
     returnWindow: string;
     conditions: Array<string>;

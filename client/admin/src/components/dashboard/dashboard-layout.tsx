@@ -1,31 +1,37 @@
-import { useState, type FC } from "react";
+import type { FC } from "react";
 
 // react router
 import { Outlet } from "react-router";
 
-// Sidebar + Navbar
-import DashboardNavbar from "./dashboard-navbar";
+// shadcn/ui component
+import { SidebarInset, SidebarProvider, SidebarTrigger } from "../library/shadcn-components/ui/sidebar";
+
+// Sidebar + Navbar + Theme Toggler
 import DashboardSidebar from "./dashboard-sidebar";
+import ThemeModeToggle from "./theme-mode-toggle";
+import UserDropdown from "./user-dropdown";
 
 const DashboardLayout: FC = () => {
-  const [openSidebar, setOpenSidebar] = useState<boolean>(true);
-
   return (
-    <div className="w-full min-w-0 flex-auto">
-      <div className="relative">
-        {/* Navbar at the Top */}
-        <DashboardNavbar setOpenSidebar={setOpenSidebar} openSidebar={openSidebar} />
-
-        <div className="mx-auto w-full lg:flex">
-          {/* Sidebar --- Fixed Width, full Height */}
-          <DashboardSidebar openSidebar={openSidebar} setOpenSidebar={setOpenSidebar} />
-
-          <div className="w-full min-w-0 p-4">
-            <Outlet />
+    <SidebarProvider>
+      <DashboardSidebar />
+      <SidebarInset className="overflow-hidden px-4 md:px-6 lg:px-8">
+        <header className="flex h-16 shrink-0 items-center gap-2 border-b">
+          <div className="flex flex-1 items-center gap-2 px-3">
+            <SidebarTrigger className="ms-2" />
           </div>
-        </div>
-      </div>
-    </div>
+          <div className="ml-auto flex gap-5">
+            <ThemeModeToggle />
+
+            <UserDropdown />
+          </div>
+        </header>
+
+        <main className="flex flex-1 flex-col gap-4 py-4 lg:gap-6 lg:py-6">
+          <Outlet />
+        </main>
+      </SidebarInset>
+    </SidebarProvider>
   );
 };
 
