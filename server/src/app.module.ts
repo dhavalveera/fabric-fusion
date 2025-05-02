@@ -101,6 +101,10 @@ import { CouponController as CustomerCouponController } from "./customer/coupon/
 import { AuthOtpModule } from "./auth-otp/auth-otp.module";
 import { AuthOtpController } from "./auth-otp/auth-otp.controller";
 
+// Feeds Module + Controller => for GSearch, Bing & Pinterest
+import { FeedsModule } from "./feeds/feeds.module";
+import { FeedsController } from "./feeds/feeds.controller";
+
 // Cache Invalidator Module
 import { CacheInvalidatorModule } from "./cache-invalidator/cache-invalidator.module";
 
@@ -199,6 +203,9 @@ import { CacheInvalidatorModule } from "./cache-invalidator/cache-invalidator.mo
 
     // Cache Invalidator Module
     CacheInvalidatorModule,
+
+    // Feeds Module => for GSearch, Bing & Pinterest
+    FeedsModule,
   ],
   controllers: [AppController],
   providers: [
@@ -216,36 +223,35 @@ import { CacheInvalidatorModule } from "./cache-invalidator/cache-invalidator.mo
 })
 export class AppModule implements NestModule {
   configure(consumer: MiddlewareConsumer) {
-    consumer
-      .apply(RequestLoggerMiddleware)
-      .forRoutes(
-        AppController,
-        AdminAuthController,
-        AdminProductCategoryController,
-        AdminProductSubCategoryController,
-        AdminProductsController,
-        AdminProductImagesController,
-        AdminAdsController,
-        AdminCouponController,
-        AdminProductAttributesController,
-        AdminOrdersController,
-        AdminShippingController,
-        AdminProductReviewsController,
-        AdminRegionTagsController,
-        AdminStaticPagesController,
-        CustomerCommonController,
-        CustomerAuthController,
-        CustomerAddressController,
-        CustomerWishlistController,
-        CustomerCartController,
-        CustomerProfileController,
-        CustomerSearchController,
-        CustomerProductReviewsController,
-        CustomerRecentlyViewedController,
-        CustomerOrderController,
-        CustomerPaymentController,
-        CustomerCouponController,
-        AuthOtpController,
-      );
+    consumer.apply(RequestLoggerMiddleware).forRoutes(
+      AppController,
+      AdminAuthController,
+      AdminProductCategoryController,
+      AdminProductSubCategoryController,
+      AdminProductsController,
+      AdminProductImagesController,
+      AdminAdsController,
+      AdminCouponController,
+      AdminProductAttributesController,
+      AdminOrdersController,
+      AdminShippingController,
+      AdminProductReviewsController,
+      AdminRegionTagsController,
+      AdminStaticPagesController,
+      CustomerCommonController,
+      CustomerAuthController,
+      CustomerAddressController,
+      CustomerWishlistController,
+      CustomerCartController,
+      CustomerProfileController,
+      CustomerSearchController,
+      CustomerProductReviewsController,
+      CustomerRecentlyViewedController,
+      CustomerOrderController,
+      CustomerPaymentController,
+      CustomerCouponController,
+      AuthOtpController,
+      FeedsController, // Feeds Module + Controller => for GSearch, Bing & Pinterest
+    );
   }
 }
