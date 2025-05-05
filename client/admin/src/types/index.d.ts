@@ -1,16 +1,13 @@
-import type { ComponentProps, Dispatch, ElementType, FC, InputHTMLAttributes, PropsWithChildren, ReactElement, ReactNode, SetStateAction, SVGProps } from "react";
+import type { ComponentProps, Dispatch, FC, InputHTMLAttributes, PropsWithChildren, ReactElement, ReactNode, SetStateAction, SVGProps } from "react";
 
 // Framer Motion => types
-import type { HTMLMotionProps } from "framer-motion";
+import type { HTMLMotionProps, MotionProps } from "framer-motion";
 
 // axiox
 import type { InternalAxiosRequestConfig } from "axios";
 
 // Formik
 import { FormikProps } from "formik";
-
-// stepperize
-import * as Stepperize from "@stepperize/react";
 
 // class-variance-authority
 // import type { VariantProps } from "class-variance-authority";
@@ -299,6 +296,10 @@ export interface ThemeProviderState {
 
 export interface DescriptionListItemProps extends ComponentProps<"div"> {
   title: string;
+}
+
+export interface BentoGridBlockProps extends MotionProps {
+  className?: string;
 }
 
 export interface CreateProductFormValues {
