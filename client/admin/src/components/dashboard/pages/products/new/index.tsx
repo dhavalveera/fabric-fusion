@@ -1,12 +1,15 @@
-import { useCallback, useState, type FC } from "react";
+import type { FC } from "react";
 
 // Formik
 import { useFormik } from "formik";
 
+// stepperize
+import { defineStepper } from "@stepperize/react";
+
 // DRY
 import Breadcrumb from "@/components/library/breadcrumb";
 import CustomButton from "@/components/library/custom-button";
-import Stepper from "@/components/library/stepper";
+import StepIndicator from "@/components/library/stepper-indicator";
 
 // Data
 import { createProductSteps } from "@/data/create-product-steps";
@@ -22,33 +25,34 @@ import ThumbnailProductImage from "./image-upload";
 import ProductPolicies from "./product-policies";
 import ProductFinalReview from "./review-product-list";
 
+const { useStepper, utils } = defineStepper(
+  ...createProductSteps.map(step => ({
+    id: step.id,
+    title: step.title,
+    description: step.description,
+  })),
+);
+
 const CreateProductPage: FC = () => {
-  const [activeStep, setActiveStep] = useState<number>(1);
-  const isLastStep = activeStep === createProductValidationSchemas.length;
+  const stepper = useStepper();
 
-  const nextStep = useCallback(() => {
-    setActiveStep(nextStep => nextStep + 1);
-  }, []);
-
-  const prevStep = useCallback(() => {
-    setActiveStep(prevStep => prevStep - 1);
-  }, []);
+  const currentIndex = utils.getIndex(stepper.current.id);
 
   const formik = useFormik<CreateProductFormValues>({
     initialValues: createProductInitialValues,
-    validationSchema: createProductValidationSchemas[activeStep - 1],
+    validationSchema: createProductValidationSchemas[currentIndex],
     validateOnBlur: true,
     validateOnChange: true,
     onSubmit: async (values, helpers) => {
       try {
         helpers.setSubmitting(true);
 
-        if (isLastStep) {
+        if (stepper.isLast) {
           helpers.setSubmitting(true);
 
           console.log({ values });
         } else {
-          nextStep();
+          stepper.next();
 
           // helpers.setTouched({});
           // helpers.setErrors({});
@@ -69,27 +73,33 @@ const CreateProductPage: FC = () => {
 
         {/* Form */}
         <div className="mt-10">
-          <div className="mb-10">
-            <Stepper activeStep={activeStep} stepsData={createProductSteps} />
+          <div className="mb-10 flex w-full items-center justify-center">
+            <div className="flex items-center gap-4">
+              <StepIndicator currentStep={currentIndex + 1} totalSteps={stepper.all.length} />
+
+              <div className="flex flex-col">
+                <h2 className="font-della-respira flex-1 text-lg font-medium">{stepper.current.title}</h2>
+
+                <p className="font-della-respira text-sm text-gray-500">{stepper.current.description}</p>
+              </div>
+            </div>
           </div>
 
           <form onSubmit={formik.handleSubmit} noValidate>
             <div>
-              {activeStep === 1 ? <ProductBasicInfoForm formik={formik} /> : null}
-
-              {activeStep === 2 ? <VariantsOptions formik={formik} /> : null}
-
-              {activeStep === 3 ? <ThumbnailProductImage formik={formik} /> : null}
-
-              {activeStep === 4 ? <ProductPolicies formik={formik} /> : null}
-
-              {activeStep === 5 ? <ProductFinalReview formik={formik} /> : null}
+              {stepper.switch({
+                basic: () => <ProductBasicInfoForm formik={formik} />,
+                variants: () => <VariantsOptions formik={formik} />,
+                image: () => <ThumbnailProductImage formik={formik} />,
+                policies: () => <ProductPolicies formik={formik} />,
+                review: () => <ProductFinalReview formik={formik} />,
+              })}
             </div>
 
             <div className="mt-28 flex justify-between">
-              <CustomButton type="button" btnLabel="Previous" btnSize="md" onClick={prevStep} disabled={activeStep === 1} />
+              <CustomButton type="button" btnLabel="Previous" btnSize="md" onClick={stepper.prev} disabled={stepper.isFirst} />
 
-              <CustomButton btnLabel={isLastStep ? "Submit" : "Next"} btnSize="md" type={formik.isSubmitting ? "button" : "submit"} disabled={formik.isSubmitting} />
+              <CustomButton btnLabel={stepper.isLast ? "Submit" : "Next"} btnSize="md" type={formik.isSubmitting ? "button" : "submit"} disabled={formik.isSubmitting} />
             </div>
           </form>
         </div>

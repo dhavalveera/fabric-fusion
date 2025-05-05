@@ -23,9 +23,9 @@
     "@radix-ui/react-slot": "^1.2.0",
     "@radix-ui/react-tooltip": "^1.2.4",
     "@reduxjs/toolkit": "^2.6.1",
+    "@stepperize/react": "^5.1.5",
     "@tailwindcss/vite": "^4.1.3",
     "axios": "^1.8.4",
-    "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",
     "dayjs": "^1.11.13",
     "emblor": "^1.4.8",
@@ -66,5 +66,28 @@
     "typescript-eslint": "^8.24.1",
     "vite": "^6.2.0",
     "vite-plugin-webfont-dl": "^3.10.4"
+  },
+  "overrides": {
+    "cmdk": {
+      "react": "19.1.0",
+      "react-dom": "19.1.0"
+    },
+    "emblor": {
+      "react": "19.1.0",
+      "react-dom": "19.1.0"
+    },
+    "@radix-ui/react-dialog": {
+      "react": "19.1.0",
+      "react-dom": "19.1.0"
+    },
+    "@radix-ui/react-context": {
+      "react": "19.1.0"
+    },
+    "@radix-ui/react-compose-refs": {
+      "react": "19.1.0"
+    },
+    "@headlessui/react": {
+      "react": "19.1.0"
+    }
   }
 }

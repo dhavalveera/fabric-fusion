@@ -2,23 +2,28 @@ import type { StepsDataProps } from "@/types";
 
 export const createProductSteps: StepsDataProps[] = [
   {
-    label: "Basic",
-    step: 1,
+    id: "basic",
+    title: "Basic",
+    description: "Product Basic Information such as Name, Price, etc.",
   },
   {
-    label: "Variants",
-    step: 2,
+    id: "variants",
+    title: "Variants",
+    description: "Product Variants like Size, Color, etc.",
   },
   {
-    label: "Image",
-    step: 3,
+    id: "image",
+    title: "Image",
+    description: "Display or Thumbnail Picture of the Product.",
   },
   {
-    label: "Policies",
-    step: 4,
+    id: "policies",
+    title: "Policies",
+    description: "Product Policies such as Return Policy & Care Instructions.",
   },
   {
-    label: "Review",
-    step: 5,
+    id: "review",
+    title: "Review",
+    description: "Review the Product before Creating it.",
   },
 ];

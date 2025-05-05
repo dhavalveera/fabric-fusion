@@ -1,4 +1,4 @@
-import type { ComponentProps, Dispatch, FC, InputHTMLAttributes, PropsWithChildren, ReactElement, ReactNode, SetStateAction, SVGProps } from "react";
+import type { ComponentProps, Dispatch, ElementType, FC, InputHTMLAttributes, PropsWithChildren, ReactElement, ReactNode, SetStateAction, SVGProps } from "react";
 
 // Framer Motion => types
 import type { HTMLMotionProps } from "framer-motion";
@@ -8,6 +8,12 @@ import type { InternalAxiosRequestConfig } from "axios";
 
 // Formik
 import { FormikProps } from "formik";
+
+// stepperize
+import * as Stepperize from "@stepperize/react";
+
+// class-variance-authority
+// import type { VariantProps } from "class-variance-authority";
 
 // shadcn/ui types
 import type { FileMetadata } from "@/components/library/shadcn-components/hooks/use-file-upload";
@@ -261,13 +267,16 @@ export interface CardProps extends ComponentProps<"div"> {
 }
 
 export interface StepsDataProps {
-  label: string;
-  step: number;
+  id: string;
+  title: string;
+  description: string;
 }
 
-export interface StepperProps extends ComponentProps<"div"> {
-  activeStep: number;
-  stepsData: StepsDataProps[];
+export interface StepIndicatorProps {
+  currentStep: number;
+  totalSteps: number;
+  size?: number;
+  strokeWidth?: number;
 }
 
 export interface SelectDataProps {
