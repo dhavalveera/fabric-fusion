@@ -83,9 +83,12 @@ const authService = {
     }
   },
 
-  isLoggedIn: () => {
+  isLoggedIn: (): boolean => {
     const token = localStorage.getItem("token");
-    return token && !authService.isTokenExpired(token);
+
+    if (!token) return false;
+
+    return !authService.isTokenExpired(token);
   },
 
   /* The `getToken` method in the `authService` object is a function that retrieves the "token" value

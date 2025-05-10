@@ -43,7 +43,7 @@ const LoginForm: FC<{ isLoggedIn: boolean }> = ({ isLoggedIn }) => {
   const [verifyOtpPayload, setVerifyOtpPayload] = useState<VerifyOtpPayloadProps>({ email: "", rememberMe: false });
 
   useEffect(() => {
-    if (authService.isLoggedIn() !== null) {
+    if (authService.isLoggedIn()) {
       const changeRoute = returnUrl ?? "/dashboard";
 
       navigate(changeRoute, { preventScrollReset: false, replace: true, viewTransition: true });

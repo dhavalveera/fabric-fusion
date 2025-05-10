@@ -25,7 +25,7 @@ import CreateProductPage from "./components/dashboard/pages/products/new";
 import SettingsPage from "./components/dashboard/pages/settings";
 
 const App: FC = () => {
-  const [isLoggedIn] = useState<boolean>(authService.isLoggedIn() !== null);
+  const [isLoggedIn] = useState<boolean>(authService.isLoggedIn());
 
   const navigate = useNavigate();
 
