@@ -80,6 +80,18 @@ export interface CustomAxiosRequestConfig extends InternalAxiosRequestConfig {
   handlerEnabled?: boolean;
 }
 
+export interface HandleApiErrorRespProps {
+  status: number;
+  statusCode: number;
+  message: string;
+}
+
+export interface ApiErrorResponse {
+  statusCode?: number;
+  message: string | string[];
+  error?: string;
+}
+
 export interface DecodedTokenProps {
   adminId: string;
   email: string;
@@ -337,4 +349,95 @@ export interface CreateProductFormValues {
 
 export interface CreateProductFormikProps {
   formik: FormikProps<CreateProductFormValues>;
+}
+
+// API
+export interface ProductCategPayloadProps {
+  productCategoryName: string;
+  productCategoryImage: string;
+}
+
+export interface ProductSubCategoryPayloadProps {
+  productSubCategoryName: string;
+  productSubCategoryImage: string;
+}
+
+export interface CreateProductCategRespProps {
+  productCategoryName: string;
+  productCategoryImage: string;
+  isDeleted: boolean;
+  createdAt: string;
+  updatedAt: string;
+  productCategoryId: string;
+}
+
+export interface ProductSubCategRespProps {
+  isDeleted: boolean;
+  createdAt: string;
+  updatedAt: string;
+  productSubCategoryId: string;
+  productSubCategoryName: string;
+  productSubCategoryImage: string;
+}
+
+export interface AllProductCategoryResp {
+  rows: {
+    isDeleted: boolean;
+    createdAt: string;
+    updatedAt: string;
+    productCategoryId: string;
+    productCategoryName: string;
+    productCategoryImage: string;
+  }[];
+  count: number;
+}
+
+export interface AllProdSubCategoryResp {
+  rows: ProductSubCategRespProps[];
+  count: number;
+}
+
+export interface SingleProductCategResp {
+  isDeleted: boolean;
+  createdAt: string;
+  updatedAt: string;
+  productCategoryId: string;
+  productCategoryName: string;
+  productCategoryImage: string;
+}
+
+export interface CreateProductPayloadProps {
+  productDetails: {
+    productName: string;
+    productDescription: string;
+    productPrice: string;
+    brandName: string;
+    gstPercentage: string;
+    productDisplayImage: string;
+    colorOptions: Array<string>;
+    fabricType: string;
+    styleOfFit: string;
+    tags: Array<string>;
+    gender: string;
+    metaTitle: string;
+    metaDescription: string;
+    metaKeywords: Array<string>;
+  };
+  productSubCategoryId: string;
+  productSize: Array<{ size: string; totalStock: number }>;
+  productRegionId: string;
+  careInstruction?: {
+    washingInstructions: string;
+    dryingInstructions: string;
+    ironingInstructions: string;
+    bleachingInstructions: string;
+    dryCleaningInstructions: string;
+    storageInstructions: string;
+  };
+  returnPolicy?: {
+    returnDuration: number;
+    returnWindow: string;
+    conditions: Array<string>;
+    policyInformation: string;
+  };
 }

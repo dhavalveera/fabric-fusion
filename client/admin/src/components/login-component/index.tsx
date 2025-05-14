@@ -7,8 +7,8 @@ import { useNavigate, useSearchParams } from "react-router";
 import { useFormik } from "formik";
 import * as Yup from "yup";
 
-// react toastify
-import { toast } from "react-toastify";
+// sonner
+import { toast } from "sonner";
 
 // react icons
 import { MdAlternateEmail } from "react-icons/md";
@@ -78,7 +78,9 @@ const LoginForm: FC<{ isLoggedIn: boolean }> = ({ isLoggedIn }) => {
               email: values.email,
               rememberMe: values.rememberMe,
             });
-            toast.success("OTP Sent Successfully!.");
+            toast.success("OTP Sent Successfully!.", {
+              description: "Please check the Email for the OTP.",
+            });
             setShowModal(true);
             break;
           case 400:
@@ -90,6 +92,10 @@ const LoginForm: FC<{ isLoggedIn: boolean }> = ({ isLoggedIn }) => {
             toast.error(message);
             break;
           case 404:
+            helpers.setErrors({ submit: message });
+            toast.error(message);
+            break;
+          case 409:
             helpers.setErrors({ submit: message });
             toast.error(message);
             break;

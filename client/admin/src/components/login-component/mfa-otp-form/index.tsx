@@ -8,7 +8,7 @@ import { Field, Form, Formik, type FormikHelpers } from "formik";
 import * as Yup from "yup";
 
 // react toastify
-import { toast } from "react-toastify";
+import { toast } from "sonner";
 
 // react icons
 import { MdLockOutline } from "react-icons/md";

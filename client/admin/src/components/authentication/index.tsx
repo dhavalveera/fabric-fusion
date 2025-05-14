@@ -4,6 +4,9 @@ import { jwtDecode } from "jwt-decode";
 // axios instance
 import axiosInstance from "@/api/axiosInstance";
 
+// Utils
+import { handleLoginApiError } from "@/utils/handle-api-error";
+
 // types
 import type { DecodedTokenProps, LoginAPIResp, LoginCredentialProps, LoginCredsRespProps, ResendOtpCredsProps, VerifyOTPRespProps, VerifyOtpApiResp, VerifyOtpCredentialProps } from "@/types";
 
@@ -21,7 +24,7 @@ const authService = {
       console.log("🚀 ~ components/authentication index.tsx:15 ~ login: ~ error:", error);
       console.log("🚀 -----------------------------------------🚀");
 
-      return { status: 401, statusCode: 401, message: "Unauthorized" };
+      return handleLoginApiError(error);
     }
   },
 
@@ -42,7 +45,9 @@ const authService = {
       console.log("🚀 ~ index.tsx:36 ~ verifyOtp: ~ error:", error);
       console.log("🚀 ---------------------------------------------🚀");
 
-      return { status: 401, token: "", message: "Unable to Verify OTP", statusCode: 401 };
+      const errorResp = handleLoginApiError(error);
+
+      return { token: "", ...errorResp, message: "Unable to Verify OTP" };
     }
   },
 
@@ -59,7 +64,9 @@ const authService = {
       console.log("🚀 ~ index.tsx:53 ~ resendOtp: ~ error:", error);
       console.log("🚀 ---------------------------------------------🚀");
 
-      return { status: 400, message: "Unable to Send OTP", statusCode: 400 };
+      const errorResp = handleLoginApiError(error);
+
+      return { ...errorResp, status: 400, message: "Unable to Send OTP", statusCode: 400 };
     }
   },
 

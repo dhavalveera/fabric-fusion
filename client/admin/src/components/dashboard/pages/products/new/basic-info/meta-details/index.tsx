@@ -86,7 +86,7 @@ const MetaDetails: FC<CreateProductFormikProps> = ({ formik }) => {
                         className="peer pe-14"
                         type="text"
                         value={formik.values.metaDescription}
-                        maxLength={65}
+                        maxLength={155}
                         onChange={e => {
                           formik.setFieldValue("metaDescription", e.target.value);
                           metaDescHandleChange(e);

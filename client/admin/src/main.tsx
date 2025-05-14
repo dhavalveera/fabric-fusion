@@ -8,11 +8,11 @@ import { createRoot } from "react-dom/client";
 // React Router
 import { BrowserRouter } from "react-router";
 
-// React Toastify
-import { ToastContainer } from "react-toastify";
-
 // Theme Provider
 import { ThemeProvider } from "./components/theme-provider/index.tsx";
+
+// Sonner => Toast Notification
+import SonnerToasterComp from "./components/library/sonner-toaster/index.tsx";
 
 import "./index.css";
 import App from "./App.tsx";
@@ -22,9 +22,9 @@ createRoot(document.getElementById("root")!).render(
     <BrowserRouter>
       <ThemeProvider defaultTheme="light" storageKey="vite-ui-theme">
         <App />
-      </ThemeProvider>
 
-      <ToastContainer newestOnTop position="top-right" />
+        <SonnerToasterComp />
+      </ThemeProvider>
     </BrowserRouter>
   </StrictMode>,
 );

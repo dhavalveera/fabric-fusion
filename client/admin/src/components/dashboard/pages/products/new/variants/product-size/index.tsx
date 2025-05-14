@@ -37,7 +37,15 @@ const ProductSizeComp: FC<CreateProductFormikProps> = ({ formik }) => {
             <div className="flex-1">
               <Label htmlFor={`productSize.${index}.totalStock`}>Total Stock</Label>
 
-              <Input id={`productSize.${index}.totalStock`} value={formik.values.productSize[index].totalStock} onChange={formik.handleChange} onBlur={formik.handleBlur} placeholder="e.g. 5" />
+              <Input
+                id={`productSize.${index}.totalStock`}
+                value={formik.values.productSize[index].totalStock}
+                onChange={formik.handleChange}
+                onBlur={formik.handleBlur}
+                type="number"
+                placeholder="e.g. 5"
+                className="no-spinner"
+              />
 
               {formik.touched.productSize?.[index]?.totalStock && typeof formik.errors.productSize?.[index] === "object" && formik.errors.productSize?.[index]?.totalStock && (
                 <p className="mt-1 text-sm text-red-500">{formik.errors.productSize[index]?.totalStock}</p>

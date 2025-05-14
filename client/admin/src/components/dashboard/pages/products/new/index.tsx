@@ -6,6 +6,12 @@ import { useFormik } from "formik";
 // stepperize
 import { defineStepper } from "@stepperize/react";
 
+// Sonner => Toast Message
+import { toast } from "sonner";
+
+// API
+import { createProductApi } from "@/api/product-api";
+
 // DRY
 import Breadcrumb from "@/components/library/breadcrumb";
 import CustomButton from "@/components/library/custom-button";
@@ -15,8 +21,11 @@ import StepIndicator from "@/components/library/stepper-indicator";
 import { createProductSteps } from "@/data/create-product-steps";
 import { createProductInitialValues, createProductValidationSchemas } from "@/data/formik";
 
+// hooks
+import { useAppNavigate } from "@/hooks/use-app-navigate";
+
 // types
-import { CreateProductFormValues } from "@/types";
+import { CreateProductFormValues, CreateProductPayloadProps } from "@/types";
 
 // Form Components
 import ProductBasicInfoForm from "./basic-info";
@@ -24,6 +33,7 @@ import VariantsOptions from "./variants";
 import ThumbnailProductImage from "./image-upload";
 import ProductPolicies from "./product-policies";
 import ProductFinalReview from "./review-product-list";
+import { isReturnPolicyEmpty } from "./review-product-list/is-return-policy-empty";
 
 const { useStepper, utils } = defineStepper(
   ...createProductSteps.map(step => ({
@@ -35,6 +45,8 @@ const { useStepper, utils } = defineStepper(
 
 const CreateProductPage: FC = () => {
   const stepper = useStepper();
+
+  const { goTo } = useAppNavigate();
 
   const currentIndex = utils.getIndex(stepper.current.id);
 
@@ -50,7 +62,46 @@ const CreateProductPage: FC = () => {
         if (stepper.isLast) {
           helpers.setSubmitting(true);
 
-          console.log({ values });
+          const createProductPayload: CreateProductPayloadProps = {
+            productDetails: {
+              colorOptions: values.colorOptions,
+              fabricType: values.fabricType,
+              gender: values.gender,
+              gstPercentage: values.gstPercentage,
+              metaDescription: values.metaDescription,
+              metaKeywords: values.metaKeywords,
+              metaTitle: values.metaTitle,
+              productDescription: values.productDescription,
+              productDisplayImage: values.productDisplayImage,
+              productName: values.productName,
+              productPrice: values.productPrice,
+              styleOfFit: values.styleOfFit,
+              tags: values.tags,
+              brandName: "Fabric Fusion",
+            },
+            productRegionId: values.productRegionId, // "ee37af70-1386-40ed-bff3-78df0b902b21"
+            productSize: values.productSize,
+            productSubCategoryId: values.productSubCategoryId, // "3076719d-59c8-4db4-93e1-0daab64f3aae"
+            ...(!isReturnPolicyEmpty(values.returnPolicy) && { returnPolicy: values.returnPolicy }),
+            ...(Object.values(values.careInstruction).every(value => value.trim() !== "") && { careInstruction: values.careInstruction }),
+          };
+
+          const response = await createProductApi(createProductPayload);
+
+          if (response?.statusCode === 201) {
+            toast.success(
+              <div className="space-x-2">
+                <span className="font-della-respira text-base">Product</span>
+                <span className="text-lg font-bold">{values.productName}</span>
+                <span className="font-della-respira text-base">Create Successfully!.</span>
+              </div>,
+              {
+                description: "Product Creation",
+              },
+            );
+
+            goTo("/dashboard/products");
+          }
         } else {
           stepper.next();
 
@@ -62,6 +113,14 @@ const CreateProductPage: FC = () => {
         console.log("🚀 --------------------------------------------🚀");
         console.log("🚀 ~ Create Product:37 ~ onSubmit: ~ error:", error);
         console.log("🚀 --------------------------------------------🚀");
+
+        helpers.setSubmitting(false);
+
+        toast.error("Failed to create product", {
+          description: "Product Creation.",
+        });
+      } finally {
+        helpers.setSubmitting(false);
       }
     },
   });

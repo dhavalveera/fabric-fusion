@@ -18,6 +18,8 @@ export class TypeOrmExceptionFilter implements ExceptionFilter {
     const response = ctx.getResponse<Response>();
     const request = ctx.getRequest();
 
+    console.log({ exception });
+
     const error = exception.driverError as unknown as PostgreError;
     const errorCode = error.code;
 
@@ -41,7 +43,7 @@ export class TypeOrmExceptionFilter implements ExceptionFilter {
         message = "Missing required field.";
         break;
       case "22P02": // Invalid text representation (e.g., UUID format issue)
-        this.logger.error(`URL: ${request.originalUrl} ==> Invalid input syntax.`);
+        this.logger.error(`URL: ${request.originalUrl} ==> Invalid input syntax. (e.g., UUID format issue)`);
         status = HttpStatus.BAD_REQUEST;
         message = "Invalid input syntax.";
         break;

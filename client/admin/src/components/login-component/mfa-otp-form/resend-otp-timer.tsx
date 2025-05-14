@@ -1,7 +1,7 @@
 import { useEffect, useState, type FC } from "react";
 
 // react toastify
-import { toast } from "react-toastify";
+import { toast } from "sonner";
 
 // Auth Service
 import authService from "@/components/authentication";

@@ -1,8 +1,5 @@
 import axios, { AxiosError, AxiosResponse, InternalAxiosRequestConfig } from "axios";
 
-// Toast
-import { toast } from "react-toastify";
-
 // types
 import { CustomAxiosRequestConfig } from "@/types";
 
@@ -15,9 +12,6 @@ const axiosInstance = axios.create({
   baseURL: API_BASE_URL,
   headers: {
     "Content-Type": "application/json",
-  },
-  validateStatus(status) {
-    return status >= 200 && status < 599;
   },
 });
 
@@ -60,7 +54,6 @@ const errorHandler = (error: AxiosError): Promise<AxiosError> => {
   const config = error.config as CustomAxiosRequestConfig;
 
   if (isHandlerEnabled(config)) {
-    toast.error("Something went wrong!");
     // Optional: Add any error logging or transformations here
     console.error("❌ Axios Error:", {
       url: config.url,

@@ -4,7 +4,7 @@ import { useEffect, type FC } from "react";
 import { Outlet, useLocation } from "react-router";
 
 // react toastify
-import { toast } from "react-toastify";
+import { toast } from "sonner";
 
 // useAppService
 import { navigateTo } from "@/navigation-service";

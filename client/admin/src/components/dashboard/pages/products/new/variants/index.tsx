@@ -31,9 +31,9 @@ const VariantsOptions: FC<CreateProductFormikProps> = ({ formik }) => {
   const [activeTagIndex, setActiveTagIndex] = useState<number | null>(null);
 
   const genderItems = [
-    { value: "male", label: "Male" },
-    { value: "female", label: "Female" },
-    { value: "unisex", label: "Unisex" },
+    { value: "Male", label: "Male" },
+    { value: "Female", label: "Female" },
+    { value: "Unisex", label: "Unisex" },
   ];
 
   return (
