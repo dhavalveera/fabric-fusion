@@ -406,6 +406,25 @@ export interface SingleProductCategResp {
   productCategoryImage: string;
 }
 
+export interface CreateProductRegionPayload {
+  regionTagName: string;
+  description: string;
+}
+
+export interface ProductRegionTagResProps {
+  isDeleted: boolean;
+  createdAt: string;
+  updatedAt: string;
+  productRegionTagId: string;
+  regionTagName: string;
+  regionTagDescription: string;
+}
+
+export interface AllProdRegionResp {
+  rows: ProductRegionTagResProps[];
+  count: number;
+}
+
 export interface CreateProductPayloadProps {
   productDetails: {
     productName: string;

@@ -1,11 +1,10 @@
-import {
-  useId,
-  // useState,
-  type FC,
-} from "react";
+import { useEffect, useId, useState, type FC } from "react";
 
 // shadcn/ui Components
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/library/shadcn-components/ui/select";
+
+// API
+import { getAllProductRegionApi } from "@/api/product-region-api";
 
 // Own Components
 import Card from "@/components/library/card";
@@ -14,10 +13,30 @@ import Card from "@/components/library/card";
 import { TwoColumnGrid } from "@/ui";
 
 // types
-import { CreateProductFormikProps } from "@/types";
+import { CreateProductFormikProps, ProductRegionTagResProps } from "@/types";
 
 const SelectProdRegion: FC<CreateProductFormikProps> = ({ formik }) => {
   const id = useId();
+
+  const [regionTags, setRegionTags] = useState<ProductRegionTagResProps[]>([]);
+
+  useEffect(() => {
+    (async () => {
+      try {
+        const response = await getAllProductRegionApi();
+
+        if (response && response?.count > 0) {
+          setRegionTags(response.rows);
+        } else {
+          setRegionTags([]);
+        }
+      } catch (error) {
+        console.log("🚀 --------------------------------🚀");
+        console.log("🚀 ~ index.tsx:39 (select-region) ~ error:", error);
+        console.log("🚀 --------------------------------🚀");
+      }
+    })();
+  }, []);
 
   return (
     <>
@@ -45,14 +64,13 @@ const SelectProdRegion: FC<CreateProductFormikProps> = ({ formik }) => {
                     <SelectValue placeholder="Select Product Region" className="font-della-respira" />
                   </SelectTrigger>
                   <SelectContent>
-                    {/* {categroyData.map((category, index) => {
+                    {regionTags.map((region, index) => {
                       return (
-                        <SelectItem value={category.value} key={index}>
-                          {category.label}
+                        <SelectItem value={region.productRegionTagId} key={index}>
+                          {region.regionTagName}
                         </SelectItem>
                       );
-                    })} */}
-                    <SelectItem value="region-one">Region One</SelectItem>
+                    })}
                   </SelectContent>
                 </Select>
               </div>
