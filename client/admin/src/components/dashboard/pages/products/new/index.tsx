@@ -144,7 +144,7 @@ const CreateProductPage: FC = () => {
             </div>
           </div>
 
-          <form onSubmit={formik.handleSubmit} noValidate>
+          <form onSubmit={formik.handleSubmit}>
             <div>
               {stepper.switch({
                 basic: () => <ProductBasicInfoForm formik={formik} />,

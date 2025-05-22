@@ -22,6 +22,7 @@ import DashboardLayout from "./components/dashboard/dashboard-layout";
 import DashboardPage from "./components/dashboard/pages/dashboard";
 import ProductsPage from "./components/dashboard/pages/products";
 import CreateProductPage from "./components/dashboard/pages/products/new";
+import ProductRegionPage from "./components/dashboard/pages/product-region";
 import SettingsPage from "./components/dashboard/pages/settings";
 
 const App: FC = () => {
@@ -44,7 +45,7 @@ const App: FC = () => {
             <Route path="product/create" element={<CreateProductPage />} />
             <Route path="product-size" element={<p>Product Size Pages</p>} />
             <Route path="product-schema" element={<p>Product Schema Pages</p>} />
-            <Route path="product-region" element={<p>Product Region Pages</p>} />
+            <Route path="product-region" element={<ProductRegionPage />} />
             <Route path="orders" element={<p>Orders Pages</p>} />
             <Route path="category" element={<p>Category Pages</p>} />
             <Route path="coupons" element={<p>Coupons Pages</p>} />

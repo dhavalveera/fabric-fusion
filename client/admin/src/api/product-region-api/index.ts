@@ -9,7 +9,7 @@ import axiosInstance from "../axiosInstance";
 
 export const createProductRegionApi = async (payload: CreateProductRegionPayload) => {
   try {
-    const response = await axiosInstance({
+    const response = await axiosInstance<{ statusCode: number; message: string }>({
       url: `/admin/region-tags/create`,
       method: "post",
       data: payload,

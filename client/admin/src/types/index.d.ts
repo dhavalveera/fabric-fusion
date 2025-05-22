@@ -351,6 +351,14 @@ export interface CreateProductFormikProps {
   formik: FormikProps<CreateProductFormValues>;
 }
 
+export interface CreateRegionPageProps {
+  setOpenSheet: Dispatch<SetStateAction<boolean>>;
+}
+
+export type MediaQueryBreakpoints = "sm" | "md" | "lg" | "xl" | "2xl";
+
+export type BreakpointMap = Record<MediaQueryBreakpoints, string>;
+
 // API
 export interface ProductCategPayloadProps {
   productCategoryName: string;
