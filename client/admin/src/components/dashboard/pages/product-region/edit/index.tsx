@@ -8,7 +8,7 @@ import * as Yup from "yup";
 import { toast } from "sonner";
 
 // API
-import { createProductRegionApi } from "@/api/product-region-api";
+import { updateProductRegionApi } from "@/api/product-region-api";
 
 // shadcn/ui
 import { Label } from "@/components/library/shadcn-components/ui/label";
@@ -18,15 +18,15 @@ import { Input } from "@/components/library/shadcn-components/ui/input";
 import CustomButton from "@/components/library/custom-button";
 
 // types
-import type { CreateRegionPageProps } from "@/types";
+import type { EditRegionTagFormProps } from "@/types";
 
-const CreateRegionPage: FC<CreateRegionPageProps> = props => {
-  const { fetchRegionTag, setOpenSheet } = props;
+const EditRegionTagForm: FC<EditRegionTagFormProps> = props => {
+  const { regionTagDescription, regionTagId, regionTagName, setOpenSheet } = props;
 
   const formik = useFormik({
     initialValues: {
-      regionTagName: "",
-      description: "",
+      regionTagName: regionTagName,
+      description: regionTagDescription,
     },
     validationSchema: Yup.object({
       regionTagName: Yup.string().required("Region Tag Name is requited."),
@@ -36,35 +36,33 @@ const CreateRegionPage: FC<CreateRegionPageProps> = props => {
       try {
         helpers.setSubmitting(true);
 
-        toast.promise(createProductRegionApi(values), {
-          loading: "Creating Region Tag....",
+        toast.promise(updateProductRegionApi(regionTagId, values), {
+          loading: "Updating Region Tag....",
           success: response => {
-            if (response?.statusCode === 201) {
-              fetchRegionTag();
-
+            if (response?.statusCode === 200) {
               setOpenSheet(false);
 
               helpers.resetForm();
 
               return (
                 <div>
-                  <div className="font-della-respira font-medium">Region Tag created successfully!</div>
+                  <div className="font-della-respira font-medium">Region Tag updated successfully!</div>
                   <div className="text-muted-foreground font-della-respira text-sm">Region Tag</div>
                 </div>
               );
             }
           },
-          error: "Unable to create Region Tag.",
+          error: "Unable to the Region Tag.",
         });
       } catch (error) {
         console.log("🚀 --------------------------------------------🚀");
-        console.log("🚀 ~ index.tsx:48 (create product region form) ~ onSubmit: ~ error:", error);
+        console.log("🚀 ~ index.tsx:53 (edit product region form) ~ onSubmit: ~ error:", error);
         console.log("🚀 --------------------------------------------🚀");
 
         helpers.setSubmitting(false);
 
-        toast.error("Failed to create product region", {
-          description: "Product Region Creation.",
+        toast.error("Failed to update product region", {
+          description: "Product Region Updating.",
         });
       } finally {
         helpers.setSubmitting(false);
@@ -99,7 +97,7 @@ const CreateRegionPage: FC<CreateRegionPageProps> = props => {
           </div>
 
           <div className="mt-5">
-            <CustomButton btnLabel={formik.isSubmitting ? "Creating...." : "Create"} btnSize="md" type={formik.isSubmitting ? "button" : "submit"} disabled={formik.isSubmitting} className="w-full" />
+            <CustomButton btnLabel={formik.isSubmitting ? "Updating...." : "Update"} btnSize="md" type={formik.isSubmitting ? "button" : "submit"} disabled={formik.isSubmitting} className="w-full" />
           </div>
         </form>
       </div>
@@ -107,4 +105,4 @@ const CreateRegionPage: FC<CreateRegionPageProps> = props => {
   );
 };
 
-export default CreateRegionPage;
+export default EditRegionTagForm;

@@ -4,7 +4,7 @@ import { useEffect, useId, useState, type FC } from "react";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/library/shadcn-components/ui/select";
 
 // API
-import { getAllProductRegionApi } from "@/api/product-region-api";
+import { getAllProductRegionApiWOPage } from "@/api/product-region-api";
 
 // Own Components
 import Card from "@/components/library/card";
@@ -23,7 +23,7 @@ const SelectProdRegion: FC<CreateProductFormikProps> = ({ formik }) => {
   useEffect(() => {
     (async () => {
       try {
-        const response = await getAllProductRegionApi();
+        const response = await getAllProductRegionApiWOPage();
 
         if (response && response?.count > 0) {
           setRegionTags(response.rows);

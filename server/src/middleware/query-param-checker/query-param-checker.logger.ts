@@ -8,6 +8,7 @@ export const requireQueryParamsMiddleware = (req: Request, res: Response, next: 
 
   const requiredParams: Record<string, Array<string>> = {
     "/api/admin/orders/all": ["pageNumber", "pageSize", "orderStatus"],
+    "/api/admin/region-tags/all": ["pageNumber", "pageSize"],
   };
 
   const paramsForRoute = requiredParams[req.path];

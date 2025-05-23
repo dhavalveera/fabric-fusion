@@ -50,8 +50,30 @@ export class RegionTagsService {
     }
   }
 
-  async findAll(): Promise<{ count: number; rows: RegionTagModel[] }> {
-    const [rows, count] = await this.regionTagRepository.findAndCount({ where: { isDeleted: false }, order: { createdAt: "DESC" } });
+  async findAll(pageNumber: string, pageSize: string): Promise<{ count: number; rows: RegionTagModel[] }> {
+    const [rows, count] = await this.regionTagRepository.findAndCount({
+      where: { isDeleted: false },
+      order: { createdAt: "DESC" },
+      take: Number(pageSize),
+      skip: Number(pageSize) * Number(pageNumber),
+    });
+
+    if (count > 0) {
+      this.logger.log(`Found total ${count} Product Region Tags.`);
+
+      return { count, rows };
+    } else {
+      this.logger.warn(`No Product Region Tags were Found!.`);
+
+      throw new UnsuccessfulException();
+    }
+  }
+
+  async findAllWithPagination(): Promise<{ count: number; rows: RegionTagModel[] }> {
+    const [rows, count] = await this.regionTagRepository.findAndCount({
+      where: { isDeleted: false },
+      order: { createdAt: "DESC" },
+    });
 
     if (count > 0) {
       this.logger.log(`Found total ${count} Product Region Tags.`);

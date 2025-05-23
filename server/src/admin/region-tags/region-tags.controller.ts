@@ -1,4 +1,4 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete } from "@nestjs/common";
+import { Controller, Get, Post, Body, Patch, Param, Delete, Query } from "@nestjs/common";
 
 // Swagger
 import { ApiBearerAuth, ApiTags } from "@nestjs/swagger";
@@ -22,8 +22,13 @@ export class RegionTagsController {
   }
 
   @Get("all")
-  findAll() {
-    return this.regionTagsService.findAll();
+  findAll(@Query("pageSize") pageSize: string, @Query("pageNumber") pageNumber: string) {
+    return this.regionTagsService.findAll(pageNumber, pageSize);
+  }
+
+  @Get("all-without-pagination")
+  findAllWithPagination() {
+    return this.regionTagsService.findAllWithPagination();
   }
 
   @Get(":id/details")

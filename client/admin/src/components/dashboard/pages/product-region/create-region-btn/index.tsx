@@ -12,10 +12,13 @@ import CustomButton from "@/components/library/custom-button";
 // hooks
 import { useTailwindBreakpoint } from "@/hooks/use-tailwind-breakpoint";
 
+// types
+import type { CreateRegionButtonProps } from "@/types";
+
 // Create Region Tag Form
 import CreateRegionPage from "../new";
 
-const CreateRegionButton: FC = () => {
+const CreateRegionButton: FC<CreateRegionButtonProps> = ({ fetchRegionTag }) => {
   const [openSheet, setOpenSheet] = useState<boolean>(false);
 
   const isMobile = !useTailwindBreakpoint("sm");
@@ -36,7 +39,7 @@ const CreateRegionButton: FC = () => {
           <SheetDescription>Create tags to define product regions or traditional styles.</SheetDescription>
         </SheetHeader>
 
-        <CreateRegionPage setOpenSheet={setOpenSheet} />
+        <CreateRegionPage setOpenSheet={setOpenSheet} fetchRegionTag={fetchRegionTag} />
       </SheetContent>
     </Sheet>
   );

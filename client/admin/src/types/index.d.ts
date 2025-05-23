@@ -9,8 +9,8 @@ import type { InternalAxiosRequestConfig } from "axios";
 // Formik
 import { FormikProps } from "formik";
 
-// class-variance-authority
-// import type { VariantProps } from "class-variance-authority";
+// TanStack Table
+import type { Row } from "@tanstack/react-table";
 
 // shadcn/ui types
 import type { FileMetadata } from "@/components/library/shadcn-components/hooks/use-file-upload";
@@ -353,11 +353,38 @@ export interface CreateProductFormikProps {
 
 export interface CreateRegionPageProps {
   setOpenSheet: Dispatch<SetStateAction<boolean>>;
+  fetchRegionTag: () => void;
+}
+
+export interface EditRegionTagFormProps {
+  setOpenSheet: Dispatch<SetStateAction<boolean>>;
+  regionTagId: string;
+  regionTagName: string;
+  regionTagDescription: string;
 }
 
 export type MediaQueryBreakpoints = "sm" | "md" | "lg" | "xl" | "2xl";
 
 export type BreakpointMap = Record<MediaQueryBreakpoints, string>;
+
+export interface RegionTagListTableProps {
+  regionTagData: ProductRegionTagResProps[];
+  totalSize: number;
+  pageNo: number;
+  rowsPerPage: number;
+  onPageChange: Dispatch<SetStateAction<number>>;
+  onRowsPerPageChange: Dispatch<SetStateAction<number>>;
+  fetchRegionTag: () => void;
+}
+
+export interface RegionTagTableActionProps {
+  row: Row<ProductRegionTagResProps>;
+  fetchRegionTag: () => void;
+}
+
+export interface CreateRegionButtonProps {
+  fetchRegionTag: () => void;
+}
 
 // API
 export interface ProductCategPayloadProps {

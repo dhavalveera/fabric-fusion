@@ -25,17 +25,38 @@ export const createProductRegionApi = async (payload: CreateProductRegionPayload
   }
 };
 
-export const getAllProductRegionApi = async () => {
+export const getAllProductRegionApi = async (pageSize: number, pageNumber: number) => {
   try {
     const response = await axiosInstance<AllProdRegionResp>({
       url: "/admin/region-tags/all",
       method: "get",
+      params: {
+        pageSize,
+        pageNumber,
+      },
     });
 
     return response.data;
   } catch (error) {
     console.log("🚀 --------------------------------------------------------🚀");
     console.log("🚀 ~ index.ts:38 ~ getAllProductRegionApi ~ error:", error);
+    console.log("🚀 --------------------------------------------------------🚀");
+
+    handleApiError(error, "Some error occurred while fetching all Product Region!. Please try again later.");
+  }
+};
+
+export const getAllProductRegionApiWOPage = async () => {
+  try {
+    const response = await axiosInstance<AllProdRegionResp>({
+      url: "/admin/region-tags/all-without-pagination",
+      method: "get",
+    });
+
+    return response.data;
+  } catch (error) {
+    console.log("🚀 --------------------------------------------------------🚀");
+    console.log("🚀 ~ index.ts:59 ~ getAllProductRegionApiWOPage ~ error:", error);
     console.log("🚀 --------------------------------------------------------🚀");
 
     handleApiError(error, "Some error occurred while fetching all Product Region!. Please try again later.");
@@ -61,7 +82,7 @@ export const getSingleProductRegionApi = async (regionId: string) => {
 
 export const updateProductRegionApi = async (regionId: string, payload: CreateProductRegionPayload) => {
   try {
-    const response = await axiosInstance({
+    const response = await axiosInstance<{ statusCode: number; message: string }>({
       url: `/admin/region-tags/${regionId}/update`,
       method: "patch",
       data: payload,
@@ -79,7 +100,7 @@ export const updateProductRegionApi = async (regionId: string, payload: CreatePr
 
 export const deleteProductRegionApi = async (regionId: string) => {
   try {
-    const response = await axiosInstance({
+    const response = await axiosInstance<{ statusCode: number; message: string }>({
       url: `/admin/region-tags/${regionId}/delete`,
       method: "delete",
     });
