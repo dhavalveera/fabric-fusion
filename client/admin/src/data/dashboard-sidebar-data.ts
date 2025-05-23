@@ -8,7 +8,7 @@ import { FaRegImage } from "react-icons/fa";
 import { LiaGlobeSolid } from "react-icons/lia";
 
 // Custom SVG Icons
-import { ClothSizeIcon } from "@/icons";
+// import { ClothSizeIcon } from "@/icons";
 
 export const dashboardSidebarData: DashboardSidebarDataProps[] = [
   {
@@ -29,11 +29,11 @@ export const dashboardSidebarData: DashboardSidebarDataProps[] = [
         url: "/dashboard/products",
         icon: MdInventory,
       },
-      {
-        title: "Product Size",
-        url: "/dashboard/product-size",
-        icon: ClothSizeIcon,
-      },
+      // {
+      //   title: "Product Size",
+      //   url: "/dashboard/product-size",
+      //   icon: ClothSizeIcon,
+      // },
       {
         title: "Product Schema",
         url: "/dashboard/product-schema",
