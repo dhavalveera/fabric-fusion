@@ -23,6 +23,7 @@ import DashboardPage from "./components/dashboard/pages/dashboard";
 import ProductsPage from "./components/dashboard/pages/products";
 import CreateProductPage from "./components/dashboard/pages/products/new";
 import ProductRegionPage from "./components/dashboard/pages/product-region";
+import ProductReviewsPage from "./components/dashboard/pages/product-reviews";
 import SettingsPage from "./components/dashboard/pages/settings";
 
 const App: FC = () => {
@@ -50,7 +51,7 @@ const App: FC = () => {
             <Route path="category" element={<p>Category Pages</p>} />
             <Route path="coupons" element={<p>Coupons Pages</p>} />
             <Route path="ads" element={<p>Ads Pages</p>} />
-            <Route path="reviews" element={<p>Reviews Pages</p>} />
+            <Route path="reviews" element={<ProductReviewsPage />} />
             <Route path="settings" element={<SettingsPage />} />
           </Route>
         </Route>

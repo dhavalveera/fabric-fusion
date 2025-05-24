@@ -6,9 +6,6 @@ import { flexRender, getCoreRowModel, getPaginationRowModel, useReactTable, type
 // Lucide React Icons
 import { ChevronLeftIcon, ChevronRightIcon } from "lucide-react";
 
-// DRY
-import Badge from "@/components/library/badge";
-
 // shadcn/ui components
 import { Button } from "@/components/library/shadcn-components/ui/button";
 import { Label } from "@/components/library/shadcn-components/ui/label";
@@ -17,46 +14,46 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/library/shadcn-components/ui/table";
 
 // types
-import type { ProductRegionTagResProps, RegionTagListTableProps } from "@/types";
-import RegionTagTableRowAction from "./row-action";
+import type { ProdReviewListTableProps, ProductReviewsRespProps } from "@/types";
 
-const RegionTagListTable: FC<RegionTagListTableProps> = props => {
-  const { fetchRegionTag, onPageChange, onRowsPerPageChange, pageNo, regionTagData, rowsPerPage, totalSize } = props;
+const ProdReviewsListTable: FC<ProdReviewListTableProps> = props => {
+  const { onPageChange, onRowsPerPageChange, pageNo, reviewsData, rowsPerPage, totalSize } = props;
 
   const reactId = useId();
 
-  const columns: ColumnDef<ProductRegionTagResProps>[] = [
+  const columns: ColumnDef<ProductReviewsRespProps>[] = [
     {
-      id: "regionTagName",
-      header: () => <span className="font-della-respira">Tag Name</span>,
-      accessorKey: "regionTagName",
-      cell: ({ row }) => <p className="font-della-respira">{row.getValue("regionTagName")}</p>,
+      id: "ratingStar",
+      header: () => <span className="font-della-respira">Star Rating</span>,
+      accessorKey: "ratingStar",
+      cell: ({ row }) => <p className="font-della-respira">{row.getValue("ratingStar")}</p>,
+      size: 50,
+    },
+    {
+      id: "ratingComment",
+      header: () => <span className="font-della-respira">Comment</span>,
+      accessorKey: "ratingComment",
+      cell: ({ row }) => <p className="font-della-respira">{row.getValue("ratingComment")}</p>,
+      size: 250,
+    },
+    {
+      id: "productDetailsFk.productName",
+      header: () => <span className="font-della-respira">Product Name</span>,
+      accessorKey: "productDetailsFk.productName",
+      cell: ({ row }) => <p className="font-della-respira">{row.getValue("productDetailsFk.productName")}</p>,
       size: 150,
     },
     {
-      id: "regionTagDescription",
-      header: () => <span className="font-della-respira">Description</span>,
-      accessorKey: "regionTagDescription",
-      cell: ({ row }) => <p className="font-della-respira w-[250px] truncate sm:w-[500px]">{row.getValue("regionTagDescription")}</p>,
-      size: 300,
-    },
-    {
-      id: "isDeleted",
-      header: () => <span className="font-della-respira">Status</span>,
-      accessorKey: "isDeleted",
-      cell: ({ row }) => <Badge label={row.getValue("isDeleted") ? "Inactive" : "Active"} type={row.getValue("isDeleted") ? "error" : "success"} variant="outlined" />,
-      size: 75,
-    },
-    {
-      id: "actions",
-      header: () => <span className="sr-only">Actions</span>,
-      cell: ({ row }) => <RegionTagTableRowAction row={row} fetchRegionTag={fetchRegionTag} />,
-      size: 75,
+      id: "customerDetailsFk",
+      header: () => <span className="font-della-respira">Review By</span>,
+      accessorKey: "customerDetailsFk",
+      cell: ({ row }) => <p className="font-della-respira">{`${row.original.customerDetailsFk.firstName} ${row.original.customerDetailsFk.lastName}`}</p>,
+      size: 100,
     },
   ];
 
   const table = useReactTable({
-    data: regionTagData,
+    data: reviewsData,
     columns,
     pageCount: Math.ceil(totalSize / rowsPerPage),
     manualPagination: true,
@@ -192,4 +189,4 @@ const RegionTagListTable: FC<RegionTagListTableProps> = props => {
   );
 };
 
-export default RegionTagListTable;
+export default ProdReviewsListTable;

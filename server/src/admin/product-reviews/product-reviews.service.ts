@@ -19,7 +19,7 @@ export class ProductReviewsService {
     this.prodReviewRepository = this.dataSource.getRepository(ProductReviewModel);
   }
 
-  async findAll(): Promise<{ count: number; rows: ProductReviewModel[] }> {
+  async findAll(pageNumber: string, pageSize: string): Promise<{ count: number; rows: ProductReviewModel[] }> {
     const [rows, count] = await this.prodReviewRepository
       .createQueryBuilder("productReviews")
       .leftJoinAndSelect("productReviews.productDetailsFk", "productDetails")
@@ -38,6 +38,8 @@ export class ProductReviewsService {
       ])
       .andWhere("productReviews.isDeleted = :isDeleted", { isDeleted: false })
       .orderBy("productReviews.createdAt", "DESC")
+      .take(Number(pageSize))
+      .skip(Number(pageSize) * Number(pageNumber))
       .getManyAndCount();
 
     if (count > 0) {

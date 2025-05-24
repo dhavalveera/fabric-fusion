@@ -386,6 +386,15 @@ export interface CreateRegionButtonProps {
   fetchRegionTag: () => void;
 }
 
+export interface ProdReviewListTableProps {
+  reviewsData: ProductReviewsRespProps[];
+  totalSize: number;
+  pageNo: number;
+  rowsPerPage: number;
+  onPageChange: Dispatch<SetStateAction<number>>;
+  onRowsPerPageChange: Dispatch<SetStateAction<number>>;
+}
+
 // API
 export interface ProductCategPayloadProps {
   productCategoryName: string;
@@ -494,4 +503,26 @@ export interface CreateProductPayloadProps {
     conditions: Array<string>;
     policyInformation: string;
   };
+}
+
+export interface ProductReviewsRespProps {
+  isDeleted: boolean;
+  createdAt: string;
+  updatedAt: string;
+  productReviewsId: string;
+  ratingStar: number;
+  ratingComment: string;
+  productDetailsFk: {
+    productName: string;
+  };
+  customerDetailsFk: {
+    customerDetailsId: string;
+    firstName: string;
+    lastName: string;
+  };
+}
+
+export interface AllProductReviewRespProps {
+  count: number;
+  rows: ProductReviewsRespProps[];
 }

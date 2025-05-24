@@ -1,4 +1,4 @@
-import { Controller, Get } from "@nestjs/common";
+import { Controller, Get, Query } from "@nestjs/common";
 
 // Swagger
 import { ApiBearerAuth, ApiTags } from "@nestjs/swagger";
@@ -13,7 +13,7 @@ export class ProductReviewsController {
   constructor(private readonly productReviewsService: ProductReviewsService) {}
 
   @Get("all")
-  findAll() {
-    return this.productReviewsService.findAll();
+  findAll(@Query("pageSize") pageSize: string, @Query("pageNumber") pageNumber: string) {
+    return this.productReviewsService.findAll(pageSize, pageNumber);
   }
 }
