@@ -30,6 +30,9 @@ const ProductReviewsPage: FC = () => {
       if (response && response.count > 0) {
         setReviewsData(response.rows);
         setTotalCount(response.count);
+      } else {
+        setReviewsData([]);
+        setTotalCount(0);
       }
     } catch (error) {
       console.log("🚀 ------------------------------------------------------🚀");

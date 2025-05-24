@@ -32,6 +32,9 @@ const ProductRegionPage: FC = () => {
       if (response && response?.count > 0) {
         setRegionTagData(response?.rows);
         setTotalCount(response.count);
+      } else {
+        setRegionTagData([]);
+        setTotalCount(0);
       }
     } catch (error) {
       console.log("🚀 -------------------------------------------------🚀");
