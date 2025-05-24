@@ -142,7 +142,7 @@ export type BreadcrumbWithThirdLabel = CommonBreadcrumbProps & {
 
 export type BreadcrumbProps = BreadcrumbWithoutThirdLabel | BreadcrumbWithThirdLabel;
 
-export type BadgeType = "success" | "warning" | "error";
+export type BadgeType = "success" | "warning" | "error" | "info";
 
 export type BadgeVariant = "filled" | "outlined";
 
@@ -164,6 +164,7 @@ export interface ColorMapsProps {
   success: Record<BadgeVariant, BadgeStyleProps>;
   warning: Record<BadgeVariant, BadgeStyleProps>;
   error: Record<BadgeVariant, BadgeStyleProps>;
+  info: Record<BadgeVariant, BadgeStyleProps>;
   iconSize: string;
 }
 
@@ -395,6 +396,33 @@ export interface ProdReviewListTableProps {
   onRowsPerPageChange: Dispatch<SetStateAction<number>>;
 }
 
+export interface ReportedReviewsListTableProps {
+  reportedReviewsData: ReportedReviewsRespProps[];
+  totalSize: number;
+  pageNo: number;
+  rowsPerPage: number;
+  onPageChange: Dispatch<SetStateAction<number>>;
+  onRowsPerPageChange: Dispatch<SetStateAction<number>>;
+  fetchReportedReviews: () => void;
+}
+
+export interface ReportedReviewTableActionProps {
+  row: Row<ReportedReviewsRespProps>;
+  fetchReportedReviews: () => void;
+}
+
+export interface ReportedReviewEditFormProps {
+  fetchReportedReviews: () => void;
+  reportedReviewId: string;
+  currentStatus: ReportedReviewStatusType;
+  handleEditFormSheet: () => void;
+}
+
+export interface ReviewActionDataProps {
+  label: string;
+  value: ReportedReviewActionType;
+}
+
 // API
 export interface ProductCategPayloadProps {
   productCategoryName: string;
@@ -525,4 +553,47 @@ export interface ProductReviewsRespProps {
 export interface AllProductReviewRespProps {
   count: number;
   rows: ProductReviewsRespProps[];
+}
+
+export type ReportedReviewStatusType = "Pending" | "Reviewed" | "Action Taken";
+export type ReportedReviewActionType = "softDelete" | "permanentDelete";
+
+export interface ReportedReviewsRespProps {
+  createdAt: string;
+  reviewsReportedId: string;
+  reason: string;
+  reportStatus: ReportedReviewStatusType;
+  reportedByUserId: {
+    customerDetailsId: string;
+    firstName: string;
+    lastName: string;
+  };
+  productReviewFk: {
+    productReviewsId: string;
+    ratingStar: number;
+    ratingTitle: string;
+    ratingComment: string;
+    productDetailsFk: {
+      productName: string;
+    };
+    customerDetailsFk: {
+      firstName: string;
+      lastName: string;
+    };
+  };
+}
+
+export interface AllReportedReviewsApiProps {
+  count: number;
+  rows: ReportedReviewsRespProps[];
+}
+
+export interface UpdateReportedReviewPayloadProps {
+  status: ReportedReviewStatusType;
+  reviewAction?: ReportedReviewActionType;
+}
+
+export interface GenericApiResponseType {
+  statusCode: number;
+  message: string;
 }

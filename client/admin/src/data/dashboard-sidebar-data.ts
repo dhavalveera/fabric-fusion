@@ -69,6 +69,11 @@ export const dashboardSidebarData: DashboardSidebarDataProps[] = [
         url: "/dashboard/reviews",
         icon: MdOutlineRateReview,
       },
+      {
+        title: "Reviews Reported",
+        url: "/dashboard/reviews-reported",
+        icon: MdOutlineRateReview,
+      },
     ],
   },
   {

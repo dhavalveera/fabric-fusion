@@ -31,5 +31,15 @@ export const colorMaps: ColorMapsProps = {
       text: "text-red-700 dark:text-red-100",
     },
   },
+  info: {
+    filled: {
+      bg: "bg-blue-100 dark:bg-blue-700",
+      text: "text-blue-700 dark:text-blue-100",
+    },
+    outlined: {
+      border: "border border-blue-500",
+      text: "text-blue-700 dark:text-blue-100",
+    },
+  },
   iconSize: "-ms-1 me-1.5 size-4",
 };

@@ -36,16 +36,22 @@ export class ReportedReviewsService {
       .leftJoinAndSelect("reviewsReported.reportedByUserId", "reportedUser")
       .leftJoinAndSelect("reviewsReported.productReviewFk", "productReview")
       .leftJoinAndSelect("productReview.productDetailsFk", "productDetails")
+      .leftJoinAndSelect("productReview.customerDetailsFk", "reviewGivenByUser")
       .select([
         "reviewsReported.reviewsReportedId",
+        "reviewsReported.reason",
         "reviewsReported.reportStatus",
         "reviewsReported.createdAt",
+        "productReview.productReviewsId",
         "productReview.ratingStar",
         "productReview.ratingTitle",
+        "productReview.ratingComment",
         "reportedUser.customerDetailsId",
         "reportedUser.firstName",
         "reportedUser.lastName",
         "productDetails.productName",
+        "reviewGivenByUser.firstName",
+        "reviewGivenByUser.lastName",
       ])
       .where("reviewsReported.reportStatus = :reportStatus", { reportStatus: statusType })
       .andWhere("reviewsReported.isDeleted = :isDeleted", { isDeleted: false })
@@ -69,6 +75,7 @@ export class ReportedReviewsService {
       .leftJoinAndSelect("reviewsReported.reportedByUserId", "reportByUser")
       .leftJoinAndSelect("reviewsReported.productReviewFk", "productReview")
       .leftJoinAndSelect("productReview.productDetailsFk", "productDetails")
+      .leftJoinAndSelect("productReview.customerDetailsFk", "reviewGivenByUser")
       .select([
         "reviewsReported.reviewsReportedId",
         "reviewsReported.reason",
@@ -82,6 +89,8 @@ export class ReportedReviewsService {
         "reportByUser.firstName",
         "reportByUser.lastName",
         "productDetails.productName",
+        "reviewGivenByUser.firstName",
+        "reviewGivenByUser.lastName",
       ])
       .where("reviewsReported.reviewsReportedId = :reviewsReportedId", { reviewsReportedId: id })
       .andWhere("reviewsReported.isDeleted = :isDeleted", { isDeleted: false })

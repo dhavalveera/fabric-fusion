@@ -48,7 +48,7 @@ const ProductReviewsPage: FC = () => {
 
       <div className="grow-1 pb-8">
         <div className={MainParentLayout}>
-          <Breadcrumb secondLabel="Product Region" className="mb-4" />
+          <Breadcrumb secondLabel="Product Reviews" className="mb-4" />
           <div className="mb-4">
             {/* Grid */}
             <div className="flex w-full flex-col justify-between gap-4 md:flex-row md:items-center md:gap-0">
