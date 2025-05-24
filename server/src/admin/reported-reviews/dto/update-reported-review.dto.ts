@@ -11,7 +11,7 @@ import { StatusEnumType } from "../constants/review-status.enum";
 // Type
 import { StatusType } from "../types";
 
-export class UpdateProductReviewDto {
+export class UpdateReportedReviewsDto {
   @ApiProperty({ enum: StatusEnumType, enumName: "StatusType" })
   @IsNotEmpty({ message: "Status is required" })
   @IsEnum(StatusEnumType, { message: "Status must be one of the following values: Pending, Reviewed, or Action Taken." })

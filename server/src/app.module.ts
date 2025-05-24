@@ -43,6 +43,7 @@ import { ShippingModule as AdminShippingModule } from "./admin/shipping/shipping
 import { ProductReviewsModule as AdminProductReviewsModule } from "./admin/product-reviews/product-reviews.module";
 import { RegionTagsModule as AdminRegionTagsModule } from "./admin/region-tags/region-tags.module";
 import { StaticPagesModule as AdminStaticPagesModule } from "./admin/static-pages/static-pages.module";
+import { ReportedReviewsModule as AdminReportedReviewsModule } from "./admin/reported-reviews/reported-reviews.module";
 
 // Customer Modules
 import { CommonModule } from "./customer/common/common.module";
@@ -82,6 +83,7 @@ import { ShippingController as AdminShippingController } from "./admin/shipping/
 import { ProductReviewsController as AdminProductReviewsController } from "./admin/product-reviews/product-reviews.controller";
 import { RegionTagsController as AdminRegionTagsController } from "./admin/region-tags/region-tags.controller";
 import { StaticPagesController as AdminStaticPagesController } from "./admin/static-pages/static-pages.controller";
+import { ReportedReviewsController as AdminReportedReviewsController } from "./admin/reported-reviews/reported-reviews.controller";
 
 // Customer Controllers
 import { CommonController as CustomerCommonController } from "./customer/common/common.controller";
@@ -171,6 +173,7 @@ import { CacheInvalidatorModule } from "./cache-invalidator/cache-invalidator.mo
     AdminProductReviewsModule,
     AdminRegionTagsModule,
     AdminStaticPagesModule,
+    AdminReportedReviewsModule,
 
     // Cron Modules
     CouponsCronModule,
@@ -238,6 +241,7 @@ export class AppModule implements NestModule {
       AdminProductReviewsController,
       AdminRegionTagsController,
       AdminStaticPagesController,
+      AdminReportedReviewsController,
       CustomerCommonController,
       CustomerAuthController,
       CustomerAddressController,
